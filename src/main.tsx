@@ -9,7 +9,7 @@ import theme from "./style/theme.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
+      <BrowserRouter basename="/KNUChat/">
         <App />
       </BrowserRouter>
     </ThemeProvider>
