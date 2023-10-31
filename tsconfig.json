@@ -18,7 +18,18 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "allowJs": true,
+
+    /* 절대 경로 설정*/
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"],
+      "@pages/*": ["pages/*"],
+      "@components/*": ["components/*"]
+      // 기본 경로의 값이 src이기 때문에 paths 속성 경로 수정
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
