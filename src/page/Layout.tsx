@@ -12,9 +12,11 @@ const Layout = () => {
       </Helmet>
       <LayoutWrapper>
         <Navbar />
-        <Outlet />
-        <Footer />
+        <OutletWrapper>
+          <Outlet />
+        </OutletWrapper>
       </LayoutWrapper>
+      <Footer />
     </>
   );
 };
@@ -24,6 +26,14 @@ export default Layout;
 const LayoutWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  min-height: calc(100% - 6rem);
+  background-color: #f5f5f7;
   width: 100%;
+`;
+
+const OutletWrapper = styled.div`
   height: 100%;
+  border-bottom: 1px solid black;
+  display: flex;
+  justify-content: center;
 `;

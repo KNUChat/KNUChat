@@ -1,7 +1,9 @@
+import CommonTemplate from "@template/CommonTemplate";
+
 const Main = () => {
   return (
     <>
-      <div>Main</div>
+      <CommonTemplate />
     </>
   );
 };
