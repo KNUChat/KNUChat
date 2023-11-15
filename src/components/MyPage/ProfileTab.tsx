@@ -1,8 +1,14 @@
 import styled from "styled-components";
 import MyPageBox from "./MyPageBox";
+import ContentBox from "./ContentBox";
 
 const Content = () => {
-  return <>프로필</>;
+  return (
+    <>
+      프로필
+      <ContentBox />
+    </>
+  );
 };
 
 const ProfileTab = () => {
