@@ -7,6 +7,7 @@ import OpenChat from "@/page/OpenChat";
 import Profile from "@/page/Profile";
 import Search from "@/page/Search";
 import Record from "@/page/Record";
+import NotFound from "@page/NotFound";
 
 const Router = () => {
   return (
@@ -19,6 +20,7 @@ const Router = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/Search" element={<Search />} />
         <Route path="/Record" element={<Record />} />
+        <Route path="/*" element={<NotFound />} />
       </Route>
     </Routes>
   );

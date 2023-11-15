@@ -14,6 +14,7 @@ export default defineConfig({
       { find: "@api", replacement: path.resolve(__dirname, "src/api") },
       { find: "@hook", replacement: path.resolve(__dirname, "src/hook") },
       { find: "@style", replacement: path.resolve(__dirname, "src/style") },
+      { find: "@template", replacement: path.resolve(__dirname, "src/template") },
     ],
   },
 });

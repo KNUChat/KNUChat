@@ -1,14 +1,39 @@
+import Footer from "@components/Layout/Footer";
+import Navbar from "@components/Layout/Navbar";
 import { Helmet } from "react-helmet-async";
+import { Outlet } from "react-router-dom";
+import styled from "styled-components";
 
 const Layout = () => {
   return (
     <>
       <Helmet>
-        <title>KNUChat</title>
+        <title>Mapic</title>
       </Helmet>
-      <div>Layout</div>
+      <LayoutWrapper>
+        <Navbar />
+        <OutletWrapper>
+          <Outlet />
+        </OutletWrapper>
+      </LayoutWrapper>
+      <Footer />
     </>
   );
 };
 
 export default Layout;
+
+const LayoutWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100%ㄴㅋ - 6rem);
+  background-color: #f5f5f7;
+  width: 100%;
+`;
+
+const OutletWrapper = styled.div`
+  height: 100%;
+  border-bottom: 1px solid black;
+  display: flex;
+  justify-content: center;
+`;
