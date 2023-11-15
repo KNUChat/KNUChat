@@ -18,8 +18,8 @@ const Router = () => {
         <Route path="/chat" element={<Chat />} />
         <Route path="/openChat" element={<OpenChat />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/Search" element={<Search />} />
-        <Route path="/Record" element={<Record />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/record" element={<Record />} />
         <Route path="/*" element={<NotFound />} />
       </Route>
     </Routes>
