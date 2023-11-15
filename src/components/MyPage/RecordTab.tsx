@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Content = () => {
   const navigate = useNavigate();
   const handleClickMore = () => {
-    navigate("/profile");
+    navigate("/record");
   };
   return (
     <>
