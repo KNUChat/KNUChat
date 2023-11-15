@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import ProfileContent from "@components/Profile/ProfileContent";
 import RecordContent from "@components/Record/RecordContent";
+import AddRecord from "@components/Record/AddRecord";
 
 const ContentTable: { [key: string]: ReactNode } = {
   "/me": (
@@ -21,6 +22,11 @@ const ContentTable: { [key: string]: ReactNode } = {
   "/record": (
     <>
       <RecordContent />
+    </>
+  ),
+  "/addRecord": (
+    <>
+      <AddRecord />
     </>
   ),
 };
