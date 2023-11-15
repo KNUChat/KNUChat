@@ -7,6 +7,9 @@ const Navbar = () => {
   const handleClickLogo = () => {
     navigate("/");
   };
+  const handleClickMyPage = () => {
+    navigate("/me");
+  };
   const ref = useRef<HTMLInputElement>(null);
   return (
     <NavbarWrapper>
@@ -18,7 +21,7 @@ const Navbar = () => {
           <input ref={ref} />
         </SearchBox>
         <RightBox>
-          <button>mypage</button>
+          <button onClick={() => handleClickMyPage()}>mypage</button>
         </RightBox>
       </BoxWrapper>
     </NavbarWrapper>
