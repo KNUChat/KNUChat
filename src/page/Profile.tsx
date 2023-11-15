@@ -1,5 +1,11 @@
+import PrivateTemplate from "@template/PrivateTemplate";
+
 const Profile = () => {
-  return <>Profile</>;
+  return (
+    <>
+      <PrivateTemplate />
+    </>
+  );
 };
 
 export default Profile;
