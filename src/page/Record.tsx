@@ -1,5 +1,11 @@
+import PrivateTemplate from "@template/PrivateTemplate";
+
 const Record = () => {
-  return <>Record</>;
+  return (
+    <>
+      <PrivateTemplate />
+    </>
+  );
 };
 
 export default Record;
