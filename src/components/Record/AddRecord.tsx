@@ -6,6 +6,7 @@ import { useState } from "react";
 import ContentBox from "@components/MyPage/ContentBox";
 import DefaultInput from "@components/Common/DefaultInput";
 import HashTagInput from "@components/Common/HashTagInput";
+import DateRangePicker from "./DateRangePicker";
 
 const AddRecord = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -30,7 +31,13 @@ const AddRecord = () => {
         <AddRecordContent>
           <p>제목</p>
           <ContentBox>
-            <DefaultInput maxLength={1000} height="10rem" />
+            <DefaultInput maxLength={150} height="4rem" />
+          </ContentBox>
+        </AddRecordContent>
+        <AddRecordContent>
+          <p>기간</p>
+          <ContentBox>
+            <DateRangePicker />
           </ContentBox>
         </AddRecordContent>
         <AddRecordContent>
@@ -42,7 +49,7 @@ const AddRecord = () => {
           </AddRecordContent>
           <p>목표</p>
           <ContentBox>
-            <DefaultInput maxLength={1000} height="10rem" />
+            <DefaultInput maxLength={1000} height="9rem" />
           </ContentBox>
         </AddRecordContent>
         <AddRecordContent>
