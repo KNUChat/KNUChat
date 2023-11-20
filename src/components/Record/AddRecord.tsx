@@ -19,9 +19,12 @@ const AddRecord = () => {
       <MyPageBox>
         <AddRecordHeader>
           <p>이력 작성하기</p>
-          <LockButton className={isDarkMode ? "locked" : ""} onClick={toggleDarkMode} isDarkMode={isDarkMode}>
-            <Icon src={isDarkMode ? lockedIcon : unlockedIcon} alt={isDarkMode ? "Locked" : "Unlocked"} isDarkMode={isDarkMode} />
-          </LockButton>
+          <LockTab>
+            <p>공개여부</p>
+            <LockButton className={isDarkMode ? "locked" : ""} onClick={toggleDarkMode} isDarkMode={isDarkMode}>
+              <Icon src={isDarkMode ? lockedIcon : unlockedIcon} alt={isDarkMode ? "Locked" : "Unlocked"} isDarkMode={isDarkMode} />
+            </LockButton>
+          </LockTab>
         </AddRecordHeader>
         <Divider />
         <AddRecordContent>
@@ -105,4 +108,11 @@ const Divider = styled.div`
   height: 1.5px;
   background-color: rgba(0, 0, 0, 0.3);
   margin-bottom: 10px;
+`;
+
+const LockTab = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
 `;
