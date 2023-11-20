@@ -54,8 +54,9 @@ const TagCloseButton = styled.button`
 
 const Counter = styled.span`
   position: absolute;
+  top: 17px;
   right: 10px;
-  bottom: -15px;
+  transform: translateY(-50%);
   font-size: 12px;
   color: #888888;
 `;
@@ -77,7 +78,6 @@ const HashTagInput = ({ maxLength, height }: InputProps) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && value.trim() !== "") {
       event.preventDefault(); // 기본 엔터 동작 방지
-      console.log(value);
       setTags((prevTags) => [...prevTags, value.trim()]);
       setValue("");
     }
