@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <>
       <Helmet>
-        <title>Mapic</title>
+        <title>KNUChat</title>
       </Helmet>
       <LayoutWrapper>
         <Navbar />
