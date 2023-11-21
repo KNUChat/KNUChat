@@ -8,10 +8,12 @@ import Profile from "@/page/Profile";
 import Search from "@/page/Search";
 import Record from "@/page/Record";
 import NotFound from "@page/NotFound";
+import Login from "@page/Login";
 
 const Router = () => {
   return (
     <Routes>
+      <Route path="/login" element={<Login />} />
       <Route element={<Layout />}>
         <Route path="/" element={<Main />} />
         <Route path="/me" element={<MyPage />} />
