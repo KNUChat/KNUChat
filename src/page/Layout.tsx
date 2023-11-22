@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <>
       <Helmet>
-        <title>Mapic</title>
+        <title>KNUChat</title>
       </Helmet>
       <LayoutWrapper>
         <Navbar />
@@ -26,9 +26,9 @@ export default Layout;
 const LayoutWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: calc(100%ㄴㅋ - 6rem);
   background-color: #f5f5f7;
   width: 100%;
+  height: auto;
 `;
 
 const OutletWrapper = styled.div`
