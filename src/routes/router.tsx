@@ -17,7 +17,7 @@ const Router = () => {
         <Route path="/search" element={<Search />} />
         <Route path="/*" element={<NotFound />} />
         {["/me", "/record", "/addRecord", "/profile"].map((path) => (
-          <Route path={path} element={<MyPage />} />
+          <Route key={path} path={path} element={<MyPage />} />
         ))}
       </Route>
     </Routes>
