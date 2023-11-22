@@ -4,6 +4,7 @@ import styled from "styled-components";
 interface InputProps {
   maxLength: number;
   height?: string;
+  defaultValue?: string;
 }
 
 const InputWrapper = styled.div`
@@ -36,7 +37,7 @@ const Counter = styled.span`
   color: #888888;
 `;
 
-const DefaultInput = ({ maxLength, height }: InputProps) => {
+const DefaultInput = ({ maxLength, height, defaultValue }: InputProps) => {
   const [value, setValue] = useState("");
   const remainingChars = maxLength - value.length;
 

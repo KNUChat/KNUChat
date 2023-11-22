@@ -2,6 +2,7 @@ import ContentBox from "@components/MyPage/ContentBox";
 import MyPageBox from "@components/MyPage/MyPageBox";
 import styled from "styled-components";
 import { useState } from "react";
+import DefaultInput from "@components/Common/DefaultInput";
 
 const ProfileContent = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -28,7 +29,9 @@ const ProfileContent = () => {
     <ProfileContentWrapper>
       <MyPageBox>
         <p>간단소개글</p>
-        <ContentBox />
+        <ContentBox>
+          <DefaultInput maxLength={400} height="9rem" />
+        </ContentBox>
         <p>학력</p>
         <ButtonGroup>
           {statuses.map((status) => (
@@ -43,7 +46,8 @@ const ProfileContent = () => {
               <p>항목</p>
               {textInputs.map((textInput, index) => (
                 <div key={index}>
-                  <Input type="text" value={textInput} onChange={(event) => handleChange(index, event)} />
+                  {/* <Input type="text" value={textInput} onChange={(event) => handleChange(index, event)} /> */}
+                  <DefaultInput defaultValue={textInput} maxLength={1000} height="9rem" />
                   <Button onClick={() => handleSave(index)}>저장</Button>
                   <Button onClick={handleAdd}>추가</Button>
                 </div>
