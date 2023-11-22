@@ -28,7 +28,7 @@ const LayoutWrapper = styled.div`
   flex-direction: column;
   background-color: #f5f5f7;
   width: 100%;
-  height: calc(100% - 6rem);
+  height: auto;
 `;
 
 const OutletWrapper = styled.div`

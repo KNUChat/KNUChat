@@ -19,6 +19,7 @@ const ContentBoxWrapper = styled.div`
   background-color: #fafafa;
   width: calc(100% - 2rem);
   height: auto;
+  min-height: 2rem;
   margin-top: 0.5rem;
   border-radius: 1rem;
   padding: 1rem;
