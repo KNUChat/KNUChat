@@ -78,7 +78,6 @@ const HashTagInput = ({ maxLength, height }: InputProps) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && value.trim() !== "" && event.nativeEvent.isComposing === false) {
       event.preventDefault(); // 기본 엔터 동작 방지
-      console.log(value.trim());
       setTags((prevTags) => [...prevTags, value.trim()]);
       setValue("");
     }
