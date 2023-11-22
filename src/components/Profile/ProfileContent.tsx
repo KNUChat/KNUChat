@@ -51,7 +51,6 @@ const ProfileContent = () => {
             </>
           }
         />
-
         <ContentBox />
       </MyPageBox>
     </ProfileContentWrapper>
