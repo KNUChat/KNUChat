@@ -18,9 +18,10 @@ export default ContentBox;
 const ContentBoxWrapper = styled.div`
   background-color: #fafafa;
   width: calc(100% - 2rem);
-  min-height: 6rem;
   height: auto;
+  min-height: 2rem;
   margin-top: 0.5rem;
   border-radius: 1rem;
   padding: 1rem;
+  position: relative;
 `;

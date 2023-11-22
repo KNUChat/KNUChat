@@ -16,7 +16,7 @@ const CommonWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  min-height: calc(100vh-6rem-8vh);
+  min-height: calc(100vh - 6rem - 8vh);
   width: 75%;
 `;
 

@@ -9,11 +9,11 @@ const Content = () => {
     navigate("/profile");
   };
   return (
-    <>
+    <ContentWrapper>
       프로필
       <ContentBox />
-      <button onClick={() => handleClickMore()}>더보기</button>
-    </>
+      <DefaultButton onClick={() => handleClickMore()}>더보기</DefaultButton>
+    </ContentWrapper>
   );
 };
 
@@ -30,4 +30,18 @@ export default ProfileTab;
 const ProfileTabWrapper = styled.div`
   height: 30%;
   width: 100%;
+`;
+
+const DefaultButton = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 12px;
+`;
+
+const ContentWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
 `;
