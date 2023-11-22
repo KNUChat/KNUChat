@@ -38,9 +38,9 @@ const RecordContentWrapper = styled.div`
 
 const DetailButton = styled.button`
   position: absolute;
-  top: 17px;
+  bottom: 2px;
   right: 10px;
-  transform: translateY(-50%);
+  transform: translateY(-40%);
   font-size: 12px;
   color: #888888;
 `;

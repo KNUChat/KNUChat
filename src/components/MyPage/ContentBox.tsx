@@ -23,4 +23,5 @@ const ContentBoxWrapper = styled.div`
   margin-top: 0.5rem;
   border-radius: 1rem;
   padding: 1rem;
+  position: relative;
 `;
