@@ -76,8 +76,9 @@ const HashTagInput = ({ maxLength, height }: InputProps) => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && value.trim() !== "") {
+    if (event.key === "Enter" && value.trim() !== "" && event.nativeEvent.isComposing === false) {
       event.preventDefault(); // 기본 엔터 동작 방지
+      console.log(value.trim());
       setTags((prevTags) => [...prevTags, value.trim()]);
       setValue("");
     }
@@ -99,8 +100,8 @@ const HashTagInput = ({ maxLength, height }: InputProps) => {
         placeholder="단어를 입력하세요..."
       />
       <TagContainer>
-        {tags.map((tag) => (
-          <Tag key={tag}>
+        {tags.map((tag, index) => (
+          <Tag key={index}>
             <TagText>{tag}</TagText>
             <TagCloseButton onClick={() => handleTagClose(tag)}>x</TagCloseButton>
           </Tag>
