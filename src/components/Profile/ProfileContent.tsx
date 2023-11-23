@@ -3,6 +3,7 @@ import MyPageBox from "@components/MyPage/MyPageBox";
 import styled from "styled-components";
 import { useState } from "react";
 import DefaultInput from "@components/Common/DefaultInput";
+import DateRangePicker from "@components/Record/DateRangePicker";
 
 const ProfileContent = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -40,6 +41,9 @@ const ProfileContent = () => {
             </StatusButton>
           ))}
         </ButtonGroup>
+        <ContentBox>
+          <DateRangePicker />
+        </ContentBox>
         <ContentBox
           children={
             <>
@@ -99,12 +103,4 @@ const Button = styled.button`
   &:hover {
     background: #0056b3;
   }
-`;
-
-const Input = styled.input`
-  margin: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  width: 70%;
-  border: 1px solid #ced4da;
 `;
