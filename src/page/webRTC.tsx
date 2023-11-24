@@ -1,13 +1,16 @@
 // WebRTC.tsx
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 type Props = {
   id?: string;
   uuid?: string;
 };
 
-const WebRTC = ({ id, uuid }: Props) => {
+const WebRTC = ({ uuid }: Props) => {
+  const { id } = useParams();
+  console.log(id);
   const navigate = useNavigate();
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);

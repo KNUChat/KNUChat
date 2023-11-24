@@ -28,7 +28,7 @@ const Router = () => {
         <Route path="/SdpOffer" element={<SdpOffer />} />
         <Route path="/videomain" element={<VideoMain />} />
         <Route path="/room/random" element={<WebRTC />} />
-        <Route path="/room" element={<WebRTC />} />
+        <Route path="/room/:id" element={<WebRTC />} />
         {["/me", "/record", "/addRecord", "/profile"].map((path) => (
           <Route key={path} path={path} element={<MyPage />} />
         ))}

@@ -21,7 +21,9 @@ const VideoMain = () => {
   useEffect(() => {
     console.log(id, uuid);
   });
-
+  const handleMoveRoom = () => {
+    navigate(`/room/${id}`);
+  };
   const generateUuid = (): string => {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
       const r = (Math.random() * 16) | 0;
@@ -41,7 +43,7 @@ const VideoMain = () => {
       <h1>Simple WebRTC Signaling Server</h1>
       <div id="container">
         <p>This part receives a room number (or generates new one), and redirects current user there.</p>
-        <form method="post" action="/KNUChat/room" id="form">
+        <form method="post" action="/KNUChat/room/" id="form">
           <input type="hidden" id="uuid" name="uuid" value={uuid} />
           <div className="row justify-content-md-center">
             <div className="input-group col-md-6 mb-3 justify-content-md-center">
@@ -81,7 +83,8 @@ const VideoMain = () => {
                     Random #
                   </button>
                 </a>
-                <button name="action" value="create" type="submit" className="btn btn-outline-primary">
+
+                <button name="action" value="create" onClick={() => handleMoveRoom()} className="btn btn-outline-primary">
                   Create Selected Room
                 </button>
               </div>
