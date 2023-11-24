@@ -1,30 +1,46 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 const WebSocketContext = React.createContext<any>(null);
 export { WebSocketContext };
 
-export default ({ children }: { children: React.ReactNode }) => {
-  const webSocketUrl = `ws://localhost:8080/ws`
-  let ws = useRef<WebSocket | null>(null);
+const WebSocketProvider = ({ children }: { children: React.ReactNode }) => {
+  const webSocketUrl = `ws://localhost:8080/example`;
+  const ws = useRef<WebSocket | null>(null);
 
-  if (!ws.current) {
-    ws.current = new WebSocket(webSocketUrl);
-    ws.current.onopen = () => {
-      console.log("connected to " + webSocketUrl);
+  useEffect(() => {
+    if (!ws.current) {
+      ws.current = new WebSocket(webSocketUrl);
+      ws.current.onopen = () => {
+        console.log("connected to " + webSocketUrl);
+      };
+      ws.current.onclose = (error) => {
+        console.log("disconnect from " + webSocketUrl);
+        console.log(error);
+      };
+      ws.current.onerror = (error) => {
+        console.log("connection error " + webSocketUrl);
+        console.log(error);
+      };
+      ws.current.onmessage = (event) => {
+        // 서버로부터 메시지를 수신하면 이 부분에서 처리
+        const data = JSON.parse(event.data);
+        console.log("Received message:", data);
+      };
     }
-    ws.current.onclose = error => {
-      console.log("disconnect from " + webSocketUrl);
-      console.log(error);
+
+    // 컴포넌트가 언마운트될 때 WebSocket을 닫음
+    return () => {
+      if (ws.current) {
+        ws.current.close();
+      }
     };
-    ws.current.onerror = error => {
-      console.log("connection error " + webSocketUrl);
-      console.log(error);
-    };
-  }
+  }, [webSocketUrl]);
 
   return (
     <WebSocketContext.Provider value={ws}>
       {children}
     </WebSocketContext.Provider>
   );
-}
+};
+
+export default WebSocketProvider;
