@@ -7,6 +7,11 @@ import OpenChat from "@/page/OpenChat";
 import Search from "@/page/Search";
 import NotFound from "@page/NotFound";
 import Login from "@page/Login";
+import VideoChat from "@page/VideoChat";
+import Streaming from "@page/Streaming";
+import SdpOffer from "@page/SdpOffer";
+import VideoMain from "@page/VideoMain";
+import WebRTC from "@page/webRtc";
 
 const Router = () => {
   return (
@@ -18,6 +23,12 @@ const Router = () => {
         <Route path="/openChat" element={<OpenChat />} />
         <Route path="/search" element={<Search />} />
         <Route path="/*" element={<NotFound />} />
+        <Route path="/video" element={<VideoChat />} />
+        <Route path="/stream" element={<Streaming />} />
+        <Route path="/SdpOffer" element={<SdpOffer />} />
+        <Route path="/videomain" element={<VideoMain />} />
+        <Route path="/room/random" element={<WebRTC />} />
+        <Route path="/room" element={<WebRTC />} />
         {["/me", "/record", "/addRecord", "/profile"].map((path) => (
           <Route key={path} path={path} element={<MyPage />} />
         ))}
