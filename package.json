@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.8.7",
     "@types/node": "^20.8.9",
+    "axios": "^1.6.2",
     "github-label-sync": "^2.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
