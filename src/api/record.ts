@@ -13,7 +13,6 @@ const recordApi = {
   deleteRecord: async () => {
     return await clientApi.delete(`/record`);
   },
-
   searchRecord: async ({ filtering }: any) => {
     return await clientApi.get(`/record/search/${filtering}`);
   },
