@@ -2,9 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import userApi from "@api/user";
 
 const useGetUserProfile = () => {
-  const queryKey = [];
-
-  return useQuery(queryKey, () => userApi.getUserProfile({}), {});
+  const { data } = useQuery({
+    queryKey: [],
+    queryFn: ({ queryKey }) => userApi.getUserProfile({ queryKey }),
+  });
+  console.log(data?.data);
+  return { data: data?.data ?? [] };
 };
 
 export default useGetUserProfile;
