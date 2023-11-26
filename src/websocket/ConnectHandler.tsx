@@ -10,7 +10,7 @@ interface ConnectHandlerProps {
 const ConnectHandler: React.FC<ConnectHandlerProps> = ({ setClient }) => {
   useEffect(() => {
     const client = Stomp.over(() => {
-      const sock = new SockJS("ws://localhost:8080/example");
+      const sock = new WebSocket("ws://localhost:8080/example");
       return sock;
     });
 

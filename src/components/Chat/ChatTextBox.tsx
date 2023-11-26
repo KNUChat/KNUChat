@@ -46,7 +46,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
         value={message}
         onChange={handleChange}
       />
-      <ButtonBox onClick={publish}>전송</ButtonBox>
+      <ButtonBox onClick={publish}>Send</ButtonBox>
     </ChatTextBoxWrapper>
   );
 };
