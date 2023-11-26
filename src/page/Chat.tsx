@@ -1,14 +1,12 @@
-import WebSocketProvider from '../websocket/WebSocketProvider';
-import Chatting from '../components/Chat/Chatting';
-import TextInputBox from '../components/Chat/TextInputBox';
- 
+import ConnectHandler from '../websocket/ConnectHandler'; // 추가
+
 const Chat = () => {
   return (
-    <WebSocketProvider>
-      <Chatting/>
-      <TextInputBox />
-    </WebSocketProvider>
+    <div>
+      <ConnectHandler />
+
+    </div>
   );
 };
-
+ 
 export default Chat;
