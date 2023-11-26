@@ -11,7 +11,8 @@ import VideoChat from "@page/VideoChat";
 import Streaming from "@page/Streaming";
 import SdpOffer from "@page/SdpOffer";
 import VideoMain from "@page/VideoMain";
-import WebRTC from "@page/webRtc";
+import WebRTC from "@page/webRTC";
+import WebRtcTest from "@page/WebRtcTest";
 
 const Router = () => {
   return (
@@ -29,6 +30,7 @@ const Router = () => {
         <Route path="/videomain" element={<VideoMain />} />
         <Route path="/room/random" element={<WebRTC />} />
         <Route path="/room/:id" element={<WebRTC />} />
+        <Route path="/rtctest" element={<WebRtcTest />} />
         {["/me", "/record", "/addRecord", "/profile"].map((path) => (
           <Route key={path} path={path} element={<MyPage />} />
         ))}
