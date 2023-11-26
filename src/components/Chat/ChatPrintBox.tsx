@@ -42,5 +42,5 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
 export default ChatPrintBox;
 
 const ChatPrintWrapper = styled.div`
-  /* 스타일링을 필요에 따라 추가하세요. */
+  width: auto;
 `;

@@ -13,7 +13,7 @@ const Chatroom: React.FC = () => {
   return (
     <ChatroomWrapper>
       <ConnectHandler setClient={setClient} />
-      <ChatPrintBox />
+      <ChatPrintBox roomId={1} />
       <ChatTextBox client={client} />
     </ChatroomWrapper>
   );
