@@ -3,7 +3,8 @@ import useGetUserProfile from "@hook/user/useGetUserProfile";
 import styled from "styled-components";
 
 const Test = () => {
-  const { data } = useGetUserProfile();
+  const { data: userData } = useGetUserProfile();
+  console.log(userData);
   return (
     <TestWrapper>
       <h1>User</h1>
