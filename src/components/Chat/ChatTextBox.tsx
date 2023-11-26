@@ -8,12 +8,19 @@ interface ChatTextBoxProps {
 
 const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
   const [message, setMessage] = useState("");
+  const [now, setNow] = useState("");
+
+  const timeStamp = () => {
+    const now = new Date();
+    setNow(now.toISOString());
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
   const publish = () => {
+    timeStamp();
     if (client && client.connected) {
       client.publish({
         destination: "/pub/1",
@@ -21,6 +28,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
           roomId: 1,
           senderId: 1,
           message: message,
+          time: now,
         }),
       });
 
@@ -38,7 +46,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
         value={message}
         onChange={handleChange}
       />
-      <ButtonBox onClick={publish}>Send</ButtonBox>
+      <ButtonBox onClick={publish}>전송</ButtonBox>
     </ChatTextBoxWrapper>
   );
 };
