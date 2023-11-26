@@ -1,23 +1,27 @@
+// Chatroom.ts
+
 import styled from "styled-components";
 import ChatPrintBox from "./ChatPrintBox";
 import ChatTextBox from "./ChatTextBox";
 import ConnectHandler from "@/websocket/ConnectHandler";
+import { CompatClient } from "@stomp/stompjs";
+import { useState } from "react";
 
-const Chatroom = () => {
-    return (
-      <ChatroomWrapper>
+const Chatroom: React.FC = () => {
+  const [client, setClient] = useState<CompatClient | null>(null);
 
-        <ChatPrintBox />
-        <ChatTextBox client={null} user={{
-          name: ""
-        }} />
-      </ChatroomWrapper>
-    );
-  };
-  
-  export default Chatroom;
+  return (
+    <ChatroomWrapper>
+      <ConnectHandler setClient={setClient} />
+      <ChatPrintBox />
+      <ChatTextBox client={client} />
+    </ChatroomWrapper>
+  );
+};
+
+export default Chatroom;
 
 const ChatroomWrapper = styled.div`
-  display : flex,
-  flex-direction : column,
+  display: flex;
+  flex-direction: column;
 `;
