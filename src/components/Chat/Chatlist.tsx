@@ -1,9 +1,9 @@
-import ChatrromBox from "./ChatroomBox";
+import ChatroomBox from "./ChatroomBox";
 
 const Chatlist = () => {
     return (
       <div>
-        
+        <ChatroomBox />
       </div>
     );
   };

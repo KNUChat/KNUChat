@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Main from "@/page/Main";
 import Layout from "@/page/Layout";
 import MyPage from "@/page/MyPage";
-import Chat from "@/page/Chat";
+import Chat from "@/page/ChatPage";
 import OpenChat from "@/page/OpenChat";
 import Search from "@/page/Search";
 import NotFound from "@page/NotFound";
