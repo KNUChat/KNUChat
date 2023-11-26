@@ -16,7 +16,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
   const publish = () => {
     if (client && client.connected) {
       client.publish({
-        destination: "/pub/chat",
+        destination: "/pub/1",
         body: JSON.stringify({
           roomId: 1,
           senderId: 1,

@@ -20,7 +20,7 @@ const ConnectHandler: React.FC<ConnectHandlerProps> = ({ setClient }) => {
         setClient(client);
 
         client.subscribe(
-          `/sub/room/{roomid}`,
+          `/sub/room/1`,
           (message) => {
             console.log("Received message:", JSON.parse(message.body));
           },
