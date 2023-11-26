@@ -39,7 +39,7 @@ const ConnectHandler = () => {
     connectHandler();
 
     return () => {
-      // 컴포넌트가 언마운트될 때 WebSocket 연결을 해제합니다.
+      // 컴포넌트가 언마운트될 때 WebSocket 연결을 해제
       client.current?.disconnect();
     };
   }, []); // useEffect는 한 번만 실행되어야 하므로 빈 배열을 전달합니다.

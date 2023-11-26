@@ -1,12 +1,16 @@
 import styled from "styled-components";
 import ChatPrintBox from "./ChatPrintBox";
 import ChatTextBox from "./ChatTextBox";
+import ConnectHandler from "@/websocket/ConnectHandler";
 
 const Chatroom = () => {
     return (
       <ChatroomWrapper>
+
         <ChatPrintBox />
-        <ChatTextBox />
+        <ChatTextBox client={null} user={{
+          name: ""
+        }} />
       </ChatroomWrapper>
     );
   };
