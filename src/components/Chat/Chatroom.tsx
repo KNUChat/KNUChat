@@ -14,5 +14,6 @@ const Chatroom = () => {
   export default Chatroom;
 
 const ChatroomWrapper = styled.div`
-
+  display : flex,
+  flex-direction : column,
 `;
