@@ -1,3 +1,4 @@
+// ChatTextBox.tsx
 import styled from "styled-components";
 import { useState, ChangeEvent } from "react";
 import { CompatClient } from "@stomp/stompjs";
@@ -8,28 +9,23 @@ interface ChatTextBoxProps {
 
 const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
   const [message, setMessage] = useState("");
-  const [now, setNow] = useState("");
-
-  const timeStamp = () => {
-    const now = new Date();
-    setNow(now.toISOString());
-  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
   const publish = () => {
-    timeStamp();
+    const now = new Date().toISOString();
+    console.log(now);
     if (client && client.connected) {
       client.publish({
         destination: "/pub/1",
         body: JSON.stringify({
           roomId: 1,
           senderId: 1,
-          receiverId:2,
+          receiverId: 2,
           message: message,
-          time: now,
+          sendTime: now,
         }),
       });
 

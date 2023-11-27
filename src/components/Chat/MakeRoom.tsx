@@ -24,6 +24,7 @@ const MakeRoom: React.FC<MakeRoomProps> = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',
         body: JSON.stringify({
           mentee_id: menteeIdInt,
           mentor_id: mentorIdInt,

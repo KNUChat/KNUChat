@@ -15,7 +15,7 @@ interface ChatroomBoxProps {
 const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room }) => {
   return (
     <div>
-      <p>Mentor: {room.mentorName}</p>
+      <p>{room.mentorName}</p>
     </div>
   );
 };
