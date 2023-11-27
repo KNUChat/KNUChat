@@ -27,6 +27,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
         body: JSON.stringify({
           roomId: 1,
           senderId: 1,
+          receiverId:2,
           message: message,
           time: now,
         }),

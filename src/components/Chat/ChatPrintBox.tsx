@@ -6,7 +6,7 @@ interface ChatPrintBoxProps {
 }
 
 interface ChatLog {
-  userId: string;
+  userId: number;
   timestamp: string;
   content: string;
 }
@@ -17,7 +17,7 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
   useEffect(() => {
     const fetchChatLogs = async () => {
       try {
-        const response = await fetch(`/api/chat/room/1/logs`);
+        const response = await fetch(`http://52.79.37.100:32253/chat/room/1/logs`);
         const data = await response.json();
         setLogs(data);
       } catch (error) {
@@ -31,7 +31,7 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
   return (
     <ChatPrintWrapper>
       {logs.map((log, index) => (
-        <div key={index} className={log.userId === "user1" ? "special-message" : ""}>
+        <div key={index} className={log.userId ==1 ? "special-message" : ""}>
           {`${log.userId} : ${log.content} (${log.timestamp})`}
         </div>
       ))}
