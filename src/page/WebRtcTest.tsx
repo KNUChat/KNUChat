@@ -1,109 +1,121 @@
 import { useEffect, useRef, useState } from "react";
-import * as SockJS from "sockjs-client";
-import * as Stomp from "stompjs";
-import * as SimplePeer from "simple-peer";
+import SimplePeer from "simple-peer";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 
-const PeerConfig = () => {
-  const localStreamElementRef = useRef(null);
+const WebRTCExample = () => {
+  const localStreamRef = useRef(null);
   const remoteStreamDivRef = useRef(null);
   const roomIdInputRef = useRef(null);
-  const enterRoomBtnRef = useRef(null);
-  const startSteamBtnRef = useRef(null);
+  const [roomId, setRoomId] = useState("1");
+  const myKey = Math.random().toString(36).substring(2, 11);
+  const pcListMapRef = useRef(new Map());
+  const otherKeyListRef = useRef([]);
+  const [localStream, setLocalStream] = useState<MediaStream>();
+  const [stompClient, setStompClient] = useState<Stomp.Client>();
 
-  const [myKey, setMyKey] = useState("");
-  const [pcListMap, setPcListMap] = useState(new Map());
-  const [roomId, setRoomId] = useState("");
-  const [otherKeyList, setOtherKeyList] = useState([]);
-  const [localStream, setLocalStream] = useState(null);
-  const [stompClient, setStompClient] = useState(null);
-
-  useEffect(() => {
-    const startCam = async () => {
-      if (navigator.mediaDevices !== undefined) {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-          console.log("Stream found");
-          setLocalStream(stream);
-          stream.getAudioTracks()[0].enabled = true;
-          localStreamElementRef.current.srcObject = stream;
-        } catch (error) {
-          console.error("Error accessing media devices:", error);
-        }
+  const startCam = async () => {
+    if (navigator.mediaDevices !== undefined) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+        console.log("Stream found");
+        setLocalStream(stream);
+        stream.getAudioTracks()[0].enabled = true;
+        localStreamRef.current.srcObject = stream;
+      } catch (error) {
+        console.error("Error accessing media devices:", error);
       }
-    };
-
-    startCam();
-  }, []);
-
-  useEffect(() => {
-    const connectSocket = async () => {
-      const socket = new SockJS("/signaling");
-      const stompClient = Stomp.over(socket);
-      stompClient.debug = null;
-
-      stompClient.connect({}, () => {
-        console.log("Connected to WebRTC server");
-
-        stompClient.subscribe(`/topic/peer/iceCandidate/${myKey}/${roomId}`, (candidate) => {
-          const key = JSON.parse(candidate.body).key;
-          const message = JSON.parse(candidate.body).body;
-
-          pcListMap
-            .get(key)
-            .addIceCandidate(new RTCIceCandidate({ candidate: message.candidate, sdpMLineIndex: message.sdpMLineIndex, sdpMid: message.sdpMid }));
-        });
-
-        stompClient.subscribe(`/topic/peer/offer/${myKey}/${roomId}`, (offer) => {
-          const key = JSON.parse(offer.body).key;
-          const message = JSON.parse(offer.body).body;
-
-          const pc = createPeerConnection(key);
-          pc.setRemoteDescription(new RTCSessionDescription({ type: message.type, sdp: message.sdp }));
-          sendAnswer(pc, key);
-        });
-
-        stompClient.subscribe(`/topic/peer/answer/${myKey}/${roomId}`, (answer) => {
-          const key = JSON.parse(answer.body).key;
-          const message = JSON.parse(answer.body).body;
-
-          pcListMap.get(key).setRemoteDescription(new RTCSessionDescription(message));
-        });
-
-        stompClient.subscribe(`/topic/call/key`, (message) => {
-          stompClient.send(`/app/send/key`, {}, JSON.stringify(myKey));
-        });
-
-        stompClient.subscribe(`/topic/send/key`, (message) => {
-          const key = JSON.parse(message.body);
-
-          if (myKey !== key && !otherKeyList.includes(myKey)) {
-            setOtherKeyList((prevList) => [...prevList, key]);
-          }
-        });
-
-        setStompClient(stompClient);
-      });
-    };
-
-    if (localStream !== null && roomId !== "") {
-      connectSocket();
     }
-  }, [localStream, roomId]);
+  };
+
+  const connectSocket = async () => {
+    console.log("connectSocket");
+    const socket = new SockJS("http://localhost:8080/signaling");
+    console.log("socket", socket);
+    const stomp = Stomp.over(socket);
+    stomp.debug = null;
+    console.log("stomp", stomp);
+    setStompClient(stomp);
+    console.log("roomID", roomId);
+    stomp.connect({}, () => {
+      console.log("Connected to WebRTC server");
+
+      stomp.subscribe(`/topic/peer/iceCandidate/${myKey}/${roomId}`, (candidate) => {
+        const key = JSON.parse(candidate.body).key;
+        const message = JSON.parse(candidate.body).body;
+        pcListMapRef.current.get(key).addIceCandidate(
+          new RTCIceCandidate({
+            candidate: message.candidate,
+            sdpMLineIndex: message.sdpMLineIndex,
+            sdpMid: message.sdpMid,
+          })
+        );
+      });
+      console.log("myKey", myKey);
+      console.log("roomId", roomId);
+      stomp.subscribe(`/topic/peer/offer/${myKey}/${roomId}`, (offer) => {
+        const key = JSON.parse(offer.body).key;
+        const message = JSON.parse(offer.body).body;
+
+        pcListMapRef.current.set(key, createPeerConnection(key));
+        pcListMapRef.current.get(key).setRemoteDescription(new RTCSessionDescription({ type: message.type, sdp: message.sdp }));
+        sendAnswer(pcListMapRef.current.get(key), key);
+      });
+
+      stomp.subscribe(`/topic/peer/answer/${myKey}/${roomId}`, (answer) => {
+        const key = JSON.parse(answer.body).key;
+        const message = JSON.parse(answer.body).body;
+
+        pcListMapRef.current.get(key).setRemoteDescription(new RTCSessionDescription(message));
+      });
+
+      stomp.subscribe(`/topic/call/key`, (message) => {
+        stomp.send(`/app/send/key`, {}, JSON.stringify(myKey));
+      });
+
+      stomp.subscribe(`/topic/send/key`, (message) => {
+        const key = JSON.parse(message.body);
+
+        if (myKey !== key && !otherKeyListRef.current.includes(key)) {
+          otherKeyListRef.current.push(key);
+          // otherKeyListRef.current = [...otherKeyListRef.current, key];
+        }
+      });
+    });
+  };
+
+  let onTrack = (event, otherKey) => {
+    if (document.getElementById(`${otherKey}`) === null) {
+      const video = document.createElement("video");
+
+      video.autoplay = true;
+      video.controls = true;
+      video.id = otherKey;
+      video.srcObject = event.streams[0];
+
+      document.getElementById("remoteStreamDiv").appendChild(video);
+    }
+
+    //
+    // remoteStreamElement.srcObject = event.streams[0];
+    // remoteStreamElement.play();
+  };
 
   const createPeerConnection = (otherKey) => {
-    const pc = new SimplePeer();
+    const pc = new RTCPeerConnection();
     try {
-      pc.on("icecandidate", (event) => {
+      pc.addEventListener("icecandidate", (event) => {
         onIceCandidate(event, otherKey);
       });
-      pc.on("track", (event) => {
+      pc.addEventListener("track", (event) => {
         onTrack(event, otherKey);
       });
-      if (localStream !== null) {
+      if (localStream !== undefined) {
         localStream.getTracks().forEach((track) => {
           pc.addTrack(track, localStream);
         });
       }
+
       console.log("PeerConnection created");
     } catch (error) {
       console.error("PeerConnection failed: ", error);
@@ -114,33 +126,43 @@ const PeerConfig = () => {
   const onIceCandidate = (event, otherKey) => {
     if (event.candidate) {
       console.log("ICE candidate");
-      stompClient.send(`/app/peer/iceCandidate/${otherKey}/${roomId}`, {}, JSON.stringify({ key: myKey, body: event.candidate }));
+      stompClient.send(
+        `/app/peer/iceCandidate/${otherKey}/${roomId}`,
+        {},
+        JSON.stringify({
+          key: myKey,
+          body: event.candidate,
+        })
+      );
     }
   };
 
-  const onTrack = (event, otherKey) => {
-    if (!document.getElementById(`${otherKey}`)) {
-      const video = document.createElement("video");
-      video.autoplay = true;
-      video.controls = true;
-      video.id = otherKey;
-      video.srcObject = event.streams[0];
-      remoteStreamDivRef.current.appendChild(video);
-    }
-  };
-
-  const sendOffer = (pc, otherKey) => {
+  let sendOffer = (pc, otherKey) => {
     pc.createOffer().then((offer) => {
       setLocalAndSendMessage(pc, offer);
-      stompClient.send(`/app/peer/offer/${otherKey}/${roomId}`, {}, JSON.stringify({ key: myKey, body: offer }));
+      stompClient.send(
+        `/app/peer/offer/${otherKey}/${roomId}`,
+        {},
+        JSON.stringify({
+          key: myKey,
+          body: offer,
+        })
+      );
       console.log("Send offer");
     });
   };
 
-  const sendAnswer = (pc, otherKey) => {
+  let sendAnswer = (pc, otherKey) => {
     pc.createAnswer().then((answer) => {
       setLocalAndSendMessage(pc, answer);
-      stompClient.send(`/app/peer/answer/${otherKey}/${roomId}`, {}, JSON.stringify({ key: myKey, body: answer }));
+      stompClient.send(
+        `/app/peer/answer/${otherKey}/${roomId}`,
+        {},
+        JSON.stringify({
+          key: myKey,
+          body: answer,
+        })
+      );
       console.log("Send answer");
     });
   };
@@ -148,25 +170,33 @@ const PeerConfig = () => {
   const setLocalAndSendMessage = (pc, sessionDescription) => {
     pc.setLocalDescription(sessionDescription);
   };
+  const handleEnterRoom = async () => {
+    await startCam();
 
-  const handleEnterRoomClick = () => {
-    const roomId = roomIdInputRef.current.value;
+    if (localStream !== null) {
+      localStreamRef.current.style.display = "block";
+      document.getElementById("startSteamBtn").style.display = "";
+    }
 
-    setRoomId(roomId);
-    roomIdInputRef.current.disabled = true;
-    enterRoomBtnRef.current.disabled = true;
-    startSteamBtnRef.current.style.display = "";
+    setRoomId("1");
+    // roomIdInputRef.current?.setAttribute("disabled", "disabled");
+    // document.getElementById("enterRoomBtn").setAttribute("disabled", "disabled");
+
+    console.log(roomId);
+
+    await connectSocket(); // WebSocket 연결
   };
 
-  const handleStartStreamClick = () => {
+  const handleStartStream = () => {
+    console.log(stompClient);
     stompClient.send(`/app/call/key`, {}, {});
-
+    console.log(otherKeyListRef);
     setTimeout(() => {
-      otherKeyList.forEach((key) => {
-        if (!pcListMap.has(key)) {
-          const pc = createPeerConnection(key);
-          setPcListMap((prevMap) => new Map(prevMap).set(key, pc));
-          sendOffer(pc, key);
+      otherKeyListRef.current.forEach((key) => {
+        console.log(key);
+        if (!pcListMapRef.current.has(key) && key != undefined) {
+          pcListMapRef.current.set(key, createPeerConnection(key));
+          sendOffer(pcListMapRef.current.get(key), key);
         }
       });
     }, 1000);
@@ -174,19 +204,21 @@ const PeerConfig = () => {
 
   return (
     <div>
-      <input type="number" ref={roomIdInputRef} />
-      <button type="button" onClick={handleEnterRoomClick} ref={enterRoomBtnRef}>
-        enter Room
-      </button>
-      <button type="button" onClick={handleStartStreamClick} style={{ display: "none" }} ref={startSteamBtnRef}>
-        start Streams
-      </button>
+      <div>
+        <input type="number" ref={roomIdInputRef} />
+        <button type="button" onClick={handleEnterRoom}>
+          enter Room
+        </button>
+        <button type="button" id="startSteamBtn" style={{ display: "none" }} onClick={handleStartStream}>
+          start Streams
+        </button>
+      </div>
 
-      <video id="localStream" autoPlay playsInline controls style={{ display: "none" }} ref={localStreamElementRef} />
+      <video id="localStream" ref={localStreamRef} autoPlay playsInline controls style={{ display: "none" }} />
 
-      <div id="remoteStreamDiv" ref={remoteStreamDivRef}></div>
+      <div id="remoteStreamDiv" />
     </div>
   );
 };
 
-export default PeerConfig;
+export default WebRTCExample;
