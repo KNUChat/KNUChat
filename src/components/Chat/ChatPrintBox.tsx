@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 interface ChatPrintBoxProps {
   roomId: number;
@@ -15,11 +16,18 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
   const [logs, setLogs] = useState<ChatLog[]>([]);
 
   useEffect(() => {
+    roomId = 1
     const fetchChatLogs = async () => {
       try {
-        const response = await fetch(`http://52.79.37.100:32253/chat/room/1/logs`);
-        const data = await response.json();
-        setLogs(data);
+        const response = await axios({
+          method: "GET",
+          url: `http://52.79.37.100:32253/chat/room/${roomId}/logs`,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        // 데이터를 상태로 업데이트
+        setLogs(response.data);
       } catch (error) {
         console.error("Error fetching chat logs:", error);
       }
@@ -31,8 +39,8 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
   return (
     <ChatPrintWrapper>
       {logs.map((log, index) => (
-        <div key={index} className={log.userId ==1 ? "special-message" : ""}>
-          {`${log.userId} : ${log.content} (${log.timestamp})`}
+        <div key={index}>
+          {`${log.userId} : ${log.content}`}
         </div>
       ))}
     </ChatPrintWrapper>

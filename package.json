@@ -12,6 +12,7 @@
   "dependencies": {
     "@stomp/stompjs": "^7.0.0",
     "@types/node": "^20.8.9",
+    "axios": "^1.6.2",
     "express": "^4.18.2",
     "github-label-sync": "^2.3.1",
     "react": "^18.2.0",
@@ -36,5 +37,5 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
-  }  
+  }
 }
