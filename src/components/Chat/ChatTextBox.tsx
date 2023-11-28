@@ -37,7 +37,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
 
   return (
     <ChatTextBoxWrapper>
-      <input
+      <InputBox
         type="text"
         placeholder="메시지"
         value={message}
@@ -50,5 +50,15 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
 
 export default ChatTextBox;
 
-const ChatTextBoxWrapper = styled.div``;
+const ChatTextBoxWrapper = styled.div`
+  width:90%;
+  align-items: center;
+  display:flex;
+  flex-direction: row;
+`;
+const InputBox = styled.input`
+  align-items: center;
+  width:100%;
+`;
+
 const ButtonBox = styled.button``;
