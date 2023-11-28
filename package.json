@@ -21,7 +21,8 @@
     "react-router-dom": "^6.17.0",
     "sockjs-client": "^1.6.1",
     "styled-components": "^6.1.1",
-    "ws": "^8.14.2"
+    "ws": "^8.14.2",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@storybook/builder-vite": "^7.4.6",

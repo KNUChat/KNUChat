@@ -50,5 +50,9 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
 export default ChatPrintBox;
 
 const ChatPrintWrapper = styled.div`
-  width: auto;
+  width: 100%;
+  hight: 50rem;
+  align-item: center;
+  text-align: center;
+  background-color:white;
 `;

@@ -6,7 +6,6 @@ import ChatTextBox from "./ChatTextBox";
 import ConnectHandler from "@/websocket/ConnectHandler";
 import { CompatClient } from "@stomp/stompjs";
 import { useState } from "react";
-import ChatPrintTestBox from "./ChatPrintTestBox";
 import ChatTitle from "./ChatTitle";
 
 const Chatroom: React.FC = () => {
@@ -16,7 +15,7 @@ const Chatroom: React.FC = () => {
     <ChatroomWrapper>
       <ChatTitle/>
       <ConnectHandler setClient={setClient} />
-      <ChatPrintTestBox/>
+      <ChatPrintBox roomId={1} />
       <ChatTextBox client={client} />
     </ChatroomWrapper>
   );
