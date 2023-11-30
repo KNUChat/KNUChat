@@ -1,5 +1,3 @@
-// Chatroom.ts
-
 import styled from "styled-components";
 import ChatPrintBox from "./ChatPrintBox";
 import ChatTextBox from "./ChatTextBox";

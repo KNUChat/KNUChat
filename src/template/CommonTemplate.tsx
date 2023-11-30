@@ -7,7 +7,7 @@ const CommonTemplate = () => {
   return (
     <CommonWrapper>
       <LeftBox>
-        <Chatlist/>
+        
       </LeftBox>
       <MainBox>
         <Chatroom/>

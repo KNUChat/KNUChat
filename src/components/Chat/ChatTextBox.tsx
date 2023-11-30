@@ -2,6 +2,7 @@
 import styled from "styled-components";
 import { useState, ChangeEvent } from "react";
 import { CompatClient } from "@stomp/stompjs";
+import { useChatStore } from "../../store/store";
 
 interface ChatTextBoxProps {
   client: CompatClient | null;
@@ -9,6 +10,7 @@ interface ChatTextBoxProps {
 
 const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
   const [message, setMessage] = useState("");
+  const setSendTime = useChatStore((state) => state.setSendTime);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -17,6 +19,10 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
   const publish = () => {
     const now = new Date().toISOString();
     console.log(now);
+
+    // 상태 업데이트
+    setSendTime(now);
+
     if (client && client.connected) {
       client.publish({
         destination: "/pub/1",
@@ -51,14 +57,15 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
 export default ChatTextBox;
 
 const ChatTextBoxWrapper = styled.div`
-  width:90%;
+  width: 90%;
   align-items: center;
-  display:flex;
+  display: flex;
   flex-direction: row;
 `;
+
 const InputBox = styled.input`
   align-items: center;
-  width:100%;
+  width: 100%;
 `;
 
 const ButtonBox = styled.button``;

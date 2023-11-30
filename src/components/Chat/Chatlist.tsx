@@ -1,5 +1,6 @@
 import ChatroomBox from "./ChatroomBox";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface Room {
   roomId: number;
@@ -13,19 +14,21 @@ const Chatlist = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
 
   useEffect(() => {
-    // TODO: 서버에서 방 정보를 가져와서 상태 업데이트
-    const dummyRooms = [
-      {
-        roomId: 123,
-        mentorName: "LeeSangHee",
-        status: "progress",
-        created_at: "2023-10-14T01:33:51Z",
-        updated_at: "2023-10-14T01:34:00Z",
-      },
-      // ... 더 많은 방 정보
-    ];
+    const fetchChatRooms = async () => {
+      try {
+        const response = await axios.get('http://52.79.37.100:32253/chat/room', {
+          params: {
+            Id: 1,
+          },
+        });
+        console.log(response);
+        setRooms(response.data);
+      } catch (error) {
+        console.error('Error fetching chat rooms:', error);
+      }
+    };
 
-    setRooms(dummyRooms);
+    fetchChatRooms();
   }, []);
 
   return (
