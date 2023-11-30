@@ -17,4 +17,7 @@ export default defineConfig({
       { find: "@template", replacement: path.resolve(__dirname, "src/template") },
     ],
   },
+  define: process.env.NODE_ENV === "development" ? { global: "window" } : {},
 });
+
+

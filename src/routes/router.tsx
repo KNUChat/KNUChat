@@ -2,11 +2,12 @@ import { Routes, Route } from "react-router-dom";
 import Main from "@/page/Main";
 import Layout from "@/page/Layout";
 import MyPage from "@/page/MyPage";
-import Chat from "@/page/Chat";
+import Chat from "@/page/ChatPage";
 import OpenChat from "@/page/OpenChat";
 import Search from "@/page/Search";
 import NotFound from "@page/NotFound";
 import Login from "@page/Login";
+import MakeRoom from "@components/Chat/MakeRoom";
 
 const Router = () => {
   return (
@@ -18,6 +19,7 @@ const Router = () => {
         <Route path="/openChat" element={<OpenChat />} />
         <Route path="/search" element={<Search />} />
         <Route path="/*" element={<NotFound />} />
+        <Route path="/makeroom" element={<MakeRoom/>}/>
         {["/me", "/record", "/addRecord", "/profile"].map((path) => (
           <Route key={path} path={path} element={<MyPage />} />
         ))}

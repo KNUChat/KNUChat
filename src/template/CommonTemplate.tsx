@@ -1,11 +1,20 @@
 import styled from "styled-components";
+import Chatroom from "@components/Chat/Chatroom";
+import Chatlist from "@components/Chat/Chatlist";
+import Chatprofile from "@components/Chat/Chatprofile";
 
 const CommonTemplate = () => {
   return (
     <CommonWrapper>
-      <LeftBox>left</LeftBox>
-      <MainBox>Main</MainBox>
-      <RightBox>Right</RightBox>
+      <LeftBox>
+        
+      </LeftBox>
+      <MainBox>
+        <Chatroom/>
+      </MainBox>
+      <RightBox>
+        <Chatprofile/>
+      </RightBox>
     </CommonWrapper>
   );
 };
