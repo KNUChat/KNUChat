@@ -24,14 +24,12 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
       try {
         const response = await axios.get(`http://52.79.37.100:32253/chat/room/${roomId}/logs`);
 
-        // API 응답 형식에 따라 데이터 가공
         const formattedLogs = response.data.map((log: ChatLog) => ({
           senderId: log.senderId,
           message: log.message,
           sendTime: log.sendTime,
         }));
 
-        // 데이터를 상태로 업데이트
         setLogs(formattedLogs);
       } catch (error) {
         console.error("Error fetching chat logs:", error);
@@ -58,8 +56,10 @@ export default ChatPrintBox;
 
 const ChatPrintWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: 30rem;
   align-items: center;
   text-align: center;
   background-color: white;
+  margin-top: 3px;
+  overflow-y: auto; // 스크롤바 추가
 `;
