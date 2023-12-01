@@ -10,11 +10,12 @@ interface Room {
 
 interface ChatroomBoxProps {
   room: Room;
+  onClick: () => void;
 }
 
-const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room }) => {
+const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room,onClick }) => {
   return (
-    <ChatroomBoxWrapper>
+    <ChatroomBoxWrapper onClick={onClick}>
       <p>{room.mentorId}</p>
     </ChatroomBoxWrapper>
   );
