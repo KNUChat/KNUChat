@@ -1,13 +1,13 @@
 import ChatroomBox from "./ChatroomBox";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
 
 interface Room {
   roomId: number;
-  mentorName: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
+  mentorId: number;
+  menteeId: number;
+  roomStatus: string;
 }
 
 const Chatlist = () => {
@@ -18,7 +18,7 @@ const Chatlist = () => {
       try {
         const response = await axios.get('http://52.79.37.100:32253/chat/room', {
           params: {
-            Id: 1,
+            id: 1,
           },
         });
         console.log(response);
@@ -32,12 +32,17 @@ const Chatlist = () => {
   }, []);
 
   return (
-    <div>
+    <ChatlistWrapper>
       {rooms.map((room) => (
-        <ChatroomBox key={room.roomId} room={room} />
+        <ChatroomBox key={room.roomId} room={room}/>
       ))}
-    </div>
+    </ChatlistWrapper>
   );
 };
 
 export default Chatlist;
+
+const ChatlistWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`;

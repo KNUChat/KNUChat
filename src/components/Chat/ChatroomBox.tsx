@@ -2,10 +2,9 @@ import React from "react";
 
 interface Room {
   roomId: number;
-  mentorName: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
+  mentorId: number;
+  menteeId: number;
+  roomStatus: string;
 }
 
 interface ChatroomBoxProps {
@@ -15,7 +14,7 @@ interface ChatroomBoxProps {
 const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room }) => {
   return (
     <div>
-      <p>{room.mentorName}</p>
+      <p>{room.mentorId}</p>
     </div>
   );
 };
