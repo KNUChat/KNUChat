@@ -11,6 +11,7 @@ interface ChatTextBoxProps {
 const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
   const [message, setMessage] = useState("");
   const setSendTime = useChatStore((state) => state.setSendTime);
+  const selectedRoomId = useChatStore((state) => state.selectedRoomId);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -23,13 +24,15 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
     // 상태 업데이트
     setSendTime(now);
 
-    if (client && client.connected) {
+    if (client && client.connected && selectedRoomId) {
+      const publishAddress = `/pub/${selectedRoomId}`;
+
       client.publish({
-        destination: "/pub/1",
+        destination: publishAddress,
         body: JSON.stringify({
-          roomId: 1,
-          senderId: 1,
-          receiverId: 2,
+          roomId: selectedRoomId,
+          senderId: 1, // Adjust senderId as needed
+          receiverId: 2, // Adjust receiverId as needed
           message: message,
           sendTime: now,
         }),
@@ -37,7 +40,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
 
       setMessage("");
     } else {
-      console.error("WebSocket client is not initialized or not connected.");
+      console.error("WebSocket client is not initialized, not connected, or selectedRoomId is not available.");
     }
   };
 
