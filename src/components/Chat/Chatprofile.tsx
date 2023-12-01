@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import ChatproTitle from "./ChatproTitle";
 import Profile from "./Profile";
+import Title from "./Title";
 
 const Chatprofile = () => {
 
     return (
         <ChatprofileWrapper>
-            <ChatproTitle/>
+            <Title text="Profile"/>
             <ProfileWrapper>
                 <Profile/>
             </ProfileWrapper>
