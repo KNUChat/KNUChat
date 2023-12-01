@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 
 interface Room {
   roomId: number;
@@ -13,10 +14,19 @@ interface ChatroomBoxProps {
 
 const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room }) => {
   return (
-    <div>
+    <ChatroomBoxWrapper>
       <p>{room.mentorId}</p>
-    </div>
+    </ChatroomBoxWrapper>
   );
 };
 
 export default ChatroomBox;
+
+
+const ChatroomBoxWrapper = styled.div`
+  background-color: white;
+  width: 100%;
+  text-align: center;
+  margin-top: 3px;
+  hight: auto;
+`;
