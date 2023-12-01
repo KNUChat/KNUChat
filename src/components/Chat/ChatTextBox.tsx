@@ -21,7 +21,6 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
     const now = new Date().toISOString();
     console.log(now);
 
-    // 상태 업데이트
     setSendTime(now);
 
     if (client && client.connected && selectedRoomId) {
@@ -31,8 +30,8 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
         destination: publishAddress,
         body: JSON.stringify({
           roomId: selectedRoomId,
-          senderId: 1, // Adjust senderId as needed
-          receiverId: 2, // Adjust receiverId as needed
+          senderId: 1,
+          receiverId: 2,
           message: message,
           sendTime: now,
         }),

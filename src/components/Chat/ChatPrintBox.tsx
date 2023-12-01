@@ -37,7 +37,7 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
     };
 
     fetchChatLogs();
-  }, [roomId, sendTime]); // sendTime이 변경될 때마다 다시 불러옴
+  }, [roomId, sendTime]);
 
   return (
     <ChatPrintWrapper>
