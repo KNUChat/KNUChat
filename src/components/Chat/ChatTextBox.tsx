@@ -18,8 +18,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
   };
 
   const publish = () => {
-    const now = new Date().toISOString();
-    console.log(now);
+    const now = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
 
     setSendTime(now);
 
