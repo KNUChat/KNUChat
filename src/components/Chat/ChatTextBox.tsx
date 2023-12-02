@@ -11,6 +11,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
   const [message, setMessage] = useState("");
   const setSendTime = useChatStore((state) => state.setSendTime);
   const selectedRoomId = useChatStore((state) => state.selectedRoomId);
+  const userId = useChatStore();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -28,7 +29,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
         destination: publishAddress,
         body: JSON.stringify({
           roomId: selectedRoomId,
-          senderId: 1,
+          senderId: userId,
           receiverId: 2,
           message: message,
           sendTime: now,

@@ -16,7 +16,7 @@ const Chatroom: React.FC = () => {
     <ChatroomWrapper>
       <Title text="ChatRoom"/>
       <ConnectHandler setClient={setClient} />
-      {selectedRoomId && <ChatPrintBox roomId={selectedRoomId} />}
+      {selectedRoomId && <ChatPrintBox roomId={selectedRoomId} client={client} />}
       <ChatTextBox client={client} />
     </ChatroomWrapper>
   );

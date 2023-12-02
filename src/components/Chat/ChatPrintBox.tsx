@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useChatStore } from "../../store/store";
+import SubHandler from "@/websocket/SubHandler";
+import { CompatClient } from "@stomp/stompjs";
 
 interface ChatPrintBoxProps {
   roomId: number;
+  client: CompatClient | null;
 }
 
 interface ChatLog {
@@ -15,7 +18,7 @@ interface ChatLog {
   sendTime: string;
 }
 
-const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
+const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ client, roomId }) => {
   const [logs, setLogs] = useState<ChatLog[]>([]);
   const sendTime = useChatStore((state) => state.sendTime);
 
@@ -29,7 +32,7 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
           message: log.message,
           sendTime: log.sendTime,
         }));
-        console.log(response.data);
+
         setLogs(formattedLogs);
       } catch (error) {
         console.error("Error fetching chat logs:", error);
@@ -41,6 +44,7 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
 
   return (
     <ChatPrintWrapper>
+      <SubHandler client={client} selectedRoomId={roomId}/>
       {logs.map((log, index) => (
         <div key={index}>
           <div>{`SenderId: ${log.senderId} | Message: ${log.message}`}</div>
@@ -61,5 +65,5 @@ const ChatPrintWrapper = styled.div`
   text-align: center;
   background-color: white;
   margin-top: 3px;
-  overflow-y: auto; // 스크롤바 추가
+  overflow-y: auto;
 `;
