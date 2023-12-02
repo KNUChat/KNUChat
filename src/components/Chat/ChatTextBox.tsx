@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useState, ChangeEvent } from "react";
 import { CompatClient } from "@stomp/stompjs";
 import { useChatStore } from "../../store/store";
-
 interface ChatTextBoxProps {
   client: CompatClient | null;
 }
@@ -18,10 +17,8 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
   };
 
   const publish = () => {
-    const now = new Date().toISOString();
-    console.log(now);
+    const now = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
 
-    // 상태 업데이트
     setSendTime(now);
 
     if (client && client.connected && selectedRoomId) {
@@ -31,13 +28,12 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
         destination: publishAddress,
         body: JSON.stringify({
           roomId: selectedRoomId,
-          senderId: 1, // Adjust senderId as needed
-          receiverId: 2, // Adjust receiverId as needed
+          senderId: 1,
+          receiverId: 2,
           message: message,
           sendTime: now,
         }),
       });
-
       setMessage("");
     } else {
       console.error("WebSocket client is not initialized, not connected, or selectedRoomId is not available.");

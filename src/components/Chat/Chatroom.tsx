@@ -4,7 +4,7 @@ import ChatTextBox from "./ChatTextBox";
 import ConnectHandler from "@/websocket/ConnectHandler";
 import { CompatClient } from "@stomp/stompjs";
 import { useChatStore } from "../../store/store"; // Update the import path
-import ChatTitle from "./ChatTitle";
+import Title from "./Title";
 import { useState } from "react";
 
 const Chatroom: React.FC = () => {
@@ -14,7 +14,7 @@ const Chatroom: React.FC = () => {
 
   return (
     <ChatroomWrapper>
-      <ChatTitle/>
+      <Title text="ChatRoom"/>
       <ConnectHandler setClient={setClient} />
       {selectedRoomId && <ChatPrintBox roomId={selectedRoomId} />}
       <ChatTextBox client={client} />

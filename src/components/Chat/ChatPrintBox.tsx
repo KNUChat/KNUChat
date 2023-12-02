@@ -29,7 +29,7 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
           message: log.message,
           sendTime: log.sendTime,
         }));
-
+        console.log(response.data);
         setLogs(formattedLogs);
       } catch (error) {
         console.error("Error fetching chat logs:", error);
@@ -37,7 +37,7 @@ const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
     };
 
     fetchChatLogs();
-  }, [roomId, sendTime]); // sendTime이 변경될 때마다 다시 불러옴
+  }, [roomId, sendTime]);
 
   return (
     <ChatPrintWrapper>
