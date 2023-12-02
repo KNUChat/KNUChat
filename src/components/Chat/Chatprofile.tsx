@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Profile from "./Profile";
 import Title from "./Title";
+import ProfileTest from "./ProfileTest";
 
 const Chatprofile = () => {
 
@@ -8,7 +8,7 @@ const Chatprofile = () => {
         <ChatprofileWrapper>
             <Title text="Profile"/>
             <ProfileWrapper>
-                <Profile/>
+                <ProfileTest/>
             </ProfileWrapper>
         </ChatprofileWrapper>
     );
@@ -18,6 +18,7 @@ export default Chatprofile;
 
 const ChatprofileWrapper = styled.div`
     text-align: center;
+    width: 100%;
 `;
 
 const ProfileWrapper = styled.div`
