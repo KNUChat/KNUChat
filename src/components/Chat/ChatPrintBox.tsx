@@ -12,6 +12,7 @@ interface ChatPrintBoxProps {
 }
 
 interface ChatLog {
+  roomId: number;
   senderId: number;
   receiverId: number;
   message: string;

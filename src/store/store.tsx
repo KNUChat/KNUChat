@@ -8,7 +8,7 @@ interface ChatStore {
   setSelectedRoomId: (roomId: number | null) => void;
   userId: number | null;
   setUserId: (userId: number | 1) => void;
-  rooms: Room[]; // Room 타입을 찾을 수 있도록 수정
+  rooms: Room[];
   setRooms: (rooms: Room[]) => void;
 }
 
@@ -25,7 +25,7 @@ export const useChatStore = create<ChatStore>((set) => ({
   selectedRoomId: null,
   setSelectedRoomId: (roomId) => set({ selectedRoomId: roomId }),
   userId: 1,
-  setUserId: (userId) => set({ userId: userId }),
+  setUserId: (userId) => set({ userId: userId as number }),
   rooms: [],
   setRooms: (rooms) => set({ rooms }),
 }));
