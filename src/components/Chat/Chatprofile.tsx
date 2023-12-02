@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Title from "./Title";
-import ProfileTest from "./ProfileTest";
+import Profile from "./Profile";
 
 const Chatprofile = () => {
 
@@ -8,7 +8,7 @@ const Chatprofile = () => {
         <ChatprofileWrapper>
             <Title text="Profile"/>
             <ProfileWrapper>
-                <ProfileTest/>
+                <Profile/>
             </ProfileWrapper>
         </ChatprofileWrapper>
     );
