@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Chatroom from "@components/Chat/Chatroom";
 import Chatlist from "@components/Chat/Chatlist";
-import Chatprofile from "@components/Chat/Chatprofile";
+import ChatProfile from "@components/Chat/Chatprofile";
 
 const CommonTemplate = () => {
   return (
@@ -13,7 +13,7 @@ const CommonTemplate = () => {
         <Chatroom/>
       </MainBox>
       <RightBox>
-        <Chatprofile/>
+        <ChatProfile/>
       </RightBox>
     </CommonWrapper>
   );

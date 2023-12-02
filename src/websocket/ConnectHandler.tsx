@@ -22,7 +22,6 @@ const ConnectHandler: React.FC<ConnectHandlerProps> = ({ setClient }) => {
         setClient(client);
 
         if (selectedRoomId) {
-          // Use the selectedRoomId dynamically in the subscribe address
           const subscribeAddress = `/sub/room/${selectedRoomId}`;
           client.subscribe(
             subscribeAddress,

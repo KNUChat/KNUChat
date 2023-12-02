@@ -13,7 +13,6 @@ const MakeRoom: React.FC<MakeRoomProps> = () => {
       const menteeIdInt = typeof menteeId === "number" ? menteeId : parseInt(menteeId);
       const mentorIdInt = typeof mentorId === "number" ? mentorId : parseInt(mentorId);
 
-      // 유효한 숫자로 변환되었는지 확인
       if (isNaN(menteeIdInt) || isNaN(mentorIdInt)) {
         console.error("Invalid menteeId or mentorId");
         return;
@@ -33,10 +32,8 @@ const MakeRoom: React.FC<MakeRoomProps> = () => {
       });
 
       if (response.ok) {
-        // 채팅룸이 성공적으로 생성됐을 때 처리
         console.log("Chat room created successfully!");
       } else {
-        // 채팅룸 생성이 실패한 경우에 대한 처리
         console.error("Failed to create chat room");
       }
     } catch (error) {

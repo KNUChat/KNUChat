@@ -4,7 +4,7 @@ import axios from "axios";
 import styled from "styled-components";
 import ChatroomBox from "./ChatroomBox";
 import { useChatStore } from "../../store/store";
-import ChatListTitle from "./ChatListTitle";
+import Title from "./Title";
 
 const Chatlist: React.FC = () => {
   const { setSelectedRoomId, userId, setRooms, rooms } = useChatStore();
@@ -33,7 +33,7 @@ const Chatlist: React.FC = () => {
 
   return (
     <ChatlistWrapper>
-      <ChatListTitle />
+      <Title text="ChatList"/>
       {rooms.map((room) => (
         <ChatroomBox
           key={room.roomId}
