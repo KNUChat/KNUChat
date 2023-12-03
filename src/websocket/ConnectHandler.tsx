@@ -1,7 +1,7 @@
 // ConnectHandler.ts
 import { Stomp } from "@stomp/stompjs";
 import { useEffect } from "react";
-import { useChatStore } from "../store/store"; // Update the import statement
+import { useChatStore } from "../store/useChatStore"; // Update the import statement
 
 const ConnectHandler: React.FC = () => {
   const setClient = useChatStore((state) => state.setClient); // Use the hook to get the setClient function

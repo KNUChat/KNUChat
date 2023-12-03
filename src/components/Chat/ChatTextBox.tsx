@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, ChangeEvent } from "react";
-import { useChatStore } from "../../store/store";
+import { useChatStore } from "../../store/useChatStore";
 
 const ChatTextBox: React.FC = () => {
   const {setSendTime, selectedRoomId, userId, rooms,client} = useChatStore();

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import ChatroomBox from "./ChatroomBox";
-import { useChatStore } from "../../store/store";
+import { useChatStore } from "../../store/useChatStore";
 import Title from "./Title";
 
 const Chatlist: React.FC = () => {

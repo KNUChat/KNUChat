@@ -43,25 +43,26 @@ const MakeRoom: React.FC<MakeRoomProps> = () => {
 
   return (
     <MakeRoomWrapper>
+      <div>Mentee ID</div>
       <label>
-        Mentee ID:
         <input
           type="text"
           value={menteeId}
           onChange={(e) => setMenteeId(e.target.value)}
         />
       </label>
+      <div>Mentor ID</div>
       <label>
-        Mentor ID:
         <input
           type="text"
           value={mentorId}
           onChange={(e) => setMentorId(e.target.value)}
         />
       </label>
+      <div>Message : </div>
       <label>
-        Message:
         <input
+          placeholder="First Message"
           type="text"
           value={msg}
           onChange={(e) => setMsg(e.target.value)}
