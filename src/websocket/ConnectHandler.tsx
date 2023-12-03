@@ -1,12 +1,11 @@
 // ConnectHandler.ts
-import { CompatClient, Stomp } from "@stomp/stompjs";
-import { useEffect, Dispatch, SetStateAction } from "react";
+import { Stomp } from "@stomp/stompjs";
+import { useEffect } from "react";
+import { useChatStore } from "../store/store"; // Update the import statement
 
-interface ConnectHandlerProps {
-  setClient: Dispatch<SetStateAction<CompatClient | null>>;
-}
+const ConnectHandler: React.FC = () => {
+  const setClient = useChatStore((state) => state.setClient); // Use the hook to get the setClient function
 
-const ConnectHandler: React.FC<ConnectHandlerProps> = ({ setClient }) => {
   useEffect(() => {
     const client = Stomp.over(() => {
       const sock = new WebSocket("ws:52.79.37.100:31702/example");
@@ -16,7 +15,8 @@ const ConnectHandler: React.FC<ConnectHandlerProps> = ({ setClient }) => {
     client.connect(
       {},
       () => {
-        setClient(client);
+        console.log("Connected successfully!");
+        setClient(client); // Set the client in the store
       }
     );
 

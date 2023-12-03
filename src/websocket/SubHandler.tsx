@@ -1,13 +1,10 @@
 // SubHandler.tsx
-import { CompatClient } from "@stomp/stompjs";
 import { useEffect } from "react";
+import { useChatStore } from "@/store/store";
 
-interface SubHandlerProps {
-  client: CompatClient | null;
-  selectedRoomId: number | null;
-}
+const SubHandler: React.FC= () => {
+  const {client, selectedRoomId} = useChatStore();
 
-const SubHandler: React.FC<SubHandlerProps> = ({ client, selectedRoomId }) => {
   useEffect(() => {
     if (client && selectedRoomId) {
       const subscribeAddress = `/sub/room/${selectedRoomId}`;
@@ -24,7 +21,6 @@ const SubHandler: React.FC<SubHandlerProps> = ({ client, selectedRoomId }) => {
       };
     }
   }, [client, selectedRoomId]);
-
   return null;
 };
 

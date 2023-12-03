@@ -1,3 +1,5 @@
+// ChatroomBox.tsx
+
 import React from "react";
 import styled from "styled-components";
 
@@ -13,21 +15,20 @@ interface ChatroomBoxProps {
   onClick: () => void;
 }
 
-const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room,onClick }) => {
+const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room, onClick }) => {
   return (
     <ChatroomBoxWrapper onClick={onClick}>
-      <p>{room.mentorId}</p>
+      <p>{room.roomId}</p>
     </ChatroomBoxWrapper>
   );
 };
 
 export default ChatroomBox;
 
-
 const ChatroomBoxWrapper = styled.div`
   background-color: white;
   width: 100%;
   text-align: center;
   margin-top: 3px;
-  hight: auto;
+  height: auto; // Fix the typo in 'height'
 `;

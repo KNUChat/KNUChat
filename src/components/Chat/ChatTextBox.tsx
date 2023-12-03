@@ -1,19 +1,19 @@
 // ChatTextBox.tsx
 import styled from "styled-components";
 import { useState, ChangeEvent } from "react";
-import { CompatClient } from "@stomp/stompjs";
 import { useChatStore } from "../../store/store";
 
-interface ChatTextBoxProps {
-  client: CompatClient | null;
+interface Message {
+  roomId: number;
+  senderId: number;
+  receiverId: number;
+  message: string;
+  sendTime: string;
 }
 
-const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
+const ChatTextBox: React.FC = () => {
+  const {setSendTime, selectedRoomId, userId, rooms, addMessage,client} = useChatStore();
   const [message, setMessage] = useState("");
-  const setSendTime = useChatStore((state) => state.setSendTime);
-  const selectedRoomId = useChatStore((state) => state.selectedRoomId);
-  const userId = useChatStore((state) => state.userId);
-  const rooms = useChatStore((state) => state.rooms);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -21,37 +21,45 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
 
   const publish = () => {
     const now = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
+    const formattedNow = now.split(", ").join("T").replace(/\//g, "-");
 
-    setSendTime(now);
+    setSendTime(formattedNow);
 
     if (client && client.connected && selectedRoomId) {
       const publishAddress = `/pub/${selectedRoomId}`;
 
-      const selectedRoom = rooms.find((room) => room.roomId === selectedRoomId);
-
+      const selectedRoom = rooms.find((room: { roomId: number; }) => room.roomId === selectedRoomId);
+      console.log(selectedRoomId)
       if (selectedRoom) {
         const receiverId = userId === selectedRoom.menteeId ? selectedRoom.mentorId : selectedRoom.menteeId;
-
-        client.publish({
+        
+        try{
+          client.publish({
           destination: publishAddress,
           body: JSON.stringify({
             roomId: selectedRoomId,
             senderId: userId,
             receiverId: receiverId,
             message: message,
-            sendTime: now,
+            sendTime: "2017-03-16T17:40:00",
           }),
         });
+          console.log("publish successfully");
+        }catch(error){
+          console.log("publish error:",error);
+        }
+        setMessage("");
 
-        console.log("Publish response:", {
+        const newMessage: Message = {
           roomId: selectedRoomId,
           senderId: userId,
           receiverId: receiverId,
           message: message,
-          sendTime: now,
-        });
+          sendTime: formattedNow,
+        };
 
-        setMessage("");
+        addMessage(newMessage);
+        console.log("WebSocket Connection Status:", client.connected ? "Connected" : "Not Connected");
       } else {
         console.error("Selected room not found.");
       }

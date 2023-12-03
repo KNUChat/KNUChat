@@ -1,17 +1,11 @@
 // ChatPrintBox.tsx
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { useChatStore } from "../../store/store";
+import axios from "axios";
 import SubHandler from "@/websocket/SubHandler";
-import { CompatClient } from "@stomp/stompjs";
 
-interface ChatPrintBoxProps {
-  roomId: number;
-  client: CompatClient | null;
-}
-
-interface ChatLog {
+interface Message {
   roomId: number;
   senderId: number;
   receiverId: number;
@@ -19,33 +13,34 @@ interface ChatLog {
   sendTime: string;
 }
 
-const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ client, roomId }) => {
-  const [logs, setLogs] = useState<ChatLog[]>([]);
-  const sendTime = useChatStore((state) => state.sendTime);
+const ChatPrintBox: React.FC = () => {
+  const [logs, setLogs] = useState<Message[]>([]);
+  const {selectedRoomId} = useChatStore();
 
   useEffect(() => {
     const fetchChatLogs = async () => {
       try {
-        const response = await axios.get(`http://52.79.37.100:32253/chat/room/${roomId}/logs`);
+        if (selectedRoomId) { // Ensure selectedRoomId is truthy before making the request
+          const response = await axios.get(`http://52.79.37.100:32253/chat/room/${selectedRoomId}/logs`);
 
-        const formattedLogs = response.data.map((log: ChatLog) => ({
-          senderId: log.senderId,
-          message: log.message,
-          sendTime: log.sendTime,
-        }));
+          const formattedLogs = response.data.map((log: Message) => ({
+            senderId: log.senderId,
+            message: log.message,
+            sendTime: log.sendTime,
+          }));
 
-        setLogs(formattedLogs);
+          setLogs(formattedLogs);
+        }
       } catch (error) {
-        console.error("Error fetching chat logs:", error);
+        console.error("채팅 로그를 불러오는 중 에러 발생:", error);
       }
     };
 
     fetchChatLogs();
-  }, [roomId, sendTime]);
-
+  }, [selectedRoomId]);
   return (
     <ChatPrintWrapper>
-      <SubHandler client={client} selectedRoomId={roomId}/>
+      <SubHandler/>
       {logs.map((log, index) => (
         <div key={index}>
           <div>{`SenderId: ${log.senderId} | Message: ${log.message}`}</div>
