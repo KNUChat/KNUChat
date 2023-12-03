@@ -26,7 +26,7 @@ interface CertificationDto {
   obtainDate: string;
 }
 
-interface UserDataProps {
+export interface UserDataProps {
   userDto: UserDto;
   profileDto: ProfileDto;
   departmentDtos: DepartmentDto[];
@@ -34,7 +34,7 @@ interface UserDataProps {
   urlDtos: string[];
 }
 
-interface UserSearchProps {
+export interface UserSearchProps {
   page: number;
   major: string;
 }
@@ -55,11 +55,15 @@ const userApi = {
   updateUserProfile: async (userData: UserDataProps) => {
     return await clientApi.user.patch("/users/", { userData });
   },
-  deleteUserProfile: async () => {
-    return await clientApi.user.delete(`/users`);
+  deleteUserProfile: async (userId: number) => {
+    return await clientApi.user.delete(`/users?${userId}`);
   },
-  searchUserProfile: async (searchData: UserSearchProps) => {
-    return await clientApi.user.get(`/users?page=${searchData.page}&major=${searchData.major}`);
+  searchUserProfile: async (queryKey: (string | UserSearchProps)[]) => {
+    const searchData = queryKey[1];
+    if (typeof searchData !== "string") {
+      // searchData가 UserSearchProps 타입인 경우에만 page 속성에 접근
+      return await clientApi.user.get(`/users?page=${searchData.page}&major=${searchData.major}`);
+    }
   },
 };
 
