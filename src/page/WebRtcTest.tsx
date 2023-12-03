@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 
-const WebRTCChat: React.FC = () => {
+const WebRTCChat = () => {
   const [stompClient, setStompClient] = useState<Stomp.Client | null>(null);
   const localStreamRef = useRef<HTMLVideoElement>(null);
   const remoteStreamDivRef = useRef<HTMLDivElement>(null);
@@ -27,6 +27,25 @@ const WebRTCChat: React.FC = () => {
     startCam();
   }, []);
 
+  const handleOfferReceived = (offer: RTCSessionDescriptionInit, otherKey: string) => {
+    const pc = createPeerConnection(otherKey);
+
+    pc.setRemoteDescription(new RTCSessionDescription(offer))
+      .then(() => {
+        return pc.createAnswer();
+      })
+      .then((answer) => {
+        return pc.setLocalDescription(answer);
+      })
+      .then(() => {
+        if (pc.localDescription && stompClient) {
+          stompClient.send(`/app/peer/answer/${otherKey}/${roomId}`, {}, JSON.stringify({ key: myKey.current, body: pc.localDescription }));
+        }
+      })
+      .catch((error) => {
+        console.error("Error handling received offer:", error);
+      });
+  };
   useEffect(() => {
     const connectSocket = async () => {
       const socket = new SockJS("http://52.79.37.100:30077/signaling");
@@ -52,6 +71,7 @@ const WebRTCChat: React.FC = () => {
         client.subscribe(`/topic/peer/iceCandidate/${myKey.current}/${roomId}`, (candidate) => {
           const key = JSON.parse(candidate.body).key;
           const message = JSON.parse(candidate.body).body;
+          handleOfferReceived(message, key);
 
           pcListMap.get(key)?.addIceCandidate(
             new RTCIceCandidate({
