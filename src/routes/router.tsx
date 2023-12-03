@@ -7,6 +7,7 @@ import OpenChat from "@/page/OpenChat";
 import Search from "@/page/Search";
 import NotFound from "@page/NotFound";
 import Login from "@page/Login";
+import Test from "@page/Test";
 import MakeRoom from "@components/Chat/MakeRoom";
 
 const Router = () => {
@@ -19,7 +20,8 @@ const Router = () => {
         <Route path="/openChat" element={<OpenChat />} />
         <Route path="/search" element={<Search />} />
         <Route path="/*" element={<NotFound />} />
-        <Route path="/makeroom" element={<MakeRoom/>}/>
+        <Route path="/makeroom" element={<MakeRoom />} />
+        <Route path="/test" element={<Test />} />
         {["/me", "/record", "/addRecord", "/profile"].map((path) => (
           <Route key={path} path={path} element={<MyPage />} />
         ))}

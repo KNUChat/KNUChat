@@ -2,16 +2,30 @@ import styled from "styled-components";
 import MyPageBox from "./MyPageBox";
 import ContentBox from "./ContentBox";
 import { useNavigate } from "react-router-dom";
+import useGetUserProfile from "@hook/user/useGetUserProfile";
+import { UserDataProps } from "@api/user";
 
 const Content = () => {
   const navigate = useNavigate();
   const handleClickMore = () => {
     navigate("/profile");
   };
+  const userId = 1;
+  const { data } = useGetUserProfile(userId);
+  const userData: UserDataProps = data;
   return (
     <ContentWrapper>
       프로필
-      <ContentBox />
+      <ContentBox>
+        <h3>{userData && userData?.profileDto?.academicStatus}</h3>
+        <p>경북대학교</p>
+        <p>
+          {userData &&
+            userData?.departmentDtos?.map((item) => {
+              return item.major + " ";
+            })}
+        </p>
+      </ContentBox>
       <DefaultButton onClick={() => handleClickMore()}>더보기</DefaultButton>
     </ContentWrapper>
   );

@@ -2,16 +2,21 @@ import styled from "styled-components";
 import MyPageBox from "./MyPageBox";
 import ContentBox from "./ContentBox";
 import { useNavigate } from "react-router-dom";
+import useGetRecord from "@hook/record/useGetRecord";
 
 const Content = () => {
   const navigate = useNavigate();
+  const userId = 1;
+  const { data: recordData } = useGetRecord(userId);
+  console.log(recordData);
   const handleClickMore = () => {
     navigate("/record");
   };
   return (
     <ContentWrapper>
-      <>이력</>
-      <ContentBox />
+      <ContentBox>
+        <p>경북대학교</p>
+      </ContentBox>
       <DefaultButton onClick={() => handleClickMore()}>더보기</DefaultButton>
     </ContentWrapper>
   );
