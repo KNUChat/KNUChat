@@ -5,7 +5,8 @@ import styled from "styled-components";
 import axios from "axios";
 
 const Test = () => {
-  const { data: userData } = useGetUserProfile();
+  const userId = 1;
+  const { data: userData } = useGetUserProfile(userId);
 
   console.log(userData);
 

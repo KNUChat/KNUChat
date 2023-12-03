@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import recordApi from "@api/record";
 
-const useDeleteRecord = () => {
+const useDeleteRecord = (recordId: number) => {
   return useMutation({
     mutationFn: () => {
-      return recordApi.deleteRecord();
+      return recordApi.deleteRecord(recordId);
     },
     onSuccess: (data) => {
       console.log(data);

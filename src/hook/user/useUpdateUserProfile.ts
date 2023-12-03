@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import userApi from "@api/user";
+import userApi, { UserDataProps } from "@api/user";
 
-const useUpdateUserProfile = () => {
+const useUpdateUserProfile = (userData: UserDataProps) => {
   return useMutation({
     mutationFn: () => {
-      return userApi.updateUserProfile();
+      return userApi.updateUserProfile(userData);
     },
     onSuccess: (data) => {
       console.log(data);

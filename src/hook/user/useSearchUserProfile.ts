@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import userApi from "@api/user";
+import userApi, { UserSearchProps } from "@api/user";
 
-const useSearchUserProfile = () => {
-  const queryKey = [];
-
-  return useQuery(queryKey, () => userApi.getUserProfile({}), {});
+const useSearchUserProfile = (searchData: UserSearchProps) => {
+  const { data } = useQuery({
+    queryKey: ["searchData", searchData],
+    queryFn: ({ queryKey }) => userApi.searchUserProfile(queryKey),
+  });
+  console.log(data?.data);
+  return { data: data?.data ?? [] };
 };
 
 export default useSearchUserProfile;

@@ -1,6 +1,7 @@
 import clientApi from "./axios";
+import { RecordSearchProps } from "@api/record";
 
-interface NewRecordProps {
+export interface NewRecordProps {
   userId: number;
   title?: string;
   description?: string;
@@ -9,10 +10,10 @@ interface NewRecordProps {
   hashtag?: string[];
 }
 
-interface RecordSearchProps {
-  searchWord: string;
-  type: "hashtag" | "keyword" | "user";
-  page: number;
+export interface RecordSearchProps {
+  searchWord?: string;
+  type?: "hashtag" | "keyword" | "user";
+  page?: number;
 }
 
 const recordApi = {
@@ -30,7 +31,8 @@ const recordApi = {
   deleteRecord: async (recordId: number) => {
     return await clientApi.record.delete(`/record`, { recordId });
   },
-  searchRecord: async (filtering: RecordSearchProps) => {
+  searchRecord: async (queryKey: (string | RecordSearchProps)[]) => {
+    const filtering: RecordSearchProps = typeof queryKey[1] != "string" ? queryKey[1] : [];
     return await clientApi.record.get(`/record?page=${filtering.page}&searchWord=${filtering.searchWord}&type=${filtering.type}`);
   },
 };
