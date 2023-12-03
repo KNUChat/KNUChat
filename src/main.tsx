@@ -14,7 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter basename="/KNUChat/">
+        <BrowserRouter>
           <HelmetProvider>
             <App />
           </HelmetProvider>
