@@ -2,16 +2,8 @@ import styled from "styled-components";
 import { useState, ChangeEvent } from "react";
 import { useChatStore } from "../../store/store";
 
-interface Message {
-  roomId: number;
-  senderId: number;
-  receiverId: number;
-  message: string;
-  sendTime: string;
-}
-
 const ChatTextBox: React.FC = () => {
-  const {setSendTime, selectedRoomId, userId, rooms, addMessage,client} = useChatStore();
+  const {setSendTime, selectedRoomId, userId, rooms,client} = useChatStore();
   const [message, setMessage] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -48,15 +40,6 @@ const ChatTextBox: React.FC = () => {
         }
         setMessage("");
 
-        const newMessage: Message = {
-          roomId: selectedRoomId,
-          senderId: userId,
-          receiverId: receiverId,
-          message: message,
-          sendTime: now,
-        };
-
-        addMessage(newMessage);
         console.log("WebSocket Connection Status:", client.connected ? "Connected" : "Not Connected");
       } else {
         console.error("Selected room not found.");

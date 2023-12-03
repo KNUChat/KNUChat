@@ -58,19 +58,14 @@ const ChatPrintBox: React.FC = () => {
           <hr />
         </div>
       ))}
-      {logs2.map((log, index) => {
-      if (index % 2 === 0) {
-        return (
-          <div key={index}>
-            <div>{`SenderId: ${log.senderId}`}</div>
-            <div>{`Message: ${log.message}`}</div>
-            <div>{`${log.sendTime}`}</div>
-            <hr />
-          </div>
-        );
-      }
-  return null;
-})}
+      {logs2.map((log, index) => (
+        <div key={index}>
+          <div>{`SenderId: ${log.senderId}`}</div>
+          <div>{`Message: ${log.message}`}</div>
+          <div>{`${log.sendTime}`}</div>
+          <hr />
+        </div>
+      ))}
 
     </ChatPrintWrapper>
   );
