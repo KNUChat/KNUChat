@@ -1,20 +1,37 @@
 import clientApi from "./axios";
 
+interface NewRecordProps {
+  userId: number;
+  title?: string;
+  description?: string;
+  period?: string;
+  achievement?: string;
+  hashtag?: string[];
+}
+
+interface RecordSearchProps {
+  searchWord: string;
+  type: "hashtag" | "keyword" | "user";
+  page: number;
+}
+
 const recordApi = {
-  getRecord: async ({ id }: any) => {
-    return await clientApi.get(`/record/${id}`);
+  getRecord: async (queryKey: (number | string)[]) => {
+    const recordId = queryKey[1];
+    return await clientApi.record.get(`/record/${recordId}`);
   },
-  addRecord: async () => {
-    return await clientApi.post("/record");
+
+  addRecord: async (newRecord: NewRecordProps) => {
+    return await clientApi.record.post("/record", { newRecord });
   },
-  patchRecord: async () => {
-    return await clientApi.patch(`/record`);
+  patchRecord: async (updateRecord: NewRecordProps) => {
+    return await clientApi.record.patch(`/record`, { updateRecord });
   },
-  deleteRecord: async () => {
-    return await clientApi.delete(`/record`);
+  deleteRecord: async (recordId: number) => {
+    return await clientApi.record.delete(`/record`, { recordId });
   },
-  searchRecord: async ({ filtering }: any) => {
-    return await clientApi.get(`/record/search/${filtering}`);
+  searchRecord: async (filtering: RecordSearchProps) => {
+    return await clientApi.record.get(`/record?page=${filtering.page}&searchWord=${filtering.searchWord}&type=${filtering.type}`);
   },
 };
 
