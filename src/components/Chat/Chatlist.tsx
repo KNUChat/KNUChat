@@ -17,7 +17,6 @@ const Chatlist: React.FC = () => {
             id: userId,
           },
         });
-        console.log(response);
         setRooms(response.data);
       } catch (error) {
         console.error("Error fetching chat rooms:", error);
@@ -50,4 +49,5 @@ export default Chatlist;
 const ChatlistWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-right:3px;
 `;

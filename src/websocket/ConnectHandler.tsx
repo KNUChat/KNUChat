@@ -1,14 +1,10 @@
 // ConnectHandler.ts
-import { CompatClient, Stomp } from "@stomp/stompjs";
-import { useEffect, Dispatch, SetStateAction } from "react";
-import { useChatStore } from "../store/store";
+import { Stomp } from "@stomp/stompjs";
+import { useEffect } from "react";
+import { useChatStore } from "../store/store"; // Update the import statement
 
-interface ConnectHandlerProps {
-  setClient: Dispatch<SetStateAction<CompatClient | null>>;
-}
-
-const ConnectHandler: React.FC<ConnectHandlerProps> = ({ setClient }) => {
-  const { selectedRoomId } = useChatStore();
+const ConnectHandler: React.FC = () => {
+  const setClient = useChatStore((state) => state.setClient); // Use the hook to get the setClient function
 
   useEffect(() => {
     const client = Stomp.over(() => {
@@ -19,25 +15,15 @@ const ConnectHandler: React.FC<ConnectHandlerProps> = ({ setClient }) => {
     client.connect(
       {},
       () => {
-        setClient(client);
-
-        if (selectedRoomId) {
-          const subscribeAddress = `/sub/room/${selectedRoomId}`;
-          client.subscribe(
-            subscribeAddress,
-            (message) => {
-              console.log("Received message:", JSON.parse(message.body));
-            },
-            {}
-          );
-        }
+        console.log("Connected successfully!");
+        setClient(client); // Set the client in the store
       }
     );
 
     return () => {
       client.disconnect();
     };
-  }, [setClient, selectedRoomId]);
+  }, [setClient]);
 
   return null;
 };

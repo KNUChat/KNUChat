@@ -19,6 +19,7 @@ export default Chatprofile;
 const ChatprofileWrapper = styled.div`
     text-align: center;
     width: 100%;
+    margin-left: 3px;
 `;
 
 const ProfileWrapper = styled.div`
