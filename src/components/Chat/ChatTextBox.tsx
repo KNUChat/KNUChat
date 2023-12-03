@@ -1,4 +1,3 @@
-// ChatTextBox.tsx
 import styled from "styled-components";
 import { useState, ChangeEvent } from "react";
 import { useChatStore } from "../../store/store";
@@ -20,10 +19,9 @@ const ChatTextBox: React.FC = () => {
   };
 
   const publish = () => {
-    const now = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
-    const formattedNow = now.split(", ").join("T").replace(/\//g, "-");
+    const now = new Date().toISOString();
 
-    setSendTime(formattedNow);
+    setSendTime(now);
 
     if (client && client.connected && selectedRoomId) {
       const publishAddress = `/pub/${selectedRoomId}`;
@@ -32,7 +30,7 @@ const ChatTextBox: React.FC = () => {
       console.log(selectedRoomId)
       if (selectedRoom) {
         const receiverId = userId === selectedRoom.menteeId ? selectedRoom.mentorId : selectedRoom.menteeId;
-        
+
         try{
           client.publish({
           destination: publishAddress,
@@ -41,7 +39,7 @@ const ChatTextBox: React.FC = () => {
             senderId: userId,
             receiverId: receiverId,
             message: message,
-            sendTime: "2017-03-16T17:40:00",
+            sendTime: now,
           }),
         });
           console.log("publish successfully");
@@ -55,7 +53,7 @@ const ChatTextBox: React.FC = () => {
           senderId: userId,
           receiverId: receiverId,
           message: message,
-          sendTime: formattedNow,
+          sendTime: now,
         };
 
         addMessage(newMessage);

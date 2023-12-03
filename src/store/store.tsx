@@ -40,7 +40,10 @@ export const useChatStore = create<ChatStore>((set) => ({
   userId: 1,
   setUserId: (userId) => set({ userId: userId as number }),
   messages: [],
-  addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })),
+  addMessage: (message) => set(() => {
+    const updatedMessages = [message];
+    return { messages: updatedMessages };
+  }),
   rooms: [],
   setRooms: (rooms) => set({ rooms }),
   client: null, 

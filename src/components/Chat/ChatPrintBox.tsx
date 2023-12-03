@@ -1,4 +1,3 @@
-// ChatPrintBox.tsx
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useChatStore } from "../../store/store";
@@ -14,13 +13,14 @@ interface Message {
 }
 
 const ChatPrintBox: React.FC = () => {
-  const [logs, setLogs] = useState<Message[]>([]);
-  const {selectedRoomId} = useChatStore();
+  const [logs1, setLogs1] = useState<Message[]>([]);
+  const [logs2, setLogs2] = useState<Message[]>([]);
+  const { selectedRoomId, messages } = useChatStore();
 
   useEffect(() => {
     const fetchChatLogs = async () => {
       try {
-        if (selectedRoomId) { // Ensure selectedRoomId is truthy before making the request
+        if (selectedRoomId) {
           const response = await axios.get(`http://52.79.37.100:32253/chat/room/${selectedRoomId}/logs`);
 
           const formattedLogs = response.data.map((log: Message) => ({
@@ -28,8 +28,8 @@ const ChatPrintBox: React.FC = () => {
             message: log.message,
             sendTime: log.sendTime,
           }));
-
-          setLogs(formattedLogs);
+          setLogs1(formattedLogs);
+          setLogs2([]);
         }
       } catch (error) {
         console.error("채팅 로그를 불러오는 중 에러 발생:", error);
@@ -38,13 +38,30 @@ const ChatPrintBox: React.FC = () => {
 
     fetchChatLogs();
   }, [selectedRoomId]);
+
+  useEffect(() => {
+    if (selectedRoomId) {
+      const filteredLogs = messages.filter((message) => message.roomId === selectedRoomId);
+      setLogs2(filteredLogs);
+    }
+  }, [messages, selectedRoomId]);
+
   return (
     <ChatPrintWrapper>
-      <SubHandler/>
-      {logs.map((log, index) => (
+      <SubHandler />
+      {logs1.map((log, index) => (
         <div key={index}>
-          <div>{`SenderId: ${log.senderId} | Message: ${log.message}`}</div>
-          <div>{`SendTime: ${log.sendTime}`}</div>
+          <div>{`SenderId: ${log.senderId}`}</div>
+          <div>{`Message: ${log.message}`}</div>
+          <div>{`${log.sendTime}`}</div>
+          <hr />
+        </div>
+      ))}
+      {logs2.map((log, index) => (
+        <div key={index}>
+          <div>{`SenderId: ${log.senderId}`}</div>
+          <div>{`Message: ${log.message}`}</div>
+          <div>{`${log.sendTime}`}</div>
           <hr />
         </div>
       ))}
