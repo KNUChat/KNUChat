@@ -6,7 +6,6 @@ interface ModalContainerProps {
 }
 
 const ModalContainer = styled.div<ModalContainerProps>`
-  background-color: ${({ theme }) => theme.backgroundColor.tab3};
   width: ${({ width }) => width}px;
   border-radius: 0.375rem;
   padding: ${({ p }) => p}px;

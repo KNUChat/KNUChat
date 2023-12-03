@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-export type ModalType = null;
+export type ModalType = null | "example";
 
 interface ModalState {
   showModal: boolean;
