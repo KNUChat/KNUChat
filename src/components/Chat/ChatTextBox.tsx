@@ -1,40 +1,49 @@
-// ChatTextBox.tsx
 import styled from "styled-components";
 import { useState, ChangeEvent } from "react";
-import { CompatClient } from "@stomp/stompjs";
 import { useChatStore } from "../../store/store";
-interface ChatTextBoxProps {
-  client: CompatClient | null;
-}
 
-const ChatTextBox: React.FC<ChatTextBoxProps> = ({ client }) => {
+const ChatTextBox: React.FC = () => {
+  const {setSendTime, selectedRoomId, userId, rooms,client} = useChatStore();
   const [message, setMessage] = useState("");
-  const setSendTime = useChatStore((state) => state.setSendTime);
-  const selectedRoomId = useChatStore((state) => state.selectedRoomId);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
   const publish = () => {
-    const now = new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" });
+    const now = new Date().toISOString();
 
     setSendTime(now);
 
     if (client && client.connected && selectedRoomId) {
       const publishAddress = `/pub/${selectedRoomId}`;
 
-      client.publish({
-        destination: publishAddress,
-        body: JSON.stringify({
-          roomId: selectedRoomId,
-          senderId: 1,
-          receiverId: 2,
-          message: message,
-          sendTime: now,
-        }),
-      });
-      setMessage("");
+      const selectedRoom = rooms.find((room: { roomId: number; }) => room.roomId === selectedRoomId);
+      console.log(selectedRoomId)
+      if (selectedRoom) {
+        const receiverId = userId === selectedRoom.menteeId ? selectedRoom.mentorId : selectedRoom.menteeId;
+
+        try{
+          client.publish({
+          destination: publishAddress,
+          body: JSON.stringify({
+            roomId: selectedRoomId,
+            senderId: userId,
+            receiverId: receiverId,
+            message: message,
+            sendTime: now,
+          }),
+        });
+          console.log("publish successfully");
+        }catch(error){
+          console.log("publish error:",error);
+        }
+        setMessage("");
+
+        console.log("WebSocket Connection Status:", client.connected ? "Connected" : "Not Connected");
+      } else {
+        console.error("Selected room not found.");
+      }
     } else {
       console.error("WebSocket client is not initialized, not connected, or selectedRoomId is not available.");
     }

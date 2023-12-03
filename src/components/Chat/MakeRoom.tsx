@@ -25,8 +25,8 @@ const MakeRoom: React.FC<MakeRoomProps> = () => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          mentee_id: menteeIdInt,
-          mentor_id: mentorIdInt,
+          menteeId: menteeIdInt,
+          mentorId: mentorIdInt,
           msg: msg,
         }),
       });

@@ -1,53 +1,72 @@
-// ChatPrintBox.tsx
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { useChatStore } from "../../store/store";
+import axios from "axios";
+import SubHandler from "@/websocket/SubHandler";
 
-interface ChatPrintBoxProps {
+interface Message {
   roomId: number;
-}
-
-interface ChatLog {
   senderId: number;
   receiverId: number;
   message: string;
   sendTime: string;
 }
 
-const ChatPrintBox: React.FC<ChatPrintBoxProps> = ({ roomId }) => {
-  const [logs, setLogs] = useState<ChatLog[]>([]);
-  const sendTime = useChatStore((state) => state.sendTime);
+const ChatPrintBox: React.FC = () => {
+  const [logs1, setLogs1] = useState<Message[]>([]);
+  const [logs2, setLogs2] = useState<Message[]>([]);
+  const { selectedRoomId, messages } = useChatStore();
 
   useEffect(() => {
     const fetchChatLogs = async () => {
       try {
-        const response = await axios.get(`http://52.79.37.100:32253/chat/room/${roomId}/logs`);
+        if (selectedRoomId) {
+          const response = await axios.get(`http://52.79.37.100:32253/chat/room/${selectedRoomId}/logs`);
 
-        const formattedLogs = response.data.map((log: ChatLog) => ({
-          senderId: log.senderId,
-          message: log.message,
-          sendTime: log.sendTime,
-        }));
-        console.log(response.data);
-        setLogs(formattedLogs);
+          const formattedLogs = response.data.map((log: Message) => ({
+            senderId: log.senderId,
+            message: log.message,
+            sendTime: log.sendTime,
+          }));
+          setLogs1(formattedLogs);
+          setLogs2([]);
+        }
       } catch (error) {
-        console.error("Error fetching chat logs:", error);
+        console.error("채팅 로그를 불러오는 중 에러 발생:", error);
       }
     };
 
     fetchChatLogs();
-  }, [roomId, sendTime]);
+  }, [selectedRoomId]);
+
+  useEffect(() => {
+    if (selectedRoomId) {
+      const existingLogs = [...logs2];
+      const newLogs = messages.filter((message) => message.roomId === selectedRoomId);
+      setLogs2([...existingLogs, ...newLogs]);
+    }
+  }, [messages, selectedRoomId]);
 
   return (
     <ChatPrintWrapper>
-      {logs.map((log, index) => (
+      <SubHandler />
+      {logs1.map((log, index) => (
         <div key={index}>
-          <div>{`SenderId: ${log.senderId} | Message: ${log.message}`}</div>
-          <div>{`SendTime: ${log.sendTime}`}</div>
+          <div>{`SenderId: ${log.senderId}`}</div>
+          <div>{`Message: ${log.message}`}</div>
+          <div>{`${log.sendTime}`}</div>
           <hr />
         </div>
       ))}
+      {logs2.map((log, index) => (
+        <div key={index}>
+          <div>{`SenderId: ${log.senderId}`}</div>
+          <div>{`Message: ${log.message}`}</div>
+          <div>{`${log.sendTime}`}</div>
+          <hr />
+        </div>
+      ))}
+
     </ChatPrintWrapper>
   );
 };
@@ -61,5 +80,5 @@ const ChatPrintWrapper = styled.div`
   text-align: center;
   background-color: white;
   margin-top: 3px;
-  overflow-y: auto; // 스크롤바 추가
+  overflow-y: auto;
 `;

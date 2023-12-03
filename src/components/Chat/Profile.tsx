@@ -19,7 +19,7 @@ const Profile: React.FC = () => {
           const userIdToFetch = selectedRoom.menteeId === userId
             ? selectedRoom.mentorId
             : selectedRoom.menteeId;
-          console.log(userIdToFetch);
+
           const response = await axios.get(`http://52.79.37.100:31338/users/${userIdToFetch}`);
           setSelectedUserProfile(response.data);
         } catch (error) {

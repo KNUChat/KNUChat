@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 interface TitleProps {
-  text: string;
+  text: string | number;
 }
 
 const Title: React.FC<TitleProps> = ({ text }) => {

@@ -1,0 +1,49 @@
+{
+  "users": {
+    "userDto": {
+      "id": 1,
+      "name": "김이나",
+      "email": "kim123@gmail.com",
+      "gender": "FEMALE"
+    },
+    "profileDto": {
+      "stdNum": 18,
+      "academicStatus": "GRADUATION",
+      "graduateDate": "202202",
+      "admissionDate": "201803",
+      "introduction": "대한민국의 작사가, 방송인"
+    },
+    "departmentDtos": [
+      {
+        "college": "예술대학",
+        "major": "미술학과",
+        "depCategory": "BASIC"
+      },
+      {
+        "college": "예술대학",
+        "major": "음악학과과",
+        "depCategory": "MINOR"
+      }
+    ],
+    "certificationDtos": [
+      {
+        "name": "TOEFL",
+        "achievement": "950",
+        "obtainDate": "20190502"
+      },
+      {
+        "name": "TOEIC",
+        "achievement": "110",
+        "obtainDate": "20190801"
+      }
+    ],
+    "urlDtos": [
+      {
+        "link": "https://www.google.com"
+      },
+      {
+        "link": "https://www.naver.com"
+      }
+    ]
+  }
+}
