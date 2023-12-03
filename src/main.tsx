@@ -8,7 +8,6 @@ import theme from "./style/theme.tsx";
 import { HelmetProvider } from "react-helmet-async";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
     <ThemeProvider theme={theme}>
       <BrowserRouter basename="/KNUChat/">
         <HelmetProvider>
@@ -16,5 +15,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </HelmetProvider>
       </BrowserRouter>
     </ThemeProvider>
-  </React.StrictMode>
 );
