@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useChatStore } from "@store/useChatStore";
 
-interface MakeRoomProps {}
-
-const MakeRoom: React.FC<MakeRoomProps> = () => {
+const MakeRoom: React.FC = () => {
   const [menteeId, setMenteeId] = useState<number | string>("");
   const [mentorId, setMentorId] = useState<number | string>("");
   const [msg, setMsg] = useState<string>("");
+  const {update,setUpdate} = useChatStore();
 
   const handleCreateRoom = async () => {
     try {
@@ -33,6 +33,8 @@ const MakeRoom: React.FC<MakeRoomProps> = () => {
 
       if (response.ok) {
         console.log("Chat room created successfully!");
+        setUpdate(true);
+        console.log(update);
       } else {
         console.error("Failed to create chat room");
       }
