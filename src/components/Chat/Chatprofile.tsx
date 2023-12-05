@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Title from "./Title";
 import Profile from "./Profile";
+import ButtonBox from "./ButtonBox";
 
 const Chatprofile = () => {
 
@@ -10,6 +11,7 @@ const Chatprofile = () => {
             <ProfileWrapper>
                 <Profile/>
             </ProfileWrapper>
+            <ButtonBox/>
         </ChatprofileWrapper>
     );
 }
