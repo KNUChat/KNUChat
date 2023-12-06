@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import useModalStore from "@store/useModalStore";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -9,6 +10,12 @@ const Navbar = () => {
   };
   const handleClickMyPage = () => {
     navigate("/me");
+  };
+  const { setModalType, setShowModal } = useModalStore();
+
+  const showExampleModal = () => {
+    setModalType("example");
+    setShowModal(true);
   };
   const ref = useRef<HTMLInputElement>(null);
   return (
@@ -21,6 +28,7 @@ const Navbar = () => {
           <input ref={ref} />
         </SearchBox>
         <RightBox>
+          <button onClick={() => showExampleModal()}>modalTest</button>
           <button onClick={() => handleClickMyPage()}>mypage</button>
         </RightBox>
       </BoxWrapper>

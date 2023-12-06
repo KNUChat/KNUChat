@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useChatStore } from "../../store/store";
+import { useChatStore } from "../../store/useChatStore";
 import axios from "axios";
 import SubHandler from "@/websocket/SubHandler";
 

@@ -1,6 +1,6 @@
 // SubHandler.tsx
 import { useEffect } from "react";
-import { useChatStore } from "@/store/store";
+import { useChatStore } from "@store/useChatStore";
 
 const SubHandler: React.FC= () => {
   const {client, selectedRoomId,addMessage} = useChatStore();

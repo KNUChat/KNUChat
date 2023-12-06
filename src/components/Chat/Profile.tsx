@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { useChatStore } from "../../store/store";
+import { useChatStore } from "../../store/useChatStore";
 
 const Profile: React.FC = () => {
   const { selectedRoomId, rooms, userId } = useChatStore();

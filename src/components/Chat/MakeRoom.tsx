@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useChatStore } from "@store/useChatStore";
 
-interface MakeRoomProps {}
-
-const MakeRoom: React.FC<MakeRoomProps> = () => {
+const MakeRoom: React.FC = () => {
   const [menteeId, setMenteeId] = useState<number | string>("");
   const [mentorId, setMentorId] = useState<number | string>("");
   const [msg, setMsg] = useState<string>("");
+  const {update,setUpdate} = useChatStore();
 
   const handleCreateRoom = async () => {
     try {
@@ -33,6 +33,8 @@ const MakeRoom: React.FC<MakeRoomProps> = () => {
 
       if (response.ok) {
         console.log("Chat room created successfully!");
+        setUpdate(true);
+        console.log(update);
       } else {
         console.error("Failed to create chat room");
       }
@@ -43,25 +45,26 @@ const MakeRoom: React.FC<MakeRoomProps> = () => {
 
   return (
     <MakeRoomWrapper>
+      <div>Mentee ID</div>
       <label>
-        Mentee ID:
         <input
           type="text"
           value={menteeId}
           onChange={(e) => setMenteeId(e.target.value)}
         />
       </label>
+      <div>Mentor ID</div>
       <label>
-        Mentor ID:
         <input
           type="text"
           value={mentorId}
           onChange={(e) => setMentorId(e.target.value)}
         />
       </label>
+      <div>Message : </div>
       <label>
-        Message:
         <input
+          placeholder="First Message"
           type="text"
           value={msg}
           onChange={(e) => setMsg(e.target.value)}

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useChatStore } from "@store/useChatStore";
 
 interface Room {
   roomId: number;
@@ -14,19 +15,22 @@ interface ChatroomBoxProps {
 }
 
 const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room, onClick }) => {
+  const { selectedRoomId } = useChatStore();
+
   return (
-    <ChatroomBoxWrapper onClick={onClick}>
+    <ChatroomBoxWrapper $isSelected={selectedRoomId === room.roomId} onClick={onClick}>
       <p>{room.roomId}</p>
     </ChatroomBoxWrapper>
   );
 };
 
-export default ChatroomBox;
-
-const ChatroomBoxWrapper = styled.div`
-  background-color: white;
+const ChatroomBoxWrapper = styled.div<{ $isSelected?: boolean }>`
   width: 100%;
   text-align: center;
   margin-top: 3px;
-  height: auto; // Fix the typo in 'height'
+  height: auto;
+  ${(props) => (props.$isSelected ? "background-color: lightblue;" : "")};
 `;
+
+
+export default ChatroomBox;
