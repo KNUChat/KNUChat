@@ -3,7 +3,7 @@ import ChatPrintBox from "./ChatPrintBox";
 import ChatTextBox from "./ChatTextBox";
 import ConnectHandler from "@/websocket/ConnectHandler";
 import Title from "./Title";
-import { useChatStore } from "@/store/store";
+import { useChatStore } from "@store/useChatStore";
 
 const Chatroom: React.FC = () => {
   const {selectedRoomId} = useChatStore();

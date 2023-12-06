@@ -14,9 +14,8 @@ export default defineConfig({
       { find: "@hook", replacement: path.resolve(__dirname, "src/hook") },
       { find: "@style", replacement: path.resolve(__dirname, "src/style") },
       { find: "@template", replacement: path.resolve(__dirname, "src/template") },
+      { find: "@store", replacement: path.resolve(__dirname, "src/store") },
     ],
   },
   define: process.env.NODE_ENV === "development" ? { global: "window" } : {},
 });
-
-

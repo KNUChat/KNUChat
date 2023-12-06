@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, ChangeEvent } from "react";
-import { useChatStore } from "../../store/store";
+import { useChatStore } from "../../store/useChatStore";
 
 const ChatTextBox: React.FC = () => {
   const {setSendTime, selectedRoomId, userId, rooms,client} = useChatStore();
@@ -21,7 +21,7 @@ const ChatTextBox: React.FC = () => {
       const selectedRoom = rooms.find((room: { roomId: number; }) => room.roomId === selectedRoomId);
       console.log(selectedRoomId)
       if (selectedRoom) {
-        const receiverId = userId === selectedRoom.menteeId ? selectedRoom.mentorId : selectedRoom.menteeId;
+        const receiverId = userId === selectedRoom.menteeId ? selectedRoom.menteeId : selectedRoom.mentorId;
 
         try{
           client.publish({

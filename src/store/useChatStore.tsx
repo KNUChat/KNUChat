@@ -30,6 +30,8 @@ interface ChatStore {
   setRooms: (rooms: Room[]) => void;
   client: CompatClient | null;
   setClient: (client: CompatClient | null) => void;
+  update: boolean;
+  setUpdate: (update: boolean) => void;
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -48,4 +50,6 @@ export const useChatStore = create<ChatStore>((set) => ({
   setRooms: (rooms) => set({ rooms }),
   client: null, 
   setClient: (client) => set({ client }),
+  update : false,
+  setUpdate: (update) => set({ update }),
 }));
