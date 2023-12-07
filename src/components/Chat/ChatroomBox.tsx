@@ -29,7 +29,7 @@ const ChatroomBoxWrapper = styled.div<{ $isSelected?: boolean }>`
   text-align: center;
   margin-top: 3px;
   height: auto;
-  ${(props) => (props.$isSelected ? "background-color: lightblue;" : "")};
+  ${(props) => (props.$isSelected ? "background-color: lightblue;" : "background-color: white;")};
 `;
 
 

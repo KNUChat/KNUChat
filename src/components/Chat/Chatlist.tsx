@@ -5,9 +5,10 @@ import styled from "styled-components";
 import ChatroomBox from "./ChatroomBox";
 import { useChatStore } from "../../store/useChatStore";
 import Title from "./Title";
+import ChatListNav from "./ChatListNav";
 
 const Chatlist: React.FC = () => {
-  const { setSelectedRoomId, userId, setRooms, rooms,update,setUpdate } = useChatStore();
+  const { setSelectedRoomId, userId, setRooms, rooms,update,setUpdate,chatstatus } = useChatStore();
 
   useEffect(() => {
     const fetchChatRooms = async () => {
@@ -23,7 +24,7 @@ const Chatlist: React.FC = () => {
         console.error("Error fetching chat rooms:", error);
       }
     };
-
+  
     fetchChatRooms();
   }, [userId, setRooms,update,setUpdate]);
 
@@ -33,13 +34,17 @@ const Chatlist: React.FC = () => {
 
   return (
     <ChatlistWrapper>
-      <Title text="ChatList"/>
+      <Title text="ChatList" />
+      <ChatListNav />
       {rooms.map((room) => (
-        <ChatroomBox
-          key={room.roomId}
-          room={room}
-          onClick={() => handleRoomClick(room.roomId)}
-        />
+        (chatstatus && room.roomStatus === 'CHAT_ENDED') ||
+        (!chatstatus && room.roomStatus === 'CHAT_PROCEEDING') && (
+          <ChatroomBox
+            key={room.roomId}
+            room={room}
+            onClick={() => handleRoomClick(room.roomId)}
+          />
+        )
       ))}
     </ChatlistWrapper>
   );
