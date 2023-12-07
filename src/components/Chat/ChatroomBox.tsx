@@ -19,17 +19,21 @@ const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room, onClick }) => {
 
   return (
     <ChatroomBoxWrapper $isSelected={selectedRoomId === room.roomId} onClick={onClick}>
-      <p>{room.roomId}</p>
+      {room.roomId}
     </ChatroomBoxWrapper>
   );
 };
 
 const ChatroomBoxWrapper = styled.div<{ $isSelected?: boolean }>`
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
   text-align: center;
-  margin-top: 3px;
-  height: auto;
-  ${(props) => (props.$isSelected ? "background-color: lightblue;" : "")};
+  margin-top: 5px;
+  height: 2.5rem;
+  border-radius: 10px 10px 10px 10px;
+  ${(props) => (props.$isSelected ? "background-color: lightblue;" : "background-color: #EEEEEE;")};
 `;
 
 
