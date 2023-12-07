@@ -7,7 +7,7 @@ interface ServiceEndpoints {
 
 const createServiceApi = (service: string): AxiosInstance => {
   const portMap: ServiceEndpoints = {
-    record: 32701,
+    record: 31097,
     user: 31338,
     video: 30077,
     // 다른 서비스들의 포트 번호 추가
