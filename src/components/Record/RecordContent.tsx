@@ -3,9 +3,19 @@ import MyPageBox from "@components/MyPage/MyPageBox";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { RecordSearchProps } from "@api/record";
+import useSearchRecord from "@hook/record/useSearchRecord";
+import { RecordProps } from "@components/MyPage/RecordTab";
 
 const RecordContent = () => {
-  const [isDetailedView, setIsDetailedView] = useState(false);
+  const [detailedViews, setDetailedViews] = useState<boolean[]>([]); // 각 레코드의 상세 보기 상태를 관리하는 배열
+  const temp: RecordSearchProps = {
+    searchWord: "1",
+    type: "user",
+    page: 0,
+  };
+  const { data: recordData } = useSearchRecord(temp);
+  console.log(recordData);
 
   const navigate = useNavigate();
 
@@ -13,30 +23,46 @@ const RecordContent = () => {
     navigate("/addRecord");
   };
 
-  const handleClickMore = () => {
-    setIsDetailedView(!isDetailedView);
+  const toggleDetailedView = (index: number) => {
+    setDetailedViews((prev) => {
+      const updatedViews = [...prev];
+      updatedViews[index] = !updatedViews[index]; // 레코드의 상세 보기 상태를 토글
+      return updatedViews;
+    });
   };
+
   return (
     <RecordContentWrapper>
       <MyPageBox>
         <p>이력</p>
         <button onClick={() => handleClickAddRecord()}>추가</button>
-        <ContentBox>
-          <ContentHeader>
-            <p>소프트웨어 마에스트로</p>
-            <p>/수료</p>
-            <p>/2020.03~2020.12</p>
-          </ContentHeader>
-          <ContentMain>
-            <p>웹 백엔드 개발자</p>
-          </ContentMain>
-          {isDetailedView ? <div>{/* 자세한 내용을 보여주는 부분 */}</div> : <div>{/* 간략한 내용을 보여주는 부분 */}</div>}
-          <DetailButton onClick={() => handleClickMore()}>{isDetailedView ? "간략히 보기" : "자세히 보기"}</DetailButton>
-        </ContentBox>
+        {recordData?.recordResponses &&
+          recordData?.recordResponses.map((record: RecordProps, index: number) => {
+            return (
+              <ContentBox key={index}>
+                <ContentHeader>
+                  <p
+                    onClick={() => {
+                      console.log("page");
+                    }}
+                  >
+                    {record.title}
+                  </p>
+                  <p>{record.hashtags}</p>
+                  <p>{record.period}</p>
+                </ContentHeader>
+                <ContentMain isDetailedView={detailedViews[index] || false}>
+                  <p>{record.description}</p>
+                </ContentMain>
+                <DetailButton onClick={() => toggleDetailedView(index)}>{detailedViews[index] ? "간략히 보기" : "자세히 보기"}</DetailButton>
+              </ContentBox>
+            );
+          })}
       </MyPageBox>
     </RecordContentWrapper>
   );
 };
+
 export default RecordContent;
 
 const RecordContentWrapper = styled.div`
@@ -60,7 +86,7 @@ const ContentHeader = styled.div`
   flex-direction: row;
 `;
 
-const ContentMain = styled.div`
-  display: flex;
+const ContentMain = styled.div<{ isDetailedView: boolean }>`
+  display: ${({ isDetailedView }) => (isDetailedView ? "flex" : "none")};
   flex-direction: column;
 `;
