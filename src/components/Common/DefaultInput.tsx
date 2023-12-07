@@ -10,6 +10,7 @@ const InputWrapper = styled.div`
   position: relative;
   height: 100%;
   width: 100%;
+  margin-bottom: 0.5rem;
 `;
 
 const Input = styled.textarea<InputProps>`
