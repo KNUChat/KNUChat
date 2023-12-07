@@ -17,4 +17,5 @@ export default Title;
 
 const TitleWrapper = styled.div`
   text-align: center;
+  background-color: #F5F5F7;
 `;
