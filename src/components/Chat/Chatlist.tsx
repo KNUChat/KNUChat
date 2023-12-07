@@ -1,4 +1,3 @@
-// Chatlist.tsx
 import { useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
@@ -35,17 +34,19 @@ const Chatlist: React.FC = () => {
   return (
     <ChatlistWrapper>
       <Title text="ChatList" />
+      <ListWrapper>
       <ChatListNav />
-      {rooms.map((room) => (
-        (chatstatus && room.roomStatus === 'CHAT_ENDED') ||
-        (!chatstatus && room.roomStatus === 'CHAT_PROCEEDING') && (
-          <ChatroomBox
-            key={room.roomId}
-            room={room}
-            onClick={() => handleRoomClick(room.roomId)}
-          />
-        )
-      ))}
+        {rooms.map((room) => (
+          (chatstatus && room.roomStatus === 'CHAT_ENDED') ||
+          (!chatstatus && room.roomStatus === 'CHAT_PROCEEDING') && (
+            <ChatroomBox
+              key={room.roomId}
+              room={room}
+              onClick={() => handleRoomClick(room.roomId)}
+            />
+          )
+        ))}
+      </ListWrapper>
     </ChatlistWrapper>
   );
 };
@@ -55,7 +56,16 @@ export default Chatlist;
 const ChatlistWrapper = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+
+const ListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color:white;
   margin-right:3px;
   height: 30rem;
   overflow-y: auto;
+  border-radius: 10px 10px 10px 10px;
 `;
