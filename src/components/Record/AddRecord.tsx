@@ -58,6 +58,7 @@ const AddRecord = () => {
             <DefaultInput maxLength={1000} height="10rem" />
           </ContentBox>
         </AddRecordContent>
+        <button>제출</button>
       </MyPageBox>
     </AddRecordWrapper>
   );
