@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useChatStore } from "@store/useChatStore";
+import { useEffect, useState } from "react";
 
 interface Message {
     roomId: number;
@@ -17,11 +18,12 @@ const Chat:React.FC<ChatProps> =({msg})=> {
     const {userId} = useChatStore();
     const [, datePart, timePart] = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(msg.sendTime) || [];
 
+    const parsedTime = timePart ? new Date(`1970-01-01T${timePart}:00Z`).toLocaleTimeString("en-US", { timeZone: "Asia/Seoul", hour12: true, hour:"2-digit",minute: "2-digit" }) : "";
+      
     return (
         <Wrapper $isCurrentUser={msg.senderId === userId}>
             <TimeWrapper>
-                <ChatTime $isCurrentUser={msg.senderId === userId}>{`${datePart}`}</ChatTime>
-                <ChatTime $isCurrentUser={msg.senderId === userId}>{`${timePart}`}</ChatTime>
+                <ChatTime $isCurrentUser={msg.senderId === userId}>{`${parsedTime}`}</ChatTime>
             </TimeWrapper>
             <ChatContentWrapper>
                 {msg.senderId !== userId && <ChatContent>{`Id: ${msg.senderId}`}</ChatContent>}
@@ -29,8 +31,7 @@ const Chat:React.FC<ChatProps> =({msg})=> {
                     {msg.message}
                 </ChatWrapper>
             </ChatContentWrapper>
-        </Wrapper>
-        
+        </Wrapper>       
     );
 }
 
@@ -77,6 +78,6 @@ const ChatWrapper = styled.div<{ $isCurrentUser: boolean }>`
     margin-left: 3px;
     padding:8px;
     width:auto;
-    max-width:10rem;
+    max-width:15rem;
     overflow-wrap: break-word;
 `;
