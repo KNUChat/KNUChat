@@ -16,7 +16,7 @@ interface Message {
 const ChatPrintBox: React.FC = () => {
   const [logs1, setLogs1] = useState<Message[]>([]);
   const [logs2, setLogs2] = useState<Message[]>([]);
-  const { selectedRoomId, messages } = useChatStore();
+  const { selectedRoomId, messages, userId } = useChatStore();
 
   useEffect(() => {
     const fetchChatLogs = async () => {
@@ -52,12 +52,12 @@ const ChatPrintBox: React.FC = () => {
     <ChatPrintWrapper>
       <SubHandler />
       {logs1.map((log, index) => (
-        <ChatBox key={index}>
+        <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
           <Chat msg={log}/>
         </ChatBox>
       ))}
       {logs2.map((log, index) => (
-        <ChatBox key={index}>
+        <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
           <Chat msg={log}/>
         </ChatBox>
       ))}
@@ -78,6 +78,8 @@ const ChatPrintWrapper = styled.div`
   border-radius:10px 10px 10px 10px;
 `;
 
-const ChatBox = styled.div`
-  margin-top:10px;
+const ChatBox = styled.div<{$isCurrentUser:boolean}>`
+  display: flex;
+  margin-top: 8px;
+  justify-content: ${(props) => (props.$isCurrentUser ? "flex-end" : "flex-start")};
 `;
