@@ -52,14 +52,14 @@ const ChatPrintBox: React.FC = () => {
     <ChatPrintWrapper>
       <SubHandler />
       {logs1.map((log, index) => (
-        <div key={index}>
+        <ChatBox key={index}>
           <Chat msg={log}/>
-        </div>
+        </ChatBox>
       ))}
       {logs2.map((log, index) => (
-        <div key={index}>
+        <ChatBox key={index}>
           <Chat msg={log}/>
-        </div>
+        </ChatBox>
       ))}
 
     </ChatPrintWrapper>
@@ -76,4 +76,8 @@ const ChatPrintWrapper = styled.div`
   background-color: white;
   overflow-y: auto;
   border-radius:10px 10px 10px 10px;
+`;
+
+const ChatBox = styled.div`
+  margin-top:10px;
 `;
