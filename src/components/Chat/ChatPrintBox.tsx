@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useChatStore } from "../../store/useChatStore";
 import axios from "axios";
 import SubHandler from "@/websocket/SubHandler";
+import Chat from "./Chat";
 
 interface Message {
   roomId: number;
@@ -52,18 +53,12 @@ const ChatPrintBox: React.FC = () => {
       <SubHandler />
       {logs1.map((log, index) => (
         <div key={index}>
-          <div>{`SenderId: ${log.senderId}`}</div>
-          <div>{`Message: ${log.message}`}</div>
-          <div>{`${log.sendTime}`}</div>
-          <hr />
+          <Chat msg={log}/>
         </div>
       ))}
       {logs2.map((log, index) => (
         <div key={index}>
-          <div>{`SenderId: ${log.senderId}`}</div>
-          <div>{`Message: ${log.message}`}</div>
-          <div>{`${log.sendTime}`}</div>
-          <hr />
+          <Chat msg={log}/>
         </div>
       ))}
 
@@ -79,6 +74,6 @@ const ChatPrintWrapper = styled.div`
   align-items: center;
   text-align: center;
   background-color: white;
-  margin-top: 3px;
   overflow-y: auto;
+  border-radius:10px 10px 10px 10px;
 `;
