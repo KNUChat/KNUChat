@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import { useChatStore } from "@store/useChatStore";
-import { useEffect, useState } from "react";
-
 interface Message {
     roomId: number;
     senderId: number;
