@@ -28,16 +28,17 @@ const Content = () => {
   };
   return (
     <ContentWrapper>
-      <p>이력</p>
+      <Header>
+        <p>이력</p>
+      </Header>
       {recordData.recordResponses &&
         recordData?.recordResponses.map((record: RecordProps) => {
           return (
-            <ContentBox>
+            <ContentBox key={record.recordId}>
               <p>{record.description}</p>
             </ContentBox>
           );
         })}
-
       <DefaultButton onClick={() => handleClickMore()}>더보기</DefaultButton>
     </ContentWrapper>
   );
@@ -69,4 +70,10 @@ const ContentWrapper = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;

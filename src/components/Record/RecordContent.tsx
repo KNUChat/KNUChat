@@ -2,19 +2,20 @@ import ContentBox from "@components/MyPage/ContentBox";
 import MyPageBox from "@components/MyPage/MyPageBox";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RecordSearchProps } from "@api/record";
 import useSearchRecord from "@hook/record/useSearchRecord";
 import { RecordProps } from "@components/MyPage/RecordTab";
 
 const RecordContent = () => {
   const [detailedViews, setDetailedViews] = useState<boolean[]>([]); // 각 레코드의 상세 보기 상태를 관리하는 배열
+  const [currentPage, setCurrentPage] = useState(0);
   const temp: RecordSearchProps = {
     searchWord: "1",
     type: "user",
-    page: 0,
+    page: currentPage,
   };
-  const { data: recordData } = useSearchRecord(temp);
+  const { data: recordData, refetch } = useSearchRecord(temp);
   console.log(recordData);
 
   const navigate = useNavigate();
@@ -22,6 +23,15 @@ const RecordContent = () => {
   const handleClickAddRecord = () => {
     navigate("/addRecord");
   };
+
+  const handleClickPage = (pageNumber: number) => {
+    setCurrentPage(pageNumber); // Update current page on click
+  };
+
+  useEffect(() => {
+    // When currentPage changes, refetch data based on the updated page number
+    refetch({ page: currentPage });
+  }, [currentPage, refetch]);
 
   const toggleDetailedView = (index: number) => {
     setDetailedViews((prev) => {
@@ -34,8 +44,10 @@ const RecordContent = () => {
   return (
     <RecordContentWrapper>
       <MyPageBox>
-        <p>이력</p>
-        <button onClick={() => handleClickAddRecord()}>추가</button>
+        <Header>
+          <p>이력</p>
+          <button onClick={() => handleClickAddRecord()}>추가</button>
+        </Header>
         {recordData?.recordResponses &&
           recordData?.recordResponses.map((record: RecordProps, index: number) => {
             return (
@@ -58,6 +70,13 @@ const RecordContent = () => {
               </ContentBox>
             );
           })}
+        <PaginationWrapper>
+          {Array.from(Array(10).keys()).map((pageNumber) => (
+            <PageNumber key={pageNumber} onClick={() => handleClickPage(pageNumber)}>
+              {pageNumber + 1}
+            </PageNumber>
+          ))}
+        </PaginationWrapper>
       </MyPageBox>
     </RecordContentWrapper>
   );
@@ -89,4 +108,29 @@ const ContentHeader = styled.div`
 const ContentMain = styled.div<{ isDetailedView: boolean }>`
   display: ${({ isDetailedView }) => (isDetailedView ? "flex" : "none")};
   flex-direction: column;
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  height: 2rem;
+`;
+
+const PageNumber = styled.button`
+  margin: 0 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e8e8e8;
+  }
 `;
