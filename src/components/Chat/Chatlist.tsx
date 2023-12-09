@@ -71,7 +71,7 @@ const ListWrapper = styled.div`
   align-items: center;
   background-color:white;
   margin-right:3px;
-  height: 30rem;
+  height: 34rem;
   overflow-y: auto;
   border-radius: 10px 10px 10px 10px;
 `;

@@ -70,7 +70,7 @@ const ChatTextBox: React.FC = () => {
     <ChatTextBoxWrapper>
       <InputBox
         type="text"
-        placeholder="메시지"
+        placeholder="  메시지"
         value={message}
         onChange={handleChange}
         onKeyDown={handleKeyDown}

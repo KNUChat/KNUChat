@@ -30,12 +30,12 @@ const CommonWrapper = styled.div`
 `;
 
 const LeftBox = styled.div`
-  flex-grow: 1;
+  flex: 1;
 `;
 const MainBox = styled.div`
-  flex-grow: 3;
+  flex: 3;
 `;
 
 const RightBox = styled.div`
-  flex-grow: 1;
+  flex: 1;
 `;

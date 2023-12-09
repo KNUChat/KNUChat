@@ -70,7 +70,7 @@ export default ChatPrintBox;
 
 const ChatPrintWrapper = styled.div`
   width: 100%;
-  height: 28rem;
+  height: 31.9rem;
   align-items: center;
   text-align: center;
   background-color: white;

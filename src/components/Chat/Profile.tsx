@@ -28,7 +28,8 @@ const Profile: React.FC = () => {
     };
 
     fetchUserProfile();
-  }, [selectedRoomId, rooms, userId]);
+  }, [selectedRoomId, rooms, userId,selectedUserProfile]);
+
   useEffect(() => {
     if (selectedRoomId) {
       setContent(
