@@ -22,9 +22,11 @@ const recordApi = {
     return await clientApi.record.get(`/record/${recordId}`);
   },
 
-  addRecord: async (newRecord: NewRecordProps) => {
-    return await clientApi.record.post("/record", { newRecord });
+  addRecord: async ({ userId, title, description, period, achievement, hashtag }: NewRecordProps) => {
+    console.log("data", userId, title, description, period, achievement, hashtag);
+    return await clientApi.record.post("/record", { userId, title, description, period, achievement, hashtag });
   },
+
   patchRecord: async (updateRecord: NewRecordProps) => {
     return await clientApi.record.patch(`/record`, { updateRecord });
   },
