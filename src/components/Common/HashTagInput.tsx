@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import styled from "styled-components";
 
 interface InputProps {
@@ -60,10 +60,14 @@ const Counter = styled.span`
   font-size: 12px;
   color: #888888;
 `;
+interface HashTagInputRef {
+  getTags: () => string[];
+}
 
-const HashTagInput = ({ maxLength, height }: InputProps) => {
+const HashTagInput = forwardRef<HashTagInputRef, InputProps>(({ maxLength, height }, ref) => {
   const [value, setValue] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const remainingChars = maxLength - value.length;
 
@@ -77,7 +81,7 @@ const HashTagInput = ({ maxLength, height }: InputProps) => {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && value.trim() !== "" && event.nativeEvent.isComposing === false) {
-      event.preventDefault(); // 기본 엔터 동작 방지
+      event.preventDefault();
       setTags((prevTags) => [...prevTags, value.trim()]);
       setValue("");
     }
@@ -88,9 +92,14 @@ const HashTagInput = ({ maxLength, height }: InputProps) => {
     setTags(updatedTags);
   };
 
+  useImperativeHandle(ref, () => ({
+    getTags: () => tags, // Expose getTags function to retrieve all tags
+  }));
+
   return (
     <InputWrapper>
       <Input
+        ref={inputRef}
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
@@ -112,6 +121,6 @@ const HashTagInput = ({ maxLength, height }: InputProps) => {
       </Counter>
     </InputWrapper>
   );
-};
+});
 
 export default HashTagInput;

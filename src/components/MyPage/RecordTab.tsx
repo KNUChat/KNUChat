@@ -2,21 +2,43 @@ import styled from "styled-components";
 import MyPageBox from "./MyPageBox";
 import ContentBox from "./ContentBox";
 import { useNavigate } from "react-router-dom";
-import useGetRecord from "@hook/record/useGetRecord";
+import useSearchRecord from "@hook/record/useSearchRecord";
+import { RecordSearchProps } from "@api/record";
+
+export interface RecordProps {
+  description: string;
+  hashtags: string[];
+  period: string;
+  recordId: number;
+  title: string;
+  userId: number;
+}
 
 const Content = () => {
   const navigate = useNavigate();
-  const userId = 1;
-  const { data: recordData } = useGetRecord(userId);
+  const temp: RecordSearchProps = {
+    searchWord: "1",
+    type: "user",
+    page: 0,
+  };
+  const { data: recordData } = useSearchRecord(temp);
   console.log(recordData);
   const handleClickMore = () => {
     navigate("/record");
   };
   return (
     <ContentWrapper>
-      <ContentBox>
-        <p>경북대학교</p>
-      </ContentBox>
+      <Header>
+        <p>이력</p>
+      </Header>
+      {recordData.recordResponses &&
+        recordData?.recordResponses.map((record: RecordProps) => {
+          return (
+            <ContentBox key={record.recordId}>
+              <p>{record.description}</p>
+            </ContentBox>
+          );
+        })}
       <DefaultButton onClick={() => handleClickMore()}>더보기</DefaultButton>
     </ContentWrapper>
   );
@@ -33,7 +55,7 @@ const RecordTab = () => {
 export default RecordTab;
 
 const RecordTabWrapper = styled.div`
-  height: 70%;
+  height: auto;
 `;
 
 const DefaultButton = styled.div`
@@ -48,4 +70,10 @@ const ContentWrapper = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;

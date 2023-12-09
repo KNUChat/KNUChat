@@ -42,7 +42,7 @@ const ProfileTab = () => {
 export default ProfileTab;
 
 const ProfileTabWrapper = styled.div`
-  height: 30%;
+  height: auto;
   width: 100%;
 `;
 
