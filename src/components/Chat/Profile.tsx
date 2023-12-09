@@ -37,11 +37,13 @@ const Profile: React.FC = () => {
 
   return (
     <ProfileWrapper>
-      <div>Name: {selectedUserProfile.userDto.name}</div>
-      <div>Email: {selectedUserProfile.userDto.email}</div>
-      <div>Collage: {selectedUserProfile.departmentDtos.Collage}</div>
-      <div>Department: {selectedUserProfile.departmentDtos.department}</div>
-      <div>Mayjor: {selectedUserProfile.departmentDtos.major}</div>
+      <Content>
+        <div>Name: {selectedUserProfile.userDto.name}</div>
+        <div>Email: {selectedUserProfile.userDto.email}</div>
+        <div>Collage: {selectedUserProfile.departmentDtos.Collage}</div>
+        <div>Department: {selectedUserProfile.departmentDtos.department}</div>
+        <div>Mayjor: {selectedUserProfile.departmentDtos.major}</div>
+      </Content>
     </ProfileWrapper>
   );
 };
@@ -49,9 +51,20 @@ const Profile: React.FC = () => {
 export default Profile;
 
 const ProfileWrapper = styled.div`
-  text-align: center;
+  text-align: left;
+  border-radius:5px 5px 5px 5px;
+  background-color: #EEEEEE;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width:auto;
 `;
 
 const LoadingOrErrorComponent: React.FC = () => (
   <div>Loading or Error</div>
 );
+
+const Content = styled.div`
+  margin-left:20px;
+`;
