@@ -20,10 +20,13 @@ export default Chatprofile;
 
 const ChatprofileWrapper = styled.div`
     text-align: center;
-    width: 100%;
     margin-left: 3px;
+    border-radius: 10px 10px 10px 10px;
+    background-color:white;
 `;
 
 const ProfileWrapper = styled.div`
+    display: inline-block;
     background-color:white;
+    width:90%;
 `;
