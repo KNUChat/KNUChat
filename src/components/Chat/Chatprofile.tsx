@@ -2,14 +2,16 @@ import styled from "styled-components";
 import Title from "./Title";
 import Profile from "./Profile";
 import ButtonBox from "./ButtonBox";
+import { useChatStore } from "@store/useChatStore";
 
 const Chatprofile = () => {
+    const {selectedRoomId} = useChatStore();
 
     return (
         <ChatprofileWrapper>
             <Title text="Profile"/>
             <ProfileWrapper>
-                <Profile/>
+                <Profile key={selectedRoomId}/>
             </ProfileWrapper>
             <ButtonBox/>
         </ChatprofileWrapper>
@@ -28,5 +30,5 @@ const ChatprofileWrapper = styled.div`
 const ProfileWrapper = styled.div`
     display: inline-block;
     background-color:white;
-    width:90%;
+    width:95%;
 `;

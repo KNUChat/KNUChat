@@ -66,5 +66,6 @@ const LoadingOrErrorComponent: React.FC = () => (
 );
 
 const Content = styled.div`
-  margin-left:20px;
+  margin-left:10px;
+  margin-right:auto;
 `;

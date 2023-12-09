@@ -2,17 +2,23 @@ import styled from "styled-components";
 import { useChatStore } from "@store/useChatStore";
 
 const ButtonBox = () => {
-  const { selectedRoomId, rooms } = useChatStore();
+  const { selectedRoomId, rooms, setSelectedRoomId } = useChatStore();
 
-  // Find the room with the selectedRoomId
   const selectedRoom = rooms.find((room) => room.roomId === selectedRoomId);
 
-  // If the room is found and its status is CHAT_PROCEEDING, render the buttons; otherwise, return null
+  const handleDisconnect = () => {
+    setSelectedRoomId(null);
+  };
+
   if (selectedRoom && selectedRoom.roomStatus === "CHAT_PROCEEDING") {
     return (
       <ButtonBoxWrapper>
-        <Button>Video Call</Button>
-        <Button>Disconnect</Button>
+        <Button onClick={handleDisconnect}>
+          Video Call
+        </Button>
+        <Button onClick={handleDisconnect}>
+          Disconnect
+        </Button>
       </ButtonBoxWrapper>
     );
   } else {
@@ -29,8 +35,8 @@ const ButtonBoxWrapper = styled.div`
 
 const Button = styled.div`
   text-align: center;
-  background-color:#eeeeee;
+  background-color: #eeeeee;
   margin-top: 5px;
   margin-bottom: 5px;
-
+  border-radius: 5px;
 `;

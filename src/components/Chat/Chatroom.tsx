@@ -12,7 +12,7 @@ const Chatroom: React.FC = () => {
     <ChatroomWrapper>
       <Title text={`${selectedRoomId}`}/>
       <ConnectHandler/>
-      <ChatPrintBox/>
+      <ChatPrintBox key={selectedRoomId}/>
       <ChatTextBox/>
     </ChatroomWrapper>
   );
