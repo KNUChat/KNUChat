@@ -3,17 +3,15 @@ import styled from "styled-components";
 import { useChatStore } from "@store/useChatStore";
 
 const MakeRoom: React.FC = () => {
-  const [menteeId, setMenteeId] = useState<number | string>("");
   const [mentorId, setMentorId] = useState<number | string>("");
   const [msg, setMsg] = useState<string>("");
-  const {update,setUpdate} = useChatStore();
+  const {update,setUpdate,userId} = useChatStore();
 
   const handleCreateRoom = async () => {
     try {
-      const menteeIdInt = typeof menteeId === "number" ? menteeId : parseInt(menteeId);
       const mentorIdInt = typeof mentorId === "number" ? mentorId : parseInt(mentorId);
 
-      if (isNaN(menteeIdInt) || isNaN(mentorIdInt)) {
+      if (isNaN(mentorIdInt)) {
         console.error("Invalid menteeId or mentorId");
         return;
       }
@@ -25,9 +23,9 @@ const MakeRoom: React.FC = () => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          menteeId: menteeIdInt,
+          menteeId: userId,
           mentorId: mentorIdInt,
-          msg: msg,
+          message: msg,
         }),
       });
 
@@ -45,14 +43,6 @@ const MakeRoom: React.FC = () => {
 
   return (
     <MakeRoomWrapper>
-      <div>Mentee ID</div>
-      <label>
-        <input
-          type="text"
-          value={menteeId}
-          onChange={(e) => setMenteeId(e.target.value)}
-        />
-      </label>
       <div>Mentor ID</div>
       <label>
         <input

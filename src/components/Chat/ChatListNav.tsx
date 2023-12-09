@@ -3,14 +3,16 @@ import { useEffect } from "react";
 import styled, { CSSObject } from "styled-components";
 
 const ChatListNav = () => {
-  const { chatstatus, setChatStatus } = useChatStore();
+  const { chatstatus, setChatStatus,setSelectedRoomId} = useChatStore();
 
   const handleProceedingClick = () => {
     setChatStatus(false);
+    setSelectedRoomId(null);
   };
 
   const handleEndedClick = () => {
     setChatStatus(true);
+    setSelectedRoomId(null);
   };
   
   useEffect(() => {

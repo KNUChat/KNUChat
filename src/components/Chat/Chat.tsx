@@ -22,7 +22,7 @@ const Chat:React.FC<ChatProps> =({msg})=> {
     return (
         <Wrapper $isCurrentUser={msg.senderId === userId}>
             <TimeWrapper>
-                {msg.senderId === userId && <ChatTime $isCurrentUser={msg.senderId === userId}>{`${parsedTime}`}</ChatTime>}
+                {msg.senderId === userId ? <ChatTime $isCurrentUser={msg.senderId === userId}>{`${parsedTime}`}</ChatTime>:null}
             </TimeWrapper>
             <ChatContentWrapper>
                 <ChatWrapper $isCurrentUser={msg.senderId === userId}>
@@ -30,7 +30,7 @@ const Chat:React.FC<ChatProps> =({msg})=> {
                 </ChatWrapper>
             </ChatContentWrapper>
             <TimeWrapper>
-                {msg.senderId !== userId && <ChatTime $isCurrentUser={msg.senderId === userId}>{`${parsedTime}`}</ChatTime>}
+                {msg.senderId !== userId?<ChatTime $isCurrentUser={msg.senderId === userId}>{`${parsedTime}`}</ChatTime>:null}
             </TimeWrapper>
         </Wrapper>       
     );
@@ -62,7 +62,6 @@ const ChatContentWrapper = styled.div`
     display : flex;
     flex-direction: column;
 `;
-
 
 const ChatWrapper = styled.div<{ $isCurrentUser: boolean }>`
     display: flex;
