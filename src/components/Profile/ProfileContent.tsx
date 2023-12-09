@@ -1,10 +1,11 @@
 import ContentBox from "@components/MyPage/ContentBox";
 import MyPageBox from "@components/MyPage/MyPageBox";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useGetUserProfile from "@hook/user/useGetUserProfile";
 import { UserDataProps } from "@api/user";
 import DateRangePicker from "@components/Record/DateRangePicker";
+import DefaultInput from "@components/Common/DefaultInput";
 
 const ProfileContent = () => {
   const userId = 1;
@@ -75,7 +76,7 @@ const ProfileContent = () => {
     [""], // for 링크
   ]);
 
-  const handleChange = (categoryIndex, inputIndex, event) => {
+  const handleChange = (categoryIndex: number, inputIndex: number, event) => {
     const newInputs = [...textInputs];
     newInputs[categoryIndex][inputIndex] = event.target.value;
     setTextInputs(newInputs);
@@ -84,12 +85,22 @@ const ProfileContent = () => {
     newEditedInputs[categoryIndex][inputIndex] = event.target.value;
     setEditedInputs(newEditedInputs);
   };
+  const defaultInputRef = useRef(null);
 
-  const handleSaveAll = (categoryIndex) => {
-    console.log(`All Inputs in Category ${categoryIndex + 1} Saved:`, editedInputs[categoryIndex]);
+  // Function to retrieve content from DefaultInput using the ref
+  const getContentFromDefaultInput = () => {
+    if (defaultInputRef.current) {
+      const inputContent = defaultInputRef.current.value;
+      console.log("Content from DefaultInput:", inputContent);
+      // You can now use inputContent as needed
+    }
   };
 
-  const handleAdd = (categoryIndex) => {
+  const handleSaveAll = () => {
+    getContentFromDefaultInput();
+  };
+
+  const handleAdd = (categoryIndex: number) => {
     setTextInputs((prevInputs) => {
       const newInputs = [...prevInputs];
       newInputs[categoryIndex].push("");
@@ -108,8 +119,13 @@ const ProfileContent = () => {
   return (
     <ProfileContentWrapper>
       <MyPageBox>
-        <p>간단소개글</p>
-        <ContentBox>{userData && userData?.profileDto?.introduction}</ContentBox>
+        <Header>
+          <p>간단소개글</p>
+          <Button onClick={() => handleSaveAll()}>전체 저장</Button>
+        </Header>
+        <ContentBox>
+          <DefaultInput ref={defaultInputRef} maxLength={200} defaultValue={userData && userData?.profileDto?.introduction} />
+        </ContentBox>
         <p>학력</p>
         <ContentBox>
           <DateRangePicker DefaultStartDate={userData?.profileDto?.admissionDate} DefaultEndDate={userData?.profileDto?.graduateDate} />
@@ -128,10 +144,9 @@ const ProfileContent = () => {
               {textInputs[0].map((textInput, index) => (
                 <div key={index}>
                   <Input type="text" value={textInput} onChange={(event) => handleChange(0, index, event)} />
-                  <Button onClick={() => handleAdd(0)}>추가</Button>
                 </div>
               ))}
-              <Button onClick={() => handleSaveAll(0)}>전체 저장</Button>
+              <Button onClick={() => handleAdd(0)}>추가</Button>
             </>
           }
         />
@@ -143,10 +158,9 @@ const ProfileContent = () => {
               {textInputs[1].map((textInput, index) => (
                 <div key={index}>
                   <Input type="text" value={textInput} onChange={(event) => handleChange(1, index, event)} />
-                  <Button onClick={() => handleAdd(1)}>추가</Button>
                 </div>
               ))}
-              <Button onClick={() => handleSaveAll(1)}>전체 저장</Button>
+              <Button onClick={() => handleAdd(1)}>추가</Button>
             </>
           }
         />
@@ -158,10 +172,9 @@ const ProfileContent = () => {
               {textInputs[2].map((textInput, index) => (
                 <div key={index}>
                   <Input type="text" value={textInput} onChange={(event) => handleChange(2, index, event)} />
-                  <Button onClick={() => handleAdd(2)}>추가</Button>
                 </div>
               ))}
-              <Button onClick={() => handleSaveAll(2)}>전체 저장</Button>
+              <Button onClick={() => handleAdd(2)}>추가</Button>
             </>
           }
         />
@@ -173,6 +186,12 @@ const ProfileContent = () => {
 const ProfileContentWrapper = styled.div`
   width: 100%;
   height: 100%;
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const ButtonGroup = styled.div`
