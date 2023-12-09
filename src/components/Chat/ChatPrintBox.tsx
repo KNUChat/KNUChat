@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useChatStore } from "../../store/useChatStore";
 import axios from "axios";
 import SubHandler from "@/websocket/SubHandler";
+import Chat from "./Chat";
 
 interface Message {
   roomId: number;
@@ -15,7 +16,7 @@ interface Message {
 const ChatPrintBox: React.FC = () => {
   const [logs1, setLogs1] = useState<Message[]>([]);
   const [logs2, setLogs2] = useState<Message[]>([]);
-  const { selectedRoomId, messages } = useChatStore();
+  const { selectedRoomId, messages, userId } = useChatStore();
 
   useEffect(() => {
     const fetchChatLogs = async () => {
@@ -51,20 +52,14 @@ const ChatPrintBox: React.FC = () => {
     <ChatPrintWrapper>
       <SubHandler />
       {logs1.map((log, index) => (
-        <div key={index}>
-          <div>{`SenderId: ${log.senderId}`}</div>
-          <div>{`Message: ${log.message}`}</div>
-          <div>{`${log.sendTime}`}</div>
-          <hr />
-        </div>
+        <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
+          <Chat msg={log}/>
+        </ChatBox>
       ))}
       {logs2.map((log, index) => (
-        <div key={index}>
-          <div>{`SenderId: ${log.senderId}`}</div>
-          <div>{`Message: ${log.message}`}</div>
-          <div>{`${log.sendTime}`}</div>
-          <hr />
-        </div>
+        <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
+          <Chat msg={log}/>
+        </ChatBox>
       ))}
 
     </ChatPrintWrapper>
@@ -75,10 +70,16 @@ export default ChatPrintBox;
 
 const ChatPrintWrapper = styled.div`
   width: 100%;
-  height: 30rem;
+  height: 28rem;
   align-items: center;
   text-align: center;
   background-color: white;
-  margin-top: 3px;
   overflow-y: auto;
+  border-radius:10px 10px 10px 10px;
+`;
+
+const ChatBox = styled.div<{$isCurrentUser:boolean}>`
+  display: flex;
+  margin-top: 8px;
+  justify-content: ${(props) => (props.$isCurrentUser ? "flex-end" : "flex-start")};
 `;
