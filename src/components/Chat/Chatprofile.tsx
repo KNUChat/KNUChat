@@ -25,10 +25,11 @@ const ChatprofileWrapper = styled.div`
     margin-left: 3px;
     border-radius: 10px 10px 10px 10px;
     background-color:white;
+    width:100%;
 `;
 
 const ProfileWrapper = styled.div`
     display: inline-block;
     background-color:white;
-    width:95%;
+    width: 90%;
 `;

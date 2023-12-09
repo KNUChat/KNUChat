@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useChatStore } from "@store/useChatStore";
+
 interface Message {
     roomId: number;
     senderId: number;
@@ -14,21 +15,23 @@ interface ChatProps {
 
 const Chat:React.FC<ChatProps> =({msg})=> {
     const {userId} = useChatStore();
-    const [, datePart, timePart] = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(msg.sendTime) || [];
+    const [, , timePart] = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(msg.sendTime) || [];
 
     const parsedTime = timePart ? new Date(`1970-01-01T${timePart}:00Z`).toLocaleTimeString("en-US", { timeZone: "Asia/Seoul", hour12: true, hour:"2-digit",minute: "2-digit" }) : "";
       
     return (
         <Wrapper $isCurrentUser={msg.senderId === userId}>
             <TimeWrapper>
-                <ChatTime $isCurrentUser={msg.senderId === userId}>{`${parsedTime}`}</ChatTime>
+                {msg.senderId === userId && <ChatTime $isCurrentUser={msg.senderId === userId}>{`${parsedTime}`}</ChatTime>}
             </TimeWrapper>
             <ChatContentWrapper>
-                {msg.senderId !== userId && <ChatContent>{`Id: ${msg.senderId}`}</ChatContent>}
                 <ChatWrapper $isCurrentUser={msg.senderId === userId}>
                     {msg.message}
                 </ChatWrapper>
             </ChatContentWrapper>
+            <TimeWrapper>
+                {msg.senderId !== userId && <ChatTime $isCurrentUser={msg.senderId === userId}>{`${parsedTime}`}</ChatTime>}
+            </TimeWrapper>
         </Wrapper>       
     );
 }
@@ -36,7 +39,7 @@ const Chat:React.FC<ChatProps> =({msg})=> {
 export default Chat;
 
 const Wrapper = styled.div<{ $isCurrentUser: boolean }>`
-    width:60%;
+    width:65;
     display: flex;
     flex-direction: row;
     margin-right: 10px;
@@ -60,12 +63,6 @@ const ChatContentWrapper = styled.div`
     flex-direction: column;
 `;
 
-const ChatContent = styled.div`
-    text-align: left;
-    margin-right: auto;
-    margin-left: 3px;
-    font-size:12px;
-`;
 
 const ChatWrapper = styled.div<{ $isCurrentUser: boolean }>`
     display: flex;

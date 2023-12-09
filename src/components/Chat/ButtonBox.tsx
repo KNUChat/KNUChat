@@ -29,8 +29,9 @@ const ButtonBox = () => {
 export default ButtonBox;
 
 const ButtonBoxWrapper = styled.div`
-  display: inline-block;
-  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Button = styled.div`
@@ -39,4 +40,5 @@ const Button = styled.div`
   margin-top: 5px;
   margin-bottom: 5px;
   border-radius: 5px;
+  width: 90%;
 `;

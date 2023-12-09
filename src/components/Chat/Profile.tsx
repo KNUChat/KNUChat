@@ -58,7 +58,6 @@ const ProfileWrapper = styled.div`
   margin-bottom: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
-  width:auto;
 `;
 
 const LoadingOrErrorComponent: React.FC = () => (
@@ -67,5 +66,5 @@ const LoadingOrErrorComponent: React.FC = () => (
 
 const Content = styled.div`
   margin-left:10px;
-  margin-right:auto;
+  margin-right:10px;
 `;
