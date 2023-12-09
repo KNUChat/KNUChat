@@ -14,7 +14,7 @@ const ChatTextBox: React.FC = () => {
     const now = new Date().toISOString();
 
     setSendTime(now);
-
+    
     if (client && client.connected && selectedRoomId) {
       const publishAddress = `/pub/${selectedRoomId}`;
 
@@ -22,7 +22,10 @@ const ChatTextBox: React.FC = () => {
       console.log(selectedRoomId)
       if (selectedRoom) {
         const receiverId = userId === selectedRoom.menteeId ? selectedRoom.menteeId : selectedRoom.mentorId;
-
+      
+        if (message.trim() === "") {
+        return;
+      }
         try{
           client.publish({
           destination: publishAddress,
@@ -49,13 +52,20 @@ const ChatTextBox: React.FC = () => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      publish();
+    }
+  };
+
   return (
     <ChatTextBoxWrapper>
       <InputBox
         type="text"
-        placeholder="메시지"
+        placeholder=" 메시지 "
         value={message}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
       />
       <ButtonBox onClick={publish}>Send</ButtonBox>
     </ChatTextBoxWrapper>
@@ -65,15 +75,26 @@ const ChatTextBox: React.FC = () => {
 export default ChatTextBox;
 
 const ChatTextBoxWrapper = styled.div`
-  width: 90%;
+  width: 100%;
   align-items: center;
   display: flex;
   flex-direction: row;
+  height: 2rem;
+  background-color:white;
+  border-radius:10px 10px 10px 10px;
+  margin-top: 0.1rem;
 `;
 
 const InputBox = styled.input`
   align-items: center;
   width: 100%;
+  border-radius:5px 5px 5px 5px;
+  border : 0.1px;
+  height: auto;
 `;
 
-const ButtonBox = styled.button``;
+const ButtonBox = styled.button`
+  border-radius:5px 5px 5px 5px;
+  border : 0.1px;
+  margin-right: 5px;
+`;
