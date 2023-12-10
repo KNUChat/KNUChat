@@ -3,7 +3,7 @@ import Main from "@/page/Main";
 import Layout from "@/page/Layout";
 import MyPage from "@/page/MyPage";
 import OpenChat from "@/page/OpenChat";
-import Search from "@/page/Search";
+import Search from "@components/Search";
 import NotFound from "@page/NotFound";
 import Login from "@page/Login";
 import Test from "@page/Test";
@@ -16,11 +16,10 @@ const Router = () => {
       <Route element={<Layout />}>
         <Route path="/" element={<Main />} />
         <Route path="/openChat" element={<OpenChat />} />
-        <Route path="/search" element={<Search />} />
         <Route path="/*" element={<NotFound />} />
         <Route path="/makeroom" element={<MakeRoom />} />
         <Route path="/test" element={<Test />} />
-        {["/me", "/record", "/addRecord", "/profile"].map((path) => (
+        {["/me", "/record", "/addRecord", "/profile", "/search"].map((path) => (
           <Route key={path} path={path} element={<MyPage />} />
         ))}
       </Route>
