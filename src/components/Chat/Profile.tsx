@@ -23,7 +23,7 @@ const Profile: React.FC = () => {
 
           const response = await axios.get(`http://52.79.37.100:32100/users/${userIdToFetch}`,{
             headers: {
-              Authorization: `Bearer ${authToken}`,
+              Authorization: `${authToken}`,
             },
           });
           setSelectedUserProfile(response.data);
