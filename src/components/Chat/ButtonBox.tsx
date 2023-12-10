@@ -21,10 +21,19 @@ const ButtonBox = () => {
     }
   };
 
+  const handleVideoCall = async () => {
+    try {
+     
+    } catch (error) {
+      console.error("Error connecting Video Call Room:", error);
+    }
+  };
+
+
   if (selectedRoom && selectedRoom.roomStatus === "CHAT_PROCEEDING") {
     return (
       <ButtonBoxWrapper>
-        <Button >
+        <Button onClick={handleVideoCall}>
           Video Call
         </Button>
         <Button onClick={handleDisconnect}>

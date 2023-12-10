@@ -16,7 +16,6 @@ const ChatListNav = () => {
   };
   
   useEffect(() => {
-    console.log(chatstatus);
   }, [chatstatus]);
 
   return (

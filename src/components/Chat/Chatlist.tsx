@@ -3,7 +3,6 @@ import axios from "axios";
 import styled from "styled-components";
 import ChatroomBox from "./ChatroomBox";
 import { useChatStore } from "../../store/useChatStore";
-import Title from "./Title";
 import ChatListNav from "./ChatListNav";
 
 const Chatlist: React.FC = () => {
@@ -33,9 +32,8 @@ const Chatlist: React.FC = () => {
 
   return (
     <ChatlistWrapper>
-      <Title text="ChatList" />
-      <ListWrapper>
       <ChatListNav />
+      <ListWrapper>
         {rooms.map((room) => (
           (chatstatus && room.roomStatus === 'CHAT_ENDED')&& (
             <ChatroomBox
@@ -60,18 +58,31 @@ const Chatlist: React.FC = () => {
 export default Chatlist;
 
 const ChatlistWrapper = styled.div`
+  margin-top: 0.5rem; 
   display: flex;
   flex-direction: column;
+  height: 35rem;
 `;
 
-
 const ListWrapper = styled.div`
+  padding-top: 0.3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color:white;
   margin-right:3px;
-  height: 34rem;
-  overflow-y: auto;
   border-radius: 10px 10px 10px 10px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0.2em;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #888;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 `;

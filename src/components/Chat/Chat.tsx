@@ -7,6 +7,7 @@ interface Message {
     receiverId: number;
     message: string;
     sendTime: string;
+    chatMessageType: string;
 }
 
 interface ChatProps {
@@ -26,7 +27,11 @@ const Chat:React.FC<ChatProps> =({msg})=> {
             </TimeWrapper>
             <ChatContentWrapper>
                 <ChatWrapper $isCurrentUser={msg.senderId === userId}>
-                    {msg.message}
+                {msg.chatMessageType === "NOTICE" && msg.message === "CONNECT"
+                    ? "Video call을 시작했습니다."
+                    : msg.chatMessageType === "NOTICE" && msg.message === "DISCONNECT"
+                    ? "Video call을 종료했습니다."
+                    : msg.message}
                 </ChatWrapper>
             </ChatContentWrapper>
             <TimeWrapper>

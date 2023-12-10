@@ -14,6 +14,7 @@ const ChatTextBox: React.FC = () => {
 
   const publish = () => {
     const now = new Date().toISOString();
+    const messageType = "TEXT";
 
     setSendTime(now);
 
@@ -42,13 +43,13 @@ const ChatTextBox: React.FC = () => {
             receiverId: receiverId,
             message: message,
             sendTime: now,
+            chatMessageType: messageType,
           }),
         });
         console.log("메시지 전송 성공");
       } catch (error) {
         console.log("메시지 전송 오류:", error);
       }
-
       setMessage("");
       console.log("WebSocket 연결 상태:", client.connected ? "연결됨" : "연결되지 않음");
     } else {
@@ -89,7 +90,7 @@ const ChatTextBoxWrapper = styled.div`
   flex-direction: row;
   height: 2rem;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 0px 0px 10px 10px;
   margin-top: 0.1rem;
 `;
 

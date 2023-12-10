@@ -2,7 +2,6 @@ import styled from "styled-components";
 import ChatPrintBox from "./ChatPrintBox";
 import ChatTextBox from "./ChatTextBox";
 import ConnectHandler from "@/websocket/ConnectHandler";
-import Title from "./Title";
 import { useChatStore } from "@store/useChatStore";
 
 const Chatroom: React.FC = () => {
@@ -10,7 +9,6 @@ const Chatroom: React.FC = () => {
 
   return (
     <ChatroomWrapper>
-      <Title text={`${selectedRoomId}`}/>
       <ConnectHandler/>
       <ChatPrintBox key={selectedRoomId}/>
       <ChatTextBox/>
@@ -21,6 +19,7 @@ const Chatroom: React.FC = () => {
 export default Chatroom;
 
 const ChatroomWrapper = styled.div`
+  margin-top: 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;

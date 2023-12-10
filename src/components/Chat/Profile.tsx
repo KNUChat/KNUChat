@@ -60,7 +60,7 @@ export default Profile;
 
 const ProfileWrapper = styled.div`
   text-align: left;
-  border-radius:5px 5px 5px 5px;
+  border-radius:10px 10px 10px 10px;
   background-color: white;
   margin-bottom: 10px;
   padding-top: 10px;

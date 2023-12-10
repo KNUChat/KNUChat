@@ -4,6 +4,7 @@ import { useChatStore } from "../../store/useChatStore";
 import axios from "axios";
 import SubHandler from "@/websocket/SubHandler";
 import Chat from "./Chat";
+import Title from "./Title";
 
 interface Message {
   roomId: number;
@@ -11,6 +12,7 @@ interface Message {
   receiverId: number;
   message: string;
   sendTime: string;
+  chatMessageType: string;
 }
 
 const ChatPrintBox: React.FC = () => {
@@ -50,18 +52,20 @@ const ChatPrintBox: React.FC = () => {
 
   return (
     <ChatPrintWrapper>
+      <Title name={"null"}/>
       <SubHandler />
-      {logs1.map((log, index) => (
-        <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
-          <Chat msg={log}/>
-        </ChatBox>
-      ))}
-      {logs2.map((log, index) => (
-        <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
-          <Chat msg={log}/>
-        </ChatBox>
-      ))}
-
+      <ChatLogWrapper>
+        {logs1.map((log, index) => (
+          <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
+            <Chat msg={log}/>
+          </ChatBox>
+        ))}
+        {logs2.map((log, index) => (
+          <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
+            <Chat msg={log}/>
+          </ChatBox>
+        ))}
+      </ChatLogWrapper>
     </ChatPrintWrapper>
   );
 };
@@ -70,12 +74,27 @@ export default ChatPrintBox;
 
 const ChatPrintWrapper = styled.div`
   width: 100%;
-  height: 31.9rem;
+  height: 32.9rem;
   align-items: center;
   text-align: center;
   background-color: white;
-  overflow-y: auto;
   border-radius:10px 10px 10px 10px;
+`;
+
+const ChatLogWrapper = styled.div`
+  height: 32.9rem;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0.2em;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #888;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 `;
 
 const ChatBox = styled.div<{$isCurrentUser:boolean}>`

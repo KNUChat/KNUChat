@@ -15,6 +15,7 @@ interface Message {
   receiverId: number;
   message: string;
   sendTime: string;
+  chatMessageType: string;
 }
 
 interface ChatStore {

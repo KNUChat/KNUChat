@@ -5,7 +5,7 @@ import { useChatStore } from "@store/useChatStore";
 const MakeRoom: React.FC = () => {
   const [mentorId, setMentorId] = useState<number | string>("");
   const [msg, setMsg] = useState<string>("");
-  const {update,setUpdate,userId} = useChatStore();
+  const {setUpdate,userId} = useChatStore();
 
   const handleCreateRoom = async () => {
     try {
@@ -32,7 +32,6 @@ const MakeRoom: React.FC = () => {
       if (response.ok) {
         console.log("Chat room created successfully!");
         setUpdate(true);
-        console.log(update);
       } else {
         console.error("Failed to create chat room");
       }
