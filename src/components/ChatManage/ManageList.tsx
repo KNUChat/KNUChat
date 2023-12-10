@@ -10,7 +10,7 @@ const ManageList = () => {
     <ManageListWrapper>
       <ManageTitle title={"Waiting Chat List"} />
       {rooms.map((room) => (
-        (checked && room.roomStatus === 'CHAT_WAITING') && (
+        (!checked && room.roomStatus === 'CHAT_WAITING') && (
           <ManageChat
             key={room.roomId}
             room={room}
