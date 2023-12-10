@@ -2,7 +2,8 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useState } from "react";
-import { useModalStore } from "@store/useModalStore";
+import useModalStore from "../../store/useModalStore";
+import { useSearchStore } from "@store/useSearchStore";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Navbar = () => {
   };
   const { setModalType, setShowModal } = useModalStore();
 
+  const { setPage, setSearchWord, setType } = useSearchStore();
   const showExampleModal = () => {
     setModalType("example");
     setShowModal(true);
@@ -25,9 +27,10 @@ const Navbar = () => {
   const handleChangeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSearchType(event.target.value);
   };
-
+  // record?page=0&searchWord=1&type=user
   const handleSearch = () => {
     const keyword = ref.current?.value;
+    console.log(keyword);
     if (keyword) {
       if (keyword.startsWith("#")) {
         // 해시태그 검색 로직
@@ -47,6 +50,10 @@ const Navbar = () => {
         }
       }
     }
+    setPage(1);
+    setType("user");
+    setSearchWord("1");
+    navigate("/search");
   };
   return (
     <NavbarWrapper>
