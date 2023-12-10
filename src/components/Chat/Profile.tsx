@@ -19,7 +19,7 @@ const Profile: React.FC = () => {
             ? selectedRoom.mentorId
             : selectedRoom.menteeId;
 
-          const response = await axios.get(`http://52.79.37.100:31338/users/${userIdToFetch}`);
+          const response = await axios.get(`http://52.79.37.100:31046/users/${userIdToFetch}`);
           setSelectedUserProfile(response.data);
         } catch (error) {
           console.error("Error fetching user profile:", error);

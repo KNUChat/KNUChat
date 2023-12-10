@@ -24,7 +24,7 @@ const ChatPrintBox: React.FC = () => {
     const fetchChatLogs = async () => {
       try {
         if (selectedRoomId) {
-          const response = await axios.get(`http://52.79.37.100:32253/chat/room/${selectedRoomId}/logs`);
+          const response = await axios.get(`http://52.79.37.100:30952/chat/room/${selectedRoomId}/logs`);
 
           const formattedLogs = response.data.map((log: Message) => ({
             senderId: log.senderId,

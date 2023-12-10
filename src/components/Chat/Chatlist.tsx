@@ -11,7 +11,7 @@ const Chatlist: React.FC = () => {
   useEffect(() => {
     const fetchChatRooms = async () => {
       try {
-        const response = await axios.get("http://52.79.37.100:32253/chat/room", {
+        const response = await axios.get("http://52.79.37.100:30952/chat/room", {
           params: {
             id: userId,
           },

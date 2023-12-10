@@ -16,7 +16,7 @@ const MakeRoom: React.FC = () => {
         return;
       }
 
-      const response = await fetch("http://52.79.37.100:32253/chat/room", {
+      const response = await fetch("http://52.79.37.100:30952/chat/room", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

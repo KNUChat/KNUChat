@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@storybook/builder-vite": "^7.4.6",
+    "@types/babel__core": "^7.20.5",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/sockjs-client": "^1.5.4",
