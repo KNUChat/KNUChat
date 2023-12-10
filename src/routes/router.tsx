@@ -32,7 +32,7 @@ const Router = () => {
         <Route path="/room/:id" element={<WebRTC />} />
         <Route path="/rtctest" element={<WebRtcTest />} />
         <Route path="/rtc" element={<VideoCall />} />
-        {["/me", "/record", "/addRecord", "/profile"].map((path) => (
+        {["/me", "/record", "/addRecord", "/profile", "/search"].map((path) => (
           <Route key={path} path={path} element={<MyPage />} />
         ))}
       </Route>
