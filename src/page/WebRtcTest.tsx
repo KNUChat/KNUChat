@@ -1,3 +1,304 @@
+// import { useEffect, useState, useRef } from "react";
+// import SockJS from "sockjs-client";
+// import Stomp from "stompjs";
+
+// const WebRTCChat = () => {
+//   const [stompClient, setStompClient] = useState<Stomp.Client | null>(null);
+//   useEffect(() => {
+//     console.log(stompClient);
+//   }, [stompClient]);
+//   const localStreamRef = useRef<HTMLVideoElement>(null);
+//   const remoteStreamDivRef = useRef<HTMLDivElement>(null);
+//   const [roomId, setRoomId] = useState("");
+//   const [localStream, setLocalStream] = useState<MediaStream | undefined>(undefined);
+//   const [pcListMap, setPcListMap] = useState<Map<string, RTCPeerConnection>>(new Map());
+//   const [otherKeyList, setOtherKeyList] = useState<string[]>([]);
+//   const myKey = useRef(Math.random().toString(36).substring(2, 11));
+
+//   const startCam = async () => {
+//     try {
+//       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+//       console.log("Stream found");
+//       setLocalStream(stream);
+//       if (localStreamRef.current) localStreamRef.current.srcObject = stream;
+//     } catch (error) {
+//       console.error("Error accessing media devices:", error);
+//     }
+//   };
+
+//   const handleOfferReceived = (offer: RTCSessionDescriptionInit, otherKey: string) => {
+//     const pc = createPeerConnection(otherKey);
+
+//     pc.setRemoteDescription(new RTCSessionDescription(offer))
+//       .then(() => {
+//         return pc.createAnswer();
+//       })
+//       .then((answer) => {
+//         return pc.setLocalDescription(answer);
+//       })
+//       .then(() => {
+//         if (pc.localDescription && stompClient) {
+//           stompClient.send(`/app/peer/answer/${otherKey}/${roomId}`, {}, JSON.stringify({ key: myKey.current, body: pc.localDescription }));
+//         }
+//       })
+//       .catch((error) => {
+//         console.error("Error handling received offer:", error);
+//       });
+//   };
+//   const connectSocket = async () => {
+//     const socket = new SockJS("http://52.79.37.100:32408/signaling");
+//     const stompClient = Stomp.over(socket);
+//     stompClient.debug = null;
+
+//     stompClient.connect({}, () => {
+//       console.log("Connected to WebRTC server");
+//       console.log("roomId", roomId);
+//       setStompClient(stompClient);
+//       stompClient.subscribe(`/topic/call/key`, () => {
+//         stompClient.send(`/app/send/key`, {}, JSON.stringify(myKey.current));
+//       });
+
+//       stompClient.subscribe(`/topic/send/key`, (message) => {
+//         const key = JSON.parse(message.body);
+
+//         if (myKey.current !== key && !otherKeyList.includes(key)) {
+//           setOtherKeyList((prevList) => [...prevList, key]);
+//         }
+//       });
+
+//       stompClient.subscribe(`/topic/peer/iceCandidate/${myKey.current}/${roomId}`, (candidate) => {
+//         const key = JSON.parse(candidate.body).key;
+//         const message = JSON.parse(candidate.body).body;
+//         handleOfferReceived(message, key);
+
+//         pcListMap.get(key)?.addIceCandidate(
+//           new RTCIceCandidate({
+//             candidate: message.candidate,
+//             sdpMLineIndex: message.sdpMLineIndex,
+//             sdpMid: message.sdpMid,
+//           })
+//         );
+//       });
+
+//       stompClient.subscribe(`/topic/peer/offer/${myKey.current}/${roomId}`, (offer) => {
+//         const key = JSON.parse(offer.body).key;
+//         const message = JSON.parse(offer.body).body;
+
+//         if (message && message.type && message.sdp) {
+//           const pc = createPeerConnection(key);
+//           pcListMap.set(key, pc);
+
+//           pc.setRemoteDescription(new RTCSessionDescription({ type: message.type, sdp: message.sdp }))
+//             .then(() => {
+//               // Check if this is an offer
+//               if (message.type === "offer") {
+//                 return pc.createAnswer();
+//               }
+//               return Promise.resolve(null); // If it's an answer, resolve immediately
+//             })
+//             .then((answer) => {
+//               if (answer) {
+//                 return pc.setLocalDescription(answer);
+//               }
+//               return Promise.resolve(null);
+//             })
+//             .then(() => {
+//               if (pc.localDescription) {
+//                 // Send the answer here
+//                 stompClient?.send(`/app/peer/answer/${key}/${roomId}`, {}, JSON.stringify({ key: myKey.current, body: pc.localDescription }));
+//                 sendAnswer(pc, key);
+//               }
+//             })
+//             .catch((error) => {
+//               console.error("Error handling offer:", error);
+//             });
+//         } else {
+//           console.error("Invalid offer message:", message);
+//         }
+//       });
+//       stompClient.subscribe(`/topic/peer/answer/${myKey.current}/${roomId}`, (answer) => {
+//         const key = JSON.parse(answer.body).key;
+//         const message = JSON.parse(answer.body).body;
+
+//         pcListMap.get(key)?.setRemoteDescription(new RTCSessionDescription(message));
+//       });
+//     });
+//     console.log(stompClient);
+//   };
+
+//   // const createPeerConnection = (otherKey: string) => {
+//   //   const pc = new RTCPeerConnection();
+
+//   //   pc.addEventListener("icecandidate", (event) => {
+//   //     if (event.candidate) {
+//   //       if (stompClient !== null) {
+//   //         stompClient.send(
+//   //           `/app/peer/iceCandidate/${otherKey}/${roomId}`,
+//   //           {},
+//   //           JSON.stringify({
+//   //             key: myKey.current,
+//   //             body: {
+//   //               candidate: event.candidate.candidate,
+//   //               sdpMLineIndex: event.candidate.sdpMLineIndex,
+//   //               sdpMid: event.candidate.sdpMid,
+//   //             },
+//   //           })
+//   //         );
+//   //       } else {
+//   //         console.log("stompClient", stompClient);
+//   //         console.error("stompClient is null. Cannot send.");
+//   //       }
+//   //     }
+//   //   });
+
+//   //   pc.addEventListener("track", (event) => {
+//   //     if (remoteStreamDivRef.current && event.streams[0]) {
+//   //       const video = document.createElement("video");
+//   //       video.autoplay = true;
+//   //       video.controls = true;
+//   //       video.id = otherKey;
+//   //       video.srcObject = event.streams[0];
+//   //       remoteStreamDivRef.current.appendChild(video);
+//   //     }
+//   //   });
+
+//   //   if (localStream) {
+//   //     localStream.getTracks().forEach((track) => {
+//   //       pc.addTrack(track, localStream);
+//   //     });
+//   //   }
+
+//   //   return pc;
+//   // };
+
+//   const createPeerConnection = (otherKey) => {
+//     const pc = new RTCPeerConnection();
+//     try {
+//       pc.addEventListener("icecandidate", (event) => {
+//         onIceCandidate(event, otherKey);
+//       });
+//       pc.addEventListener("track", (event) => {
+//         onTrack(event, otherKey);
+//       });
+//       if (localStream !== undefined) {
+//         localStream.getTracks().forEach((track) => {
+//           pc.addTrack(track, localStream);
+//         });
+//       }
+
+//       console.log("PeerConnection created");
+//     } catch (error) {
+//       console.error("PeerConnection failed: ", error);
+//     }
+//     return pc;
+//   };
+
+//   const onIceCandidate = (event, otherKey) => {
+//     if (event.candidate) {
+//       console.log("ICE candidate");
+//       console.log(stompClient);
+//       stompClient &&
+//         stompClient.send(
+//           `/app/peer/iceCandidate/${otherKey}/${roomId}`,
+//           {},
+//           JSON.stringify({
+//             key: myKey,
+//             body: event.candidate,
+//           })
+//         );
+//     }
+//   };
+//   const onTrack = (event, otherKey) => {
+//     if (document.getElementById(`${otherKey}`) === null) {
+//       const video = document.createElement("video");
+
+//       video.autoplay = true;
+//       video.controls = true;
+//       video.id = otherKey;
+//       video.srcObject = event.streams[0];
+//       remoteStreamDivRef.current.appendChild(video);
+//     }
+
+//     //
+//     // remoteStreamElement.srcObject = event.streams[0];
+//     // remoteStreamElement.play();
+//   };
+
+//   const sendOffer = (pc: RTCPeerConnection, otherKey: string) => {
+//     pc.createOffer()
+//       .then((offer) => pc.setLocalDescription(offer))
+//       .then(() => {
+//         if (pc.localDescription && stompClient) {
+//           stompClient.send(`/app/peer/offer/${otherKey}/${roomId}`, {}, JSON.stringify({ key: myKey.current, body: pc.localDescription }));
+//         }
+//       })
+//       .catch((error) => {
+//         console.error("Error creating and sending offer:", error);
+//       });
+//   };
+
+//   const sendAnswer = (pc: RTCPeerConnection, otherKey: string) => {
+//     pc.createAnswer()
+//       .then((answer) => pc.setLocalDescription(answer))
+//       .then(() => {
+//         if (pc.localDescription && stompClient) {
+//           stompClient.send(`/app/peer/answer/${otherKey}/${roomId}`, {}, JSON.stringify({ key: myKey.current, body: pc.localDescription }));
+//         }
+//       })
+//       .catch((error) => {
+//         console.error("Error creating and sending answer:", error);
+//       });
+//   };
+//   const handleEnterRoom = async () => {
+//     await startCam();
+
+//     const localStreamElement = localStreamRef.current;
+//     if (localStreamElement) {
+//       localStreamElement.style.display = "block";
+//     }
+
+//     const startStreamBtnElement = document.getElementById("startSteamBtn");
+//     if (startStreamBtnElement) {
+//       startStreamBtnElement.style.display = "block";
+//     }
+
+//     document.getElementById("roomIdInput")?.setAttribute("disabled", "true");
+//     document.getElementById("enterRoomBtn")?.setAttribute("disabled", "true");
+
+//     await connectSocket();
+//   };
+
+//   const handleStartStream = async () => {
+//     await stompClient.send(`/app/call/key`, {}, {});
+
+//     setTimeout(() => {
+//       otherKeyList.forEach((key) => {
+//         if (!pcListMap.has(key)) {
+//           const pc = createPeerConnection(key);
+//           setPcListMap((prevMap) => new Map(prevMap.set(key, pc)));
+//           sendOffer(pc, key);
+//         }
+//       });
+//     }, 1000);
+//     console.log(remoteStreamDivRef.current);
+//   };
+
+//   return (
+//     <div>
+//       <div>
+//         <input type="text" id="roomIdInput" value={roomId} onChange={(e) => setRoomId(e.target.value)} />
+//         <button onClick={handleEnterRoom}>Enter Room</button>
+//         <button onClick={handleStartStream}>Start Stream</button>
+//       </div>
+//       <div>
+//         {localStream && <video ref={localStreamRef} autoPlay muted controls />}
+//         <div ref={remoteStreamDivRef} id="remoteStreamDiv"></div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default WebRTCChat;
 import { useEffect, useState, useRef } from "react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
@@ -12,16 +313,20 @@ const WebRTCChat = () => {
   const [otherKeyList, setOtherKeyList] = useState<string[]>([]);
   const myKey = useRef(Math.random().toString(36).substring(2, 11));
 
-  const startCam = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-      console.log("Stream found");
-      setLocalStream(stream);
-      if (localStreamRef.current) localStreamRef.current.srcObject = stream;
-    } catch (error) {
-      console.error("Error accessing media devices:", error);
-    }
-  };
+  useEffect(() => {
+    const startCam = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+        console.log("Stream found");
+        setLocalStream(stream);
+        if (localStreamRef.current) localStreamRef.current.srcObject = stream;
+      } catch (error) {
+        console.error("Error accessing media devices:", error);
+      }
+    };
+
+    startCam();
+  }, []);
 
   const handleOfferReceived = (offer: RTCSessionDescriptionInit, otherKey: string) => {
     const pc = createPeerConnection(otherKey);
@@ -35,6 +340,7 @@ const WebRTCChat = () => {
       })
       .then(() => {
         if (pc.localDescription && stompClient) {
+          console.log("otherKey", otherKey, "roomId", roomId);
           stompClient.send(`/app/peer/answer/${otherKey}/${roomId}`, {}, JSON.stringify({ key: myKey.current, body: pc.localDescription }));
         }
       })
@@ -42,73 +348,70 @@ const WebRTCChat = () => {
         console.error("Error handling received offer:", error);
       });
   };
-  const connectSocket = async () => {
-    const socket = new SockJS("http://52.79.37.100:30077/signaling");
-    const client = Stomp.over(socket);
-    client.debug = null;
+  useEffect(() => {
+    const connectSocket = async () => {
+      const socket = new SockJS("http://52.79.37.100:32408/signaling");
+      const client = Stomp.over(socket);
+      client.debug = null;
 
-    client.connect({}, () => {
-      console.log("Connected to WebRTC server");
-      setStompClient(client);
-      client.subscribe(`/topic/call/key`, () => {
-        client.send(`/app/send/key`, {}, JSON.stringify(myKey.current));
-      });
+      client.connect({}, () => {
+        console.log("Connected to WebRTC server");
+        setStompClient(client);
 
-      client.subscribe(`/topic/send/key`, (message) => {
-        const key = JSON.parse(message.body);
+        client.subscribe(`/topic/call/key`, () => {
+          client.send(`/app/send/key`, {}, JSON.stringify(myKey.current));
+        });
 
-        if (myKey.current !== key && !otherKeyList.includes(key)) {
-          setOtherKeyList((prevList) => [...prevList, key]);
-        }
-      });
+        client.subscribe(`/topic/send/key`, (message) => {
+          const key = JSON.parse(message.body);
 
-      client.subscribe(`/topic/peer/iceCandidate/${myKey.current}/${roomId}`, (candidate) => {
-        const key = JSON.parse(candidate.body).key;
-        const message = JSON.parse(candidate.body).body;
-        handleOfferReceived(message, key);
+          if (myKey.current !== key && !otherKeyList.includes(key)) {
+            setOtherKeyList((prevList) => [...prevList, key]);
+          }
+        });
 
-        pcListMap.get(key)?.addIceCandidate(
-          new RTCIceCandidate({
-            candidate: message.candidate,
-            sdpMLineIndex: message.sdpMLineIndex,
-            sdpMid: message.sdpMid,
-          })
-        );
-      });
+        client.subscribe(`/topic/peer/iceCandidate/${myKey.current}/${roomId}`, (candidate) => {
+          const key = JSON.parse(candidate.body).key;
+          const message = JSON.parse(candidate.body).body;
+          handleOfferReceived(message, key);
 
-      client.subscribe(`/topic/peer/offer/${myKey.current}/${roomId}`, (offer) => {
-        const key = JSON.parse(offer.body).key;
-        const message = JSON.parse(offer.body).body;
+          pcListMap.get(key)?.addIceCandidate(
+            new RTCIceCandidate({
+              candidate: message.candidate,
+              sdpMLineIndex: message.sdpMLineIndex,
+              sdpMid: message.sdpMid,
+            })
+          );
+        });
 
-        if (message && message.type && message.sdp) {
+        client.subscribe(`/topic/peer/offer/${myKey.current}/${roomId}`, (offer) => {
+          const key = JSON.parse(offer.body).key;
+          const message = JSON.parse(offer.body).body;
+
           const pc = createPeerConnection(key);
           pcListMap.set(key, pc);
-          pc.setRemoteDescription(new RTCSessionDescription({ type: message.type, sdp: message.sdp }))
-            .then(() => {
-              sendAnswer(pc, key);
-            })
-            .catch((error) => {
-              console.error("Error setting remote description:", error);
-            });
-        } else {
-          console.error("Invalid offer message:", message);
-        }
-      });
-      client.subscribe(`/topic/peer/answer/${myKey.current}/${roomId}`, (answer) => {
-        const key = JSON.parse(answer.body).key;
-        const message = JSON.parse(answer.body).body;
+          pc.setRemoteDescription(new RTCSessionDescription({ type: message.type, sdp: message.sdp }));
+          sendAnswer(pc, key);
+        });
 
-        pcListMap.get(key)?.setRemoteDescription(new RTCSessionDescription(message));
+        client.subscribe(`/topic/peer/answer/${myKey.current}/${roomId}`, (answer) => {
+          const key = JSON.parse(answer.body).key;
+          const message = JSON.parse(answer.body).body;
+
+          pcListMap.get(key)?.setRemoteDescription(new RTCSessionDescription(message));
+        });
       });
-    });
-    console.log(stompClient);
-  };
+    };
+
+    connectSocket();
+  }, [otherKeyList]);
 
   const createPeerConnection = (otherKey: string) => {
     const pc = new RTCPeerConnection();
 
     pc.addEventListener("icecandidate", (event) => {
       if (event.candidate) {
+        console.log(stompClient);
         stompClient.send(
           `/app/peer/iceCandidate/${otherKey}/${roomId}`,
           {},
@@ -143,6 +446,14 @@ const WebRTCChat = () => {
 
     return pc;
   };
+  const handleEnterRoom = async () => {
+    console.log(localStream, roomId);
+    if (localStream && roomId) {
+      // Disable input and button after entering the room
+      document.querySelector<HTMLInputElement>("#roomIdInput")?.setAttribute("disabled", "true");
+      document.querySelector<HTMLButtonElement>("#enterRoomBtn")?.setAttribute("disabled", "true");
+    }
+  };
 
   const sendOffer = (pc: RTCPeerConnection, otherKey: string) => {
     pc.createOffer()
@@ -169,38 +480,23 @@ const WebRTCChat = () => {
         console.error("Error creating and sending answer:", error);
       });
   };
-  const handleEnterRoom = async () => {
-    await startCam();
-
-    const localStreamElement = localStreamRef.current;
-    if (localStreamElement) {
-      localStreamElement.style.display = "block";
-    }
-
-    const startStreamBtnElement = document.getElementById("startSteamBtn");
-    if (startStreamBtnElement) {
-      startStreamBtnElement.style.display = "block";
-    }
-
-    document.getElementById("roomIdInput")?.setAttribute("disabled", "true");
-    document.getElementById("enterRoomBtn")?.setAttribute("disabled", "true");
-
-    await connectSocket();
-  };
-
   const handleStartStream = async () => {
+    console.log("localStream", localStream, "roomId", roomId, "remoteStreamRef", remoteStreamDivRef);
+    if (!localStream || !roomId) return;
+
+    // Send the key to initiate the call
+    console.log(stompClient);
     await stompClient.send(`/app/call/key`, {}, {});
 
     setTimeout(() => {
       otherKeyList.forEach((key) => {
         if (!pcListMap.has(key)) {
           const pc = createPeerConnection(key);
-          setPcListMap((prevMap) => new Map(prevMap.set(key, pc)));
+          pcListMap.set(key, pc);
           sendOffer(pc, key);
         }
       });
     }, 1000);
-    console.log(remoteStreamDivRef);
   };
 
   return (
@@ -211,7 +507,7 @@ const WebRTCChat = () => {
         <button onClick={handleStartStream}>Start Stream</button>
       </div>
       <div>
-        {localStream && <video ref={localStreamRef} autoPlay muted controls />}
+        <video ref={localStreamRef} autoPlay muted controls style={{ display: localStream ? "block" : "none" }} />
         <div ref={remoteStreamDivRef} id="remoteStreamDiv"></div>
       </div>
     </div>
