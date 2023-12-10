@@ -80,12 +80,20 @@ const WebRTCChat = () => {
         const key = JSON.parse(offer.body).key;
         const message = JSON.parse(offer.body).body;
 
-        const pc = createPeerConnection(key);
-        pcListMap.set(key, pc);
-        pc.setRemoteDescription(new RTCSessionDescription({ type: message.type, sdp: message.sdp }));
-        sendAnswer(pc, key);
+        if (message && message.type && message.sdp) {
+          const pc = createPeerConnection(key);
+          pcListMap.set(key, pc);
+          pc.setRemoteDescription(new RTCSessionDescription({ type: message.type, sdp: message.sdp }))
+            .then(() => {
+              sendAnswer(pc, key);
+            })
+            .catch((error) => {
+              console.error("Error setting remote description:", error);
+            });
+        } else {
+          console.error("Invalid offer message:", message);
+        }
       });
-
       client.subscribe(`/topic/peer/answer/${myKey.current}/${roomId}`, (answer) => {
         const key = JSON.parse(answer.body).key;
         const message = JSON.parse(answer.body).body;
