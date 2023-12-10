@@ -1,19 +1,19 @@
 import styled from "styled-components";
-import Chatroom from "@components/Chat/Chatroom";
-import Chatlist from "@components/Chat/Chatlist";
-import ChatProfile from "@components/Chat/Chatprofile";
+import ChatManageProfile from "@components/ChatManage/ChatManageProfile";
+import ManageList from "@components/ChatManage/ManageList";
+import WaitToEnd from "@components/ChatManage/WaitToEnd";
 
 const CommonTemplate = () => {
   return (
     <CommonWrapper>
       <LeftBox>
-        <Chatlist/>
+        <WaitToEnd/>
       </LeftBox>
       <MainBox>
-        <Chatroom/>
+        <ManageList/>
       </MainBox>
       <RightBox>
-        <ChatProfile/>
+        <ChatManageProfile/>
       </RightBox>
     </CommonWrapper>
   );

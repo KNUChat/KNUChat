@@ -22,7 +22,7 @@ const RecordContent = () => {
 
   const handleClickAddRecord = () => {
     navigate("/addRecord");
-  };
+  };             
 
   const handleClickPage = (pageNumber: number) => {
     setCurrentPage(pageNumber); // Update current page on click

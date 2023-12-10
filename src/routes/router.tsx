@@ -8,6 +8,7 @@ import NotFound from "@page/NotFound";
 import Login from "@page/Login";
 import Test from "@page/Test";
 import MakeRoom from "@components/Chat/MakeRoom";
+
 import VideoChat from "@page/VideoChat";
 import Streaming from "@page/Streaming";
 import SdpOffer from "@page/SdpOffer";
@@ -24,6 +25,7 @@ const Router = () => {
         <Route path="/" element={<Main />} />
         <Route path="/openChat" element={<OpenChat />} />
         <Route path="/*" element={<NotFound />} />
+
         <Route path="/video" element={<VideoChat />} />
         <Route path="/stream" element={<Streaming />} />
         <Route path="/SdpOffer" element={<SdpOffer />} />
@@ -33,6 +35,7 @@ const Router = () => {
         <Route path="/rtctest" element={<WebRtcTest />} />
         <Route path="/rtc" element={<VideoCall />} />
         {["/me", "/record", "/addRecord", "/profile", "/search"].map((path) => (
+
           <Route key={path} path={path} element={<MyPage />} />
         ))}
       </Route>

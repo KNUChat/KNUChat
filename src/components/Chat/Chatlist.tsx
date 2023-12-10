@@ -3,7 +3,6 @@ import axios from "axios";
 import styled from "styled-components";
 import ChatroomBox from "./ChatroomBox";
 import { useChatStore } from "../../store/useChatStore";
-import Title from "./Title";
 import ChatListNav from "./ChatListNav";
 
 const Chatlist: React.FC = () => {
@@ -12,7 +11,7 @@ const Chatlist: React.FC = () => {
   useEffect(() => {
     const fetchChatRooms = async () => {
       try {
-        const response = await axios.get("http://52.79.37.100:32253/chat/room", {
+        const response = await axios.get("http://52.79.37.100:30952/chat/room", {
           params: {
             id: userId,
           },
@@ -33,26 +32,27 @@ const Chatlist: React.FC = () => {
 
   return (
     <ChatlistWrapper>
-      <Title text="ChatList" />
-      <ListWrapper>
       <ChatListNav />
-        {rooms.map((room) => (
-          (chatstatus && room.roomStatus === 'CHAT_ENDED')&& (
-            <ChatroomBox
-              key={room.roomId}
-              room={room}
-              onClick={() => handleRoomClick(room.roomId)}
-            />
-          )||
-          (!chatstatus && room.roomStatus === 'CHAT_PROCEEDING') && (
-            <ChatroomBox
-              key={room.roomId}
-              room={room}
-              onClick={() => handleRoomClick(room.roomId)}
-            />
-          )
-        ))}
-      </ListWrapper>
+      <Wrapper>
+        <ListWrapper>
+          {rooms.map((room) => (
+            (chatstatus && room.roomStatus === 'CHAT_ENDED')&& (
+              <ChatroomBox
+                key={room.roomId}
+                room={room}
+                onClick={() => handleRoomClick(room.roomId)}
+              />
+            )||
+            (!chatstatus && room.roomStatus === 'CHAT_PROCEEDING') && (
+              <ChatroomBox
+                key={room.roomId}
+                room={room}
+                onClick={() => handleRoomClick(room.roomId)}
+              />
+            )
+          ))}
+        </ListWrapper> 
+      </Wrapper>
     </ChatlistWrapper>
   );
 };
@@ -60,18 +60,37 @@ const Chatlist: React.FC = () => {
 export default Chatlist;
 
 const ChatlistWrapper = styled.div`
+  margin-top: 0.5rem; 
   display: flex;
   flex-direction: column;
+  height: 30rem;
+  background-color:white;
+  border-radius: 10px 10px 10px 10px;
 `;
 
+const Wrapper = styled.div`
+  height: auto;
+`;
 
 const ListWrapper = styled.div`
+  padding-top: 0.3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color:white;
-  margin-right:3px;
-  height: 30rem;
-  overflow-y: auto;
   border-radius: 10px 10px 10px 10px;
+  overflow-y: auto;
+  height: auto;
+  margin-top:0.4rem;
+  &::-webkit-scrollbar {
+    width: 0.2em;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #888;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 `;

@@ -3,60 +3,40 @@ import styled from "styled-components";
 import axios from "axios";
 import { useChatStore } from "../../store/useChatStore";
 
-const Profile: React.FC = () => {
-  const { selectedRoomId, rooms, userId } = useChatStore();
+const ManageProfile: React.FC = () => {
+  const {  userId } = useChatStore();
   const [selectedUserProfile, setSelectedUserProfile] = useState<any | null>(null);
-  const [content, setContent] = useState<JSX.Element | null>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-
-      const selectedRoom = rooms.find(room => room.roomId === selectedRoomId);
-
-      if (selectedRoom) {
-        try {
-          const userIdToFetch = selectedRoom.menteeId === userId
-            ? selectedRoom.mentorId
-            : selectedRoom.menteeId;
-
-          const response = await axios.get(`http://52.79.37.100:31046/users/${userIdToFetch}`);
-          setSelectedUserProfile(response.data);
-        } catch (error) {
-          console.error("Error fetching user profile:", error);
-        }
+      try {
+        const response = await axios.get(`http://52.79.37.100:31046/users/${userId}`);
+        setSelectedUserProfile(response.data);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
       }
     };
 
     fetchUserProfile();
-  }, [selectedRoomId, rooms, userId,selectedUserProfile]);
-
-  useEffect(() => {
-    if (selectedRoomId) {
-      setContent(
-        <Content>
-          <div>이름: {selectedUserProfile?.userDto.name}</div>
-          <div>Email: {selectedUserProfile?.userDto.email}</div>
-          <div>단과대학: {selectedUserProfile?.departmentDtos.Collage}</div>
-          <div>학부: {selectedUserProfile?.departmentDtos.department}</div>
-          <div>학과: {selectedUserProfile?.departmentDtos.major}</div>
-        </Content>
-      );
-    } else {
-      setContent(null);
-    }
-  }, [selectedRoomId, selectedUserProfile]);
+  }, [ userId,selectedUserProfile]);
 
   if (!selectedUserProfile) {
     return <LoadingOrErrorComponent />;
   }
   return (
     <ProfileWrapper>
-      {content}
+      <Content>
+          <div>이름: {selectedUserProfile?.userDto.name}</div>
+          <div>Email: {selectedUserProfile?.userDto.email}</div>
+          <div>단과대학: {selectedUserProfile?.departmentDtos.Collage}</div>
+          <div>학부: {selectedUserProfile?.departmentDtos.department}</div>
+          <div>학과: {selectedUserProfile?.departmentDtos.major}</div>
+        </Content>
     </ProfileWrapper>
   );
 };
 
-export default Profile;
+export default ManageProfile;
 
 const ProfileWrapper = styled.div`
   text-align: left;
