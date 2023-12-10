@@ -48,7 +48,7 @@ const WebRTCChat = () => {
   };
   useEffect(() => {
     const connectSocket = async () => {
-      const socket = new SockJS("http://52.79.37.100:30077/signaling");
+      const socket = new SockJS("http://52.79.37.100:32408/signaling");
       const client = Stomp.over(socket);
       client.debug = null;
 
