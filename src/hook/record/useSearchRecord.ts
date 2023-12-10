@@ -2,11 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import recordApi, { RecordSearchProps } from "@api/record";
 
 const useSearchRecord = (filterData: RecordSearchProps) => {
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["filterData", filterData],
-    queryFn: ({ queryKey }) => recordApi.getRecord(queryKey),
+    queryFn: ({ queryKey }) => recordApi.searchRecord(queryKey),
   });
-  return { data: data?.data ?? [] };
+
+  const searchData = data?.data ?? [];
+
+  return { data: searchData, refetch }; // Return data and refetch function
 };
 
 export default useSearchRecord;
