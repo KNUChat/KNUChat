@@ -27,6 +27,7 @@ const Profile: React.FC = () => {
             },
           });
           setSelectedUserProfile(response.data);
+          console.log(selectedUserProfile);
         } catch (error) {
           console.error("Error fetching user profile:", error);
         }
@@ -34,18 +35,21 @@ const Profile: React.FC = () => {
     };
 
     fetchUserProfile();
-  }, [selectedRoomId, rooms, userId,selectedUserProfile]);
+  }, [selectedRoomId, rooms, userId]);
 
   useEffect(() => {
     if (selectedRoomId) {
       setContent(
-        <Content>
-          <div>이름: {selectedUserProfile?.userDto.name}</div>
-          <div>Email: {selectedUserProfile?.userDto.email}</div>
-          <div>단과대학: {selectedUserProfile?.departmentDtos.Collage}</div>
-          <div>학부: {selectedUserProfile?.departmentDtos.department}</div>
-          <div>학과: {selectedUserProfile?.departmentDtos.major}</div>
-        </Content>
+        <ContentWrapper>
+          <Content>
+            {selectedUserProfile?.userDto.name}
+            ({selectedUserProfile?.profileDto.stdNum})
+            </Content>
+          <Content>{selectedUserProfile?.userDto.email}</Content>
+          <Content>{selectedUserProfile?.departmentDtos[0].college}</Content>
+          <Content>{selectedUserProfile?.departmentDtos[0].department}</Content>
+          <Content>{selectedUserProfile?.departmentDtos[0].major}</Content>
+        </ContentWrapper>
       );
     } else {
       setContent(null);
@@ -68,8 +72,6 @@ const ProfileWrapper = styled.div`
   text-align: left;
   border-radius:10px 10px 10px 10px;
   background-color: white;
-  margin-bottom: 10px;
-  padding-top: 10px;
   padding-bottom: 10px;
 `;
 
@@ -77,6 +79,12 @@ const LoadingOrErrorComponent: React.FC = () => (
   <div>Loading or Error</div>
 );
 
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const Content = styled.div`
-  margin-left:10px;
+  padding-top: 0.5rem;
+  margin-left: 1rem;
 `;

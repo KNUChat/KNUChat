@@ -4,14 +4,19 @@ import styled from "styled-components";
 import ChatroomBox from "./ChatroomBox";
 import { useChatStore } from "../../store/useChatStore";
 import ChatListNav from "./ChatListNav";
+import { useAuthStore } from "@store/useAuthStore";
 
 const Chatlist: React.FC = () => {
   const { setSelectedRoomId, userId, setRooms, rooms,update,setUpdate,chatstatus } = useChatStore();
-
+  const {authToken } = useAuthStore();
+  
   useEffect(() => {
     const fetchChatRooms = async () => {
       try {
         const response = await axios.get("http://52.79.37.100:30952/chat/room", {
+          headers: {
+            Authorization: `${authToken}`,
+          },
           params: {
             id: userId,
           },

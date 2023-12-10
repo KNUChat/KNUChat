@@ -5,6 +5,7 @@ import axios from "axios";
 import SubHandler from "@/websocket/SubHandler";
 import Chat from "./Chat";
 import Title from "./Title";
+import { useAuthStore } from "@store/useAuthStore";
 
 interface Message {
   roomId: number;
@@ -19,12 +20,17 @@ const ChatPrintBox: React.FC = () => {
   const [logs1, setLogs1] = useState<Message[]>([]);
   const [logs2, setLogs2] = useState<Message[]>([]);
   const { selectedRoomId, messages, userId } = useChatStore();
-
+  const {authToken } = useAuthStore();
+  
   useEffect(() => {
     const fetchChatLogs = async () => {
       try {
         if (selectedRoomId) {
-          const response = await axios.get(`http://52.79.37.100:30952/chat/room/${selectedRoomId}/logs`);
+          const response = await axios.get(`http://52.79.37.100:30952/chat/room/${selectedRoomId}/logs`,{
+            headers: {
+              Authorization: `${authToken}`,
+            },
+          });
 
           const formattedLogs = response.data.map((log: Message) => ({
             senderId: log.senderId,
