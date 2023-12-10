@@ -80,8 +80,9 @@ const ListWrapper = styled.div`
   background-color:white;
   border-radius: 10px 10px 10px 10px;
   overflow-y: auto;
-  height: auto;
+  height: 30rem;
   margin-top:0.4rem;
+  
   &::-webkit-scrollbar {
     width: 0.2em;
   }

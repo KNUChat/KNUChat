@@ -1,4 +1,6 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
+
+const jwtToken = import.meta.env.VITE_JWT;
 
 interface AuthState {
   authToken: string | null;
@@ -6,6 +8,6 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  authToken: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMSIsImV4cCI6MTcwMjIyNDgzMX0.SJnHqiMuqRZ1YoTFgpzh4kYIj4j0JcjJcwCxUgLSAfPsyJrR7zQdGT7Iujx5RTa0AuL-Eu-CRMcNZ2bwsC9Ekg",
+  authToken: jwtToken || null,
   setAuthToken: (token) => set({ authToken: token }),
 }));
