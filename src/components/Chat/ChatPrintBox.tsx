@@ -30,6 +30,7 @@ const ChatPrintBox: React.FC = () => {
             senderId: log.senderId,
             message: log.message,
             sendTime: log.sendTime,
+            chatMessageTyp: log.chatMessageType,
           }));
           setLogs1(formattedLogs);
           setLogs2([]);
@@ -83,7 +84,7 @@ const ChatPrintWrapper = styled.div`
 
 const ChatLogWrapper = styled.div`
   display: inline-block;
-  height: 33rem;
+  height: 31rem;
   justify-content:center;
   overflow-y: auto;
   width: 98%;
@@ -104,6 +105,7 @@ const ChatLogWrapper = styled.div`
 
 const ChatBox = styled.div<{$isCurrentUser:boolean}>`
   display: flex;
-  margin-top: 8px;
+  margin-top: 0.3rem;
+  margin-bottom: 0.2rem;
   justify-content: ${(props) => (props.$isCurrentUser ? "flex-end" : "flex-start")};
 `;

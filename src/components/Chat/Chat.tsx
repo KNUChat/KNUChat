@@ -6,8 +6,8 @@ interface Message {
     senderId: number;
     receiverId: number;
     message: string;
-    sendTime: string;
     chatMessageType: string;
+    sendTime: string;
 }
 
 interface ChatProps {
@@ -17,9 +17,8 @@ interface ChatProps {
 const Chat:React.FC<ChatProps> =({msg})=> {
     const {userId} = useChatStore();
     const [, , timePart] = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(msg.sendTime) || [];
-
     const parsedTime = timePart ? new Date(`1970-01-01T${timePart}:00Z`).toLocaleTimeString("en-US", { timeZone: "Asia/Seoul", hour12: true, hour:"2-digit",minute: "2-digit" }) : "";
-      
+    
     return (
         <Wrapper $isCurrentUser={msg.senderId === userId}>
             <TimeWrapper>
@@ -27,11 +26,12 @@ const Chat:React.FC<ChatProps> =({msg})=> {
             </TimeWrapper>
             <ChatContentWrapper>
                 <ChatWrapper $isCurrentUser={msg.senderId === userId}>
-                {msg.chatMessageType === "NOTICE" && msg.message === "CONNECT"
-                    ? "Video call을 시작했습니다."
-                    : msg.chatMessageType === "NOTICE" && msg.message === "DISCONNECT"
-                    ? "Video call을 종료했습니다."
-                    : msg.message}
+                {msg.chatMessageType === "NOTICE" || msg.message === "CONNECTED"
+                    ? "Video call Start"
+                    : msg.chatMessageType === "NOTICE" || msg.message === "DISCONNECTED"
+                    ? "Video call End"
+                    : msg.message
+                }
                 </ChatWrapper>
             </ChatContentWrapper>
             <TimeWrapper>
@@ -76,7 +76,7 @@ const ChatWrapper = styled.div<{ $isCurrentUser: boolean }>`
     margin-left: ${(props) => (props.$isCurrentUser ? "0.2rem" : "0.7rem")};
     margin-right: ${(props) => (props.$isCurrentUser ? "0.1rem" : "0.2rem")};
     text-align: left;
-    padding:0.5rem;
+    padding:0.4rem;
     width:auto;
     max-width:15rem;
     overflow-wrap: break-word;

@@ -34,11 +34,11 @@ const Profile: React.FC = () => {
     if (selectedRoomId) {
       setContent(
         <Content>
-          <div>Name: {selectedUserProfile?.userDto.name}</div>
+          <div>이름: {selectedUserProfile?.userDto.name}</div>
           <div>Email: {selectedUserProfile?.userDto.email}</div>
-          <div>Collage: {selectedUserProfile?.departmentDtos.Collage}</div>
-          <div>Department: {selectedUserProfile?.departmentDtos.department}</div>
-          <div>Major: {selectedUserProfile?.departmentDtos.major}</div>
+          <div>단과대학: {selectedUserProfile?.departmentDtos.Collage}</div>
+          <div>학부: {selectedUserProfile?.departmentDtos.department}</div>
+          <div>학과: {selectedUserProfile?.departmentDtos.major}</div>
         </Content>
       );
     } else {
