@@ -10,7 +10,7 @@ const ButtonBox = () => {
   const handleDisconnect = async () => {
 
     try {
-      await axios.patch(`http://52.79.37.100:30952/chat/room/End/${selectedRoomId}`, {
+      await axios.patch(`http://52.79.37.100:30952/chat/room/end/${selectedRoomId}`, {
       });
       setUpdate(true);
       setSelectedRoomId(null);

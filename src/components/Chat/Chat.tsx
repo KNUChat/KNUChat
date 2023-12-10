@@ -76,7 +76,7 @@ const ChatWrapper = styled.div<{ $isCurrentUser: boolean }>`
     margin-left: ${(props) => (props.$isCurrentUser ? "0.2rem" : "0.7rem")};
     margin-right: ${(props) => (props.$isCurrentUser ? "0.1rem" : "0.2rem")};
     text-align: left;
-    padding:0.4rem;
+    padding:0.3rem;
     width:auto;
     max-width:15rem;
     overflow-wrap: break-word;

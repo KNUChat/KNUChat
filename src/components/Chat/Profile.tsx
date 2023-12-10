@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useChatStore } from "../../store/useChatStore";
+import { useAuthStore } from "@store/useAuthStore";
 
 const Profile: React.FC = () => {
-  const { selectedRoomId, rooms, userId } = useChatStore();
+  const { selectedRoomId, rooms, userId} = useChatStore();
+  const {authToken} = useAuthStore()
   const [selectedUserProfile, setSelectedUserProfile] = useState<any | null>(null);
   const [content, setContent] = useState<JSX.Element | null>(null);
 
@@ -19,7 +21,11 @@ const Profile: React.FC = () => {
             ? selectedRoom.mentorId
             : selectedRoom.menteeId;
 
-          const response = await axios.get(`http://52.79.37.100:31046/users/${userIdToFetch}`);
+          const response = await axios.get(`http://52.79.37.100:32100/users/${userIdToFetch}`,{
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          });
           setSelectedUserProfile(response.data);
         } catch (error) {
           console.error("Error fetching user profile:", error);
