@@ -35,6 +35,8 @@ interface ChatStore {
   setUpdate: (update: boolean) => void;
   chatstatus: boolean;
   setChatStatus: (chatstatus: boolean) => void;
+  checked: boolean;
+  setChecked: (checked: boolean) => void;
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -57,4 +59,6 @@ export const useChatStore = create<ChatStore>((set) => ({
   setUpdate: (update) => set({ update }),
   chatstatus : false,
   setChatStatus: (chatstatus) => set({ chatstatus }),
+  checked : true,
+  setChecked: (checked) => set({ checked }),
 }));

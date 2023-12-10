@@ -84,7 +84,7 @@ const ChatPrintWrapper = styled.div`
 
 const ChatLogWrapper = styled.div`
   display: inline-block;
-  height: 31rem;
+  height: 31.5rem;
   justify-content:center;
   overflow-y: auto;
   width: 98%;

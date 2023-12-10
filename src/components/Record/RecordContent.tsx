@@ -11,7 +11,7 @@ const RecordContent = () => {
 
   const handleClickAddRecord = () => {
     navigate("/addRecord");
-  };
+  };             
 
   const handleClickMore = () => {
     setIsDetailedView(!isDetailedView);

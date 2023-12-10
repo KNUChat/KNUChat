@@ -8,6 +8,7 @@ import NotFound from "@page/NotFound";
 import Login from "@page/Login";
 import Test from "@page/Test";
 import MakeRoom from "@components/Chat/MakeRoom";
+import ChatManage from "@/page/ChatManagePage";
 
 const Router = () => {
   return (
@@ -20,6 +21,7 @@ const Router = () => {
         <Route path="/*" element={<NotFound />} />
         <Route path="/makeroom" element={<MakeRoom />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/chatmanage" element={<ChatManage />} />
         {["/me", "/record", "/addRecord", "/profile"].map((path) => (
           <Route key={path} path={path} element={<MyPage />} />
         ))}

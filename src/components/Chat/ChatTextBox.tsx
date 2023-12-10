@@ -69,14 +69,16 @@ const ChatTextBox: React.FC = () => {
 
   return (
     <ChatTextBoxWrapper>
-      <InputBox
-        type="text"
-        placeholder="  메시지"
-        value={message}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-      />
-      <ButtonBox onClick={publish}>Send</ButtonBox>
+      <Wrapper>
+        <InputBox
+          type="text"
+          placeholder="  메시지"
+          value={message}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+        />
+        <ButtonBox onClick={publish}>Send</ButtonBox>
+      </Wrapper>
     </ChatTextBoxWrapper>
   );
 };
@@ -85,24 +87,28 @@ export default ChatTextBox;
 
 const ChatTextBoxWrapper = styled.div`
   width: 100%;
+  height: 2rem;
+  justify-content: center;
   align-items: center;
   display: flex;
   flex-direction: row;
-  height: 2rem;
   background-color: white;
   border-radius: 0px 0px 10px 10px;
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 98%;'
+`;
+
 const InputBox = styled.input`
-  align-items: center;
   width: 100%;
   border-radius: 5px;
   border: 0.1px;
-  height: auto;
 `;
 
 const ButtonBox = styled.button`
   border-radius: 5px;
   border: 0.1px;
-  margin-right: 5px;
 `;

@@ -63,7 +63,7 @@ const ChatlistWrapper = styled.div`
   margin-top: 0.5rem; 
   display: flex;
   flex-direction: column;
-  height: 35rem;
+  height: 30rem;
   background-color:white;
   border-radius: 10px 10px 10px 10px;
 `;
@@ -80,7 +80,7 @@ const ListWrapper = styled.div`
   background-color:white;
   border-radius: 10px 10px 10px 10px;
   overflow-y: auto;
-  height: 32rem;
+  height: auto;
   margin-top:0.4rem;
   &::-webkit-scrollbar {
     width: 0.2em;
