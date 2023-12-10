@@ -137,6 +137,9 @@ const ProfileContent = () => {
             </StatusButton>
           ))}
         </ButtonGroup>
+        <ContentBox>
+          <DateRangePicker />
+        </ContentBox>
         <ContentBox
           children={
             <>
@@ -171,6 +174,10 @@ const ProfileContent = () => {
               <p>링크</p>
               {textInputs[2].map((textInput, index) => (
                 <div key={index}>
+                  {/* <Input type="text" value={textInput} onChange={(event) => handleChange(index, event)} /> */}
+                  <DefaultInput defaultValue={textInput} maxLength={1000} height="9rem" />
+                  <Button onClick={() => handleSave(index)}>저장</Button>
+                  <Button onClick={handleAdd}>추가</Button>
                   <Input type="text" value={textInput} onChange={(event) => handleChange(2, index, event)} />
                 </div>
               ))}
