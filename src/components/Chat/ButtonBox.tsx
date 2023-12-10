@@ -1,16 +1,20 @@
 import styled from "styled-components";
 import { useChatStore } from "@store/useChatStore";
 import axios from "axios";
+import { useAuthStore } from "@store/useAuthStore";
 
 const ButtonBox = () => {
   const { selectedRoomId, rooms, setSelectedRoomId,setUpdate } = useChatStore();
-
+  const {authToken} = useAuthStore();
   const selectedRoom = rooms.find((room) => room.roomId === selectedRoomId);
 
   const handleDisconnect = async () => {
 
     try {
-      await axios.patch(`http://52.79.37.100:30952/chat/room/end/${selectedRoomId}`, {
+      await axios.patch(`http://52.79.37.100:30952/chat/room/end/${selectedRoomId}`, {},{
+        headers: {
+          Authorization: `${authToken}`,
+        },  
       });
       setUpdate(true);
       setSelectedRoomId(null);

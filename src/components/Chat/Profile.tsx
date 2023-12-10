@@ -27,7 +27,6 @@ const Profile: React.FC = () => {
             },
           });
           setSelectedUserProfile(response.data);
-          console.log(selectedUserProfile);
         } catch (error) {
           console.error("Error fetching user profile:", error);
         }
