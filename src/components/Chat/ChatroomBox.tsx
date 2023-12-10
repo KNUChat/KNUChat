@@ -28,12 +28,12 @@ const ChatroomBoxWrapper = styled.div<{ $isSelected?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 95%;
+  width: 96%;
   text-align: center;
   margin-bottom: 0.4rem;
   min-height:2.5rem;
   height: 2.5rem;
-  border-radius: 10px 10px 10px 10px;
+  border-radius: 5px 5px 5px 5px;
   ${(props) => (props.$isSelected ? "background-color: #D20F1780;" : "background-color: #EEEEEE;")};
 `;
 

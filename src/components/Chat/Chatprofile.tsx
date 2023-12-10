@@ -22,7 +22,6 @@ const ChatprofileWrapper = styled.div`
     text-align: center;
     border-radius: 10px 10px 10px 10px;
     background-color:#f5f5f7;
-    margin-left: 3px;
     width:100%;
 `;
 

@@ -33,24 +33,26 @@ const Chatlist: React.FC = () => {
   return (
     <ChatlistWrapper>
       <ChatListNav />
-      <ListWrapper>
-        {rooms.map((room) => (
-          (chatstatus && room.roomStatus === 'CHAT_ENDED')&& (
-            <ChatroomBox
-              key={room.roomId}
-              room={room}
-              onClick={() => handleRoomClick(room.roomId)}
-            />
-          )||
-          (!chatstatus && room.roomStatus === 'CHAT_PROCEEDING') && (
-            <ChatroomBox
-              key={room.roomId}
-              room={room}
-              onClick={() => handleRoomClick(room.roomId)}
-            />
-          )
-        ))}
-      </ListWrapper>
+      <Wrapper>
+        <ListWrapper>
+          {rooms.map((room) => (
+            (chatstatus && room.roomStatus === 'CHAT_ENDED')&& (
+              <ChatroomBox
+                key={room.roomId}
+                room={room}
+                onClick={() => handleRoomClick(room.roomId)}
+              />
+            )||
+            (!chatstatus && room.roomStatus === 'CHAT_PROCEEDING') && (
+              <ChatroomBox
+                key={room.roomId}
+                room={room}
+                onClick={() => handleRoomClick(room.roomId)}
+              />
+            )
+          ))}
+        </ListWrapper> 
+      </Wrapper>
     </ChatlistWrapper>
   );
 };
@@ -62,6 +64,12 @@ const ChatlistWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 35rem;
+  background-color:white;
+  border-radius: 10px 10px 10px 10px;
+`;
+
+const Wrapper = styled.div`
+  height: auto;
 `;
 
 const ListWrapper = styled.div`
@@ -70,10 +78,10 @@ const ListWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   background-color:white;
-  margin-right:3px;
   border-radius: 10px 10px 10px 10px;
   overflow-y: auto;
-
+  height: 32rem;
+  margin-top:0.4rem;
   &::-webkit-scrollbar {
     width: 0.2em;
   }

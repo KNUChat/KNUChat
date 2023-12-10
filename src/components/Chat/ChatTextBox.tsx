@@ -91,7 +91,6 @@ const ChatTextBoxWrapper = styled.div`
   height: 2rem;
   background-color: white;
   border-radius: 0px 0px 10px 10px;
-  margin-top: 0.1rem;
 `;
 
 const InputBox = styled.input`

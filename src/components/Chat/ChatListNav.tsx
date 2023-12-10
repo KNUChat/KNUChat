@@ -36,6 +36,7 @@ const ChatListNavWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  background-color:#F5F5F7;
   width: 100%;
 `;
 
@@ -46,16 +47,17 @@ const commonNavStyle: CSSObject = {
   display: "flex",
   justifyContent: "center",
   cursor: "pointer",
-  backgroundColor: "white",
+  backgroundColor: "#eeeeee",
 };
 
 const ProceedingNav = styled.div<{ $isActive?: boolean }>`
   ${commonNavStyle}
   background-color: ${(props) => (props.$isActive ? "white" : "#F5F5F7")};
-  border-radius: ${(props)=>(props.$isActive ? "10px 10px 0px 0px": "10px 0px 0px 0px")};
+  border-radius: ${(props)=>(props.$isActive ? "10px 0px 0px 0px": "0px 0px 0px 0px")};
 `;
 
 const EndedNav = styled.div<{ $isActive?: boolean }>`
   ${commonNavStyle}
   background-color: ${(props) => (props.$isActive ? "#F5F5F7" : "white")};
+  border-radius: ${(props)=>(props.$isActive ? "0px 0px 0px 0px": "0px 10px 0px 0px")};
 `;

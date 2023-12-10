@@ -74,16 +74,21 @@ export default ChatPrintBox;
 
 const ChatPrintWrapper = styled.div`
   width: 100%;
-  height: 32.9rem;
+  height: 33rem;
   align-items: center;
   text-align: center;
   background-color: white;
-  border-radius:10px 10px 10px 10px;
+  border-radius:10px 10px 0px 0px;
 `;
 
 const ChatLogWrapper = styled.div`
-  height: 32.9rem;
+  display: inline-block;
+  height: 33rem;
+  justify-content:center;
   overflow-y: auto;
+  width: 98%;
+  background-color: #F5F5F7;
+
   &::-webkit-scrollbar {
     width: 0.2em;
   }

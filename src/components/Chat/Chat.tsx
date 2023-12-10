@@ -72,11 +72,12 @@ const ChatWrapper = styled.div<{ $isCurrentUser: boolean }>`
     display: flex;
     flex-direction: column;
     border-radius:5px 5px 5px 5px;
-    background-color: ${(props) => (props.$isCurrentUser ? "#FFEB33" : "#EEEEEE")};
+    background-color: ${(props) => (props.$isCurrentUser ? "#FFEB33" : "white")};
     text-align: left;
-    margin-left: 3px;
-    padding:8px;
+    padding:0.5rem;
     width:auto;
     max-width:15rem;
+    margin-left:0.7rem;
+    margin-right:0.1rem;
     overflow-wrap: break-word;
 `;

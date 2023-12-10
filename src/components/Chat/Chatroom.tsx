@@ -19,8 +19,11 @@ const Chatroom: React.FC = () => {
 export default Chatroom;
 
 const ChatroomWrapper = styled.div`
-  margin-top: 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 0.5rem;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+  margin-bottom: 0.5rem;
 `;
