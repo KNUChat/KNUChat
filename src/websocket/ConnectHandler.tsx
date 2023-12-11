@@ -9,7 +9,7 @@ const ConnectHandler: React.FC = () => {
   useEffect(() => {
     const connectWebSocket = async () => {
       const client = Stomp.over(() => {
-        const sock = new WebSocket("ws:52.79.37.100:32767/example");
+        const sock = new WebSocket("ws:52.79.37.100:31720/example");
         return sock;
       });
 

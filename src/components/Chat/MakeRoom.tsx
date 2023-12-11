@@ -1,35 +1,39 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useChatStore } from "@store/useChatStore";
+import { useAuthStore } from "@store/useAuthStore";
+import axios from "axios"; // axios를 추가합니다.
 
 const MakeRoom: React.FC = () => {
   const [mentorId, setMentorId] = useState<number | string>("");
   const [msg, setMsg] = useState<string>("");
-  const {setUpdate,userId} = useChatStore();
+  const { setUpdate, userId } = useChatStore();
+  const { authToken } = useAuthStore();
 
   const handleCreateRoom = async () => {
     try {
-      const mentorIdInt = typeof mentorId === "number" ? mentorId : parseInt(mentorId);
+      const mentorIdInt =
+        typeof mentorId === "number" ? mentorId : parseInt(mentorId);
 
       if (isNaN(mentorIdInt)) {
         console.error("Invalid menteeId or mentorId");
         return;
       }
 
-      const response = await fetch("http://52.79.37.100:30952/chat/room", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify({
+      const response = await axios.post('http://52.79.37.100:30952/chat/room',
+        {
           menteeId: userId,
           mentorId: mentorIdInt,
           message: msg,
-        }),
-      });
-
-      if (response.ok) {
+        },
+        {
+          headers: {
+            Authorization: `${authToken}`,
+          },
+        }
+      );
+        console.log(response.data);
+      if (response.status === 200) {
         console.log("Chat room created successfully!");
         setUpdate(true);
       } else {
@@ -67,6 +71,6 @@ const MakeRoom: React.FC = () => {
 export default MakeRoom;
 
 const MakeRoomWrapper = styled.div`
-  display : flex,
-  flex-direction : row,
+  display: flex;
+  flex-direction: column;
 `;

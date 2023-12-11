@@ -2,15 +2,21 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useChatStore } from "../../store/useChatStore";
+import { useAuthStore } from "@store/useAuthStore";
 
 const ManageProfile: React.FC = () => {
-  const {  userId } = useChatStore();
+  const { userId } = useChatStore();
+  const {authToken } = useAuthStore();
   const [selectedUserProfile, setSelectedUserProfile] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await axios.get(`http://52.79.37.100:31046/users/${userId}`);
+        const response = await axios.get(`http://52.79.37.100:32100/users/${userId}`,{
+          headers: {
+            Authorization: `${authToken}`,
+          },
+        });
         setSelectedUserProfile(response.data);
       } catch (error) {
         console.error("Error fetching user profile:", error);
