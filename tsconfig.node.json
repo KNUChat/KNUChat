@@ -4,7 +4,8 @@
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": ["sockjs-client", "simple-peer", "stompjs"]
   },
   "include": ["vite.config.ts"]
 }

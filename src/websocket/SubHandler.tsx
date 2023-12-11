@@ -3,10 +3,12 @@ import { useEffect } from "react";
 import { useChatStore } from "@store/useChatStore";
 
 const SubHandler: React.FC= () => {
-  const {client, selectedRoomId,addMessage} = useChatStore();
+  const {client, selectedRoomId,addMessage,rooms} = useChatStore();
+
+  const selectedRoom = rooms.find((room) => room.roomId === selectedRoomId);
 
   useEffect(() => {
-    if (client && selectedRoomId) {
+    if (client && selectedRoomId&&selectedRoom?.roomStatus==="CHAT_PROCEEDING") {
       const subscribeAddress = `/sub/room/${selectedRoomId}`;
       const subscription = client.subscribe(
         subscribeAddress,

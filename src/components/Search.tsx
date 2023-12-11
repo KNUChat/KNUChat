@@ -6,23 +6,26 @@ import { useState, useEffect } from "react";
 import { RecordSearchProps } from "@api/record";
 import useSearchRecord from "@hook/record/useSearchRecord";
 import { RecordProps } from "@components/MyPage/RecordTab";
+import { useSearchStore } from "@store/useSearchStore";
 
-const RecordContent = () => {
+const Search = () => {
   const [detailedViews, setDetailedViews] = useState<boolean[]>([]); // 각 레코드의 상세 보기 상태를 관리하는 배열
-  const [currentPage, setCurrentPage] = useState(0);
+  const { type, page, searchWord } = useSearchStore();
+  const [currentPage, setCurrentPage] = useState(page);
   const temp: RecordSearchProps = {
-    searchWord: "1",
+    searchWord: searchWord,
     type: "user",
-    page: currentPage,
+    page: page,
   };
+  console.log(type, page, searchWord);
   const { data: recordData, refetch } = useSearchRecord(temp);
-  console.log(recordData);
+  console.log("recordData", recordData);
 
   const navigate = useNavigate();
 
   const handleClickAddRecord = () => {
     navigate("/addRecord");
-  };             
+  };
 
   const handleClickPage = (pageNumber: number) => {
     setCurrentPage(pageNumber); // Update current page on click
@@ -82,7 +85,7 @@ const RecordContent = () => {
   );
 };
 
-export default RecordContent;
+export default Search;
 
 const RecordContentWrapper = styled.div`
   width: 100%;

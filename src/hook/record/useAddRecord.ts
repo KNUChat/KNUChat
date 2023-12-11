@@ -1,11 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
-import recordApi from "@api/record";
-import { NewRecordProps } from "@api/record";
+import recordApi, { NewRecordProps } from "@api/record";
 
-const useAddRecord = (recordData: NewRecordProps) => {
+const useAddRecord = () => {
   return useMutation({
-    mutationFn: () => {
-      return recordApi.addRecord(recordData);
+    mutationFn: ({ userId, title, description, period, achievement, hashtag }: NewRecordProps) => {
+      return recordApi.addRecord({
+        userId,
+        title,
+        description,
+        period,
+        achievement,
+        hashtag,
+      });
     },
     onSuccess: (data) => {
       console.log(data);

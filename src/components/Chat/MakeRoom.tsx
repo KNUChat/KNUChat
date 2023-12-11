@@ -1,40 +1,41 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useChatStore } from "@store/useChatStore";
+import { useAuthStore } from "@store/useAuthStore";
+import axios from "axios"; // axios를 추가합니다.
 
 const MakeRoom: React.FC = () => {
-  const [menteeId, setMenteeId] = useState<number | string>("");
   const [mentorId, setMentorId] = useState<number | string>("");
   const [msg, setMsg] = useState<string>("");
-  const {update,setUpdate} = useChatStore();
+  const { setUpdate, userId } = useChatStore();
+  const { authToken } = useAuthStore();
 
   const handleCreateRoom = async () => {
     try {
-      const menteeIdInt = typeof menteeId === "number" ? menteeId : parseInt(menteeId);
-      const mentorIdInt = typeof mentorId === "number" ? mentorId : parseInt(mentorId);
+      const mentorIdInt =
+        typeof mentorId === "number" ? mentorId : parseInt(mentorId);
 
-      if (isNaN(menteeIdInt) || isNaN(mentorIdInt)) {
+      if (isNaN(mentorIdInt)) {
         console.error("Invalid menteeId or mentorId");
         return;
       }
 
-      const response = await fetch("http://52.79.37.100:32253/chat/room", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          menteeId: menteeIdInt,
+      const response = await axios.post('http://52.79.37.100:30952/chat/room',
+        {
+          menteeId: userId,
           mentorId: mentorIdInt,
-          msg: msg,
-        }),
-      });
-
-      if (response.ok) {
+          message: msg,
+        },
+        {
+          headers: {
+            Authorization: `${authToken}`,
+          },
+        }
+      );
+        console.log(response.data);
+      if (response.status === 200) {
         console.log("Chat room created successfully!");
         setUpdate(true);
-        console.log(update);
       } else {
         console.error("Failed to create chat room");
       }
@@ -45,14 +46,6 @@ const MakeRoom: React.FC = () => {
 
   return (
     <MakeRoomWrapper>
-      <div>Mentee ID</div>
-      <label>
-        <input
-          type="text"
-          value={menteeId}
-          onChange={(e) => setMenteeId(e.target.value)}
-        />
-      </label>
       <div>Mentor ID</div>
       <label>
         <input
@@ -78,6 +71,6 @@ const MakeRoom: React.FC = () => {
 export default MakeRoom;
 
 const MakeRoomWrapper = styled.div`
-  display : flex,
-  flex-direction : row,
+  display: flex;
+  flex-direction: column;
 `;

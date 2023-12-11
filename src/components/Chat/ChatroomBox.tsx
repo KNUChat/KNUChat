@@ -15,26 +15,29 @@ interface ChatroomBoxProps {
 }
 
 const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room, onClick }) => {
-  const { selectedRoomId } = useChatStore();
+  const { selectedRoomId, userId } = useChatStore();
+
+  const role = userId === room.mentorId ? "Mentor" : userId === room.menteeId ? "Mentee" : null;
 
   return (
     <ChatroomBoxWrapper $isSelected={selectedRoomId === room.roomId} onClick={onClick}>
-      {room.roomId}
+      {room.roomId} {role && `| ${role}`}
     </ChatroomBoxWrapper>
   );
 };
+
+export default ChatroomBox;
 
 const ChatroomBoxWrapper = styled.div<{ $isSelected?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 95%;
+  width: 96%;
   text-align: center;
-  margin-top: 5px;
+  margin-bottom: 0.4rem;
+  min-height: 2.5rem;
   height: 2.5rem;
-  border-radius: 10px 10px 10px 10px;
-  ${(props) => (props.$isSelected ? "background-color: #D20F1780;" : "background-color: #EEEEEE;")};
+  border-radius: 5px 5px 5px 5px;
+  ${(props) =>
+    props.$isSelected ? "background-color: #D20F1780;" : "background-color: #EEEEEE;"};
 `;
-
-
-export default ChatroomBox;

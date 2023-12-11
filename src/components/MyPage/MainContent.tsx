@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import ProfileContent from "@components/Profile/ProfileContent";
 import RecordContent from "@components/Record/RecordContent";
 import AddRecord from "@components/Record/AddRecord";
+import Search from "@components/Search";
 
 const ContentTable: { [key: string]: ReactNode } = {
   "/me": (
@@ -27,6 +28,11 @@ const ContentTable: { [key: string]: ReactNode } = {
   "/addRecord": (
     <>
       <AddRecord />
+    </>
+  ),
+  "/search": (
+    <>
+      <Search />
     </>
   ),
 };

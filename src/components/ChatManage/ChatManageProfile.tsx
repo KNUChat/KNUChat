@@ -1,20 +1,18 @@
 import styled from "styled-components";
-import Profile from "./Profile";
-import ButtonBox from "./ButtonBox";
+import ManageProfile from "./MangeProfile";
 
-const Chatprofile = () => {
+const ChatManageProfile = () => {
     
     return (
         <ChatprofileWrapper>
             <ProfileWrapper>
-                <Profile/>
+                <ManageProfile/>
             </ProfileWrapper>
-            <ButtonBox/>
         </ChatprofileWrapper>
     );
 }
 
-export default Chatprofile;
+export default ChatManageProfile;
 
 const ChatprofileWrapper = styled.div`
     margin-top: 0.5rem;
