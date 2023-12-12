@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import { lazy, Suspense } from "react";
+import { useAuthStore } from "@store/useAuthStore";
 
 const Layout = () => {
   const { showModal, modalType } = useModalStore();
@@ -12,6 +13,12 @@ const Layout = () => {
   const modalTable = {
     example: <ExampleModal />,
   };
+
+  const { authToken } = useAuthStore();
+  const accessToken = localStorage.getItem("authToken");
+
+  console.log("authToken", authToken, "accessToken", accessToken);
+
   const component = modalType ? modalTable[modalType] : null;
   return (
     <>
