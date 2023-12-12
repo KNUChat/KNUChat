@@ -40,7 +40,7 @@ export interface UserSearchProps {
 }
 const userApi = {
   signIn: async () => {
-    return await clientApi.user.get("users/signin");
+    return await clientApi.user.get("/oauth2");
   },
   signUp: async () => {
     return await clientApi.user.post("/users/signup");
