@@ -37,6 +37,8 @@ interface ChatStore {
   setChatStatus: (chatstatus: string) => void;
   checked: boolean;
   setChecked: (checked: boolean) => void;
+  sendDate: string;
+  setSendDate: (sendDate: string) => void;
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -61,4 +63,6 @@ export const useChatStore = create<ChatStore>((set) => ({
   setChatStatus: (chatstatus) => set({ chatstatus }),
   checked : true,
   setChecked: (checked) => set({ checked }),
+  sendDate: "",
+  setSendDate: (sendDate) => set({ sendDate }),
 }));

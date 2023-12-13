@@ -6,6 +6,7 @@ import SubHandler from "@/websocket/SubHandler";
 import Chat from "./Chat";
 import Title from "./Title";
 import { useAuthStore } from "@store/useAuthStore";
+import PrintDate from "./Printdate";
 
 interface Message {
   roomId: number;
@@ -19,9 +20,9 @@ interface Message {
 const ChatPrintBox: React.FC = () => {
   const [logs1, setLogs1] = useState<Message[]>([]);
   const [logs2, setLogs2] = useState<Message[]>([]);
-  const { selectedRoomId, messages, userId } = useChatStore();
+  const { selectedRoomId, messages, userId} = useChatStore();
   const {authToken } = useAuthStore();
-  
+
   useEffect(() => {
     const fetchChatLogs = async () => {
       try {
@@ -63,14 +64,20 @@ const ChatPrintBox: React.FC = () => {
       <SubHandler />
       <ChatLogWrapper>
         {logs1.map((log, index) => (
-          <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
-            <Chat msg={log}/>
-          </ChatBox>
+          <div key={index}>
+            <PrintDate msg={log} />
+            <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
+              <Chat msg={log} />
+            </ChatBox>
+          </div>
         ))}
         {logs2.map((log, index) => (
-          <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
-            <Chat msg={log}/>
-          </ChatBox>
+          <div key={index}>
+            <PrintDate msg={log} />
+            <ChatBox key={index} $isCurrentUser={log.senderId === userId}>
+              <Chat msg={log} />
+            </ChatBox>
+          </div>
         ))}
       </ChatLogWrapper>
     </ChatPrintWrapper>
