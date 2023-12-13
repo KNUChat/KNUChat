@@ -31,6 +31,20 @@ const ButtonBox = () => {
     }
   };
 
+  const handleDelete = async () => {
+
+    try {
+      await axios.patch(`http://52.79.37.100:30952/chat/room/delete/${selectedRoomId}`, {},{
+        headers: {
+          Authorization: `${authToken}`,
+        },  
+      });
+      setUpdate(true);
+      setSelectedRoomId(null);
+    } catch (error) {
+      console.error("Error updating room status:", error);
+    }
+  };
 
   if (selectedRoom && selectedRoom.roomStatus === "CHAT_PROCEEDING") {
     return (
@@ -40,6 +54,14 @@ const ButtonBox = () => {
         </Button>
         <Button onClick={handleDisconnect}>
           Disconnect
+        </Button>
+      </ButtonBoxWrapper>
+    );
+  } else if (selectedRoom && selectedRoom.roomStatus === "CHAT_WAITING") {
+    return (
+      <ButtonBoxWrapper>
+        <Button onClick={handleDelete}>
+          Delete
         </Button>
       </ButtonBoxWrapper>
     );

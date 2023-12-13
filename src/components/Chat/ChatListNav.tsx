@@ -6,12 +6,17 @@ const ChatListNav = () => {
   const { chatstatus, setChatStatus,setSelectedRoomId} = useChatStore();
 
   const handleProceedingClick = () => {
-    setChatStatus(false);
+    setChatStatus("proceeding");
     setSelectedRoomId(null);
   };
 
   const handleEndedClick = () => {
-    setChatStatus(true);
+    setChatStatus("ended");
+    setSelectedRoomId(null);
+  };
+
+  const handleWaitingClick = () => {
+    setChatStatus("waiting");
     setSelectedRoomId(null);
   };
   
@@ -20,11 +25,14 @@ const ChatListNav = () => {
 
   return (
     <ChatListNavWrapper>
-        <ProceedingNav onClick={handleProceedingClick} $isActive={!chatstatus}>
-            진행중
+        <ProceedingNav $isActive={chatstatus === "waiting"} onClick={handleWaitingClick}>
+        대기중
         </ProceedingNav>
-        <EndedNav onClick={handleEndedClick} $isActive={!chatstatus}>
-            완료
+        <WaitingNav $isActive={chatstatus === "proceeding"} onClick={handleProceedingClick}>
+          진행중
+        </WaitingNav>
+        <EndedNav $isActive={chatstatus === "ended"} onClick={handleEndedClick}>
+          완료
         </EndedNav>
     </ChatListNavWrapper>
   );
@@ -50,14 +58,20 @@ const commonNavStyle: CSSObject = {
   backgroundColor: "#eeeeee",
 };
 
-const ProceedingNav = styled.div<{ $isActive?: boolean }>`
+const ProceedingNav = styled.div<{ $isActive?: boolean,chatstatus?:string }>`
   ${commonNavStyle}
-  background-color: ${(props) => (props.$isActive ? "white" : "#F5F5F7")};
-  border-radius: ${(props)=>(props.$isActive ? "10px 0px 0px 0px": "0px 0px 0px 0px")};
+  background-color: ${(props) => (props.$isActive || props.chatstatus === "proceeding" ? "white" : "#F5F5F7")};
+  border-radius: ${(props) => (props.$isActive || props.chatstatus === "proceeding" ? "10px 10px 0px 0px" : "0px 0px 0px 0px")};
 `;
 
-const EndedNav = styled.div<{ $isActive?: boolean }>`
+const WaitingNav = styled.div<{ $isActive?: boolean,chatstatus?:string }>`
   ${commonNavStyle}
-  background-color: ${(props) => (props.$isActive ? "#F5F5F7" : "white")};
-  border-radius: ${(props)=>(props.$isActive ? "0px 0px 0px 0px": "0px 10px 0px 0px")};
+  background-color: ${(props) => (props.$isActive || props.chatstatus === "waiting" ? "white" : "#F5F5F7")};
+  border-radius: ${(props) => (props.$isActive || props.chatstatus === "waiting" ? "10px 10px 0px 0px" : "0px 0px 0px 0px")};
+`;
+
+const EndedNav = styled.div<{ $isActive?: boolean, chatstatus?:string }>`
+  ${commonNavStyle}
+  background-color: ${(props) => (props.$isActive || props.chatstatus === "ended" ? "white" : "#F5F5F7")};
+  border-radius: ${(props)=>(props.$isActive || props.chatstatus === "ended" ? "10px 10px 0px 0px": "0px 10px 0px 0px")};
 `;
