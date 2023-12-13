@@ -24,7 +24,7 @@ const ManageProfile: React.FC = () => {
     };
 
     fetchUserProfile();
-  }, [ userId,selectedUserProfile]);
+  }, [ userId]);
 
   if (!selectedUserProfile) {
     return <LoadingOrErrorComponent />;
