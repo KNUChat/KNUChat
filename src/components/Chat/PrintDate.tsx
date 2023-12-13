@@ -20,7 +20,7 @@ const PrintDate: React.FC<ChatProps> = ({ msg }) => {
     <DateWrapper>
       <LeftLine />
       <TextLine>
-        ` {DatePart} `
+         {DatePart} 
       </TextLine>
       <RightLine />
     </DateWrapper>
@@ -50,16 +50,18 @@ const Line = styled.div`
   justify-content: center;
   height: 0.005rem;
   top: 50%;
-  width: 35%;
+  width: 38%;
   background-color: #cccccc;
 `;
 
 const RightLine = styled(Line)`
   right: 0;
   margin-right: 2px;
+  margin-left: 1rem;
 `;
 
 const LeftLine = styled(Line)`
   left: 0;
   margin-left: 2px;
+  margin-right: 1rem;
 `;
