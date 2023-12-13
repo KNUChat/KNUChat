@@ -37,6 +37,8 @@ interface ChatStore {
   setChatStatus: (chatstatus: string) => void;
   checked: boolean;
   setChecked: (checked: boolean) => void;
+  sendDate: string[];
+  setSendDate: (sendDate: string) => void;
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -53,7 +55,7 @@ export const useChatStore = create<ChatStore>((set) => ({
   }),
   rooms: [],
   setRooms: (rooms) => set({ rooms }),
-  client: null, 
+  client: null,
   setClient: (client) => set({ client }),
   update : false,
   setUpdate: (update) => set({ update }),
@@ -61,4 +63,9 @@ export const useChatStore = create<ChatStore>((set) => ({
   setChatStatus: (chatstatus) => set({ chatstatus }),
   checked : true,
   setChecked: (checked) => set({ checked }),
+  sendDate: ["", ""],
+  setSendDate: (newSendDate) => set((state) => {
+    const [prevSendDate, _] = state.sendDate;
+    return { sendDate: [newSendDate, prevSendDate] };
+  }),
 }));

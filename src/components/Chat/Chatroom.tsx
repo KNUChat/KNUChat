@@ -6,7 +6,7 @@ import { useChatStore } from "@store/useChatStore";
 
 const Chatroom: React.FC = () => {
   const {selectedRoomId} = useChatStore();
-
+  
   return (
     <ChatroomWrapper>
       <ConnectHandler/>
