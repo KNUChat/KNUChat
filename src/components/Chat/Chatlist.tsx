@@ -41,14 +41,21 @@ const Chatlist: React.FC = () => {
       <Wrapper>
         <ListWrapper>
           {rooms.map((room) => (
-            (chatstatus && room.roomStatus === 'CHAT_ENDED')&& (
+            (chatstatus === 'ended' && room.roomStatus === 'CHAT_ENDED')&& (
               <ChatroomBox
                 key={room.roomId}
                 room={room}
                 onClick={() => handleRoomClick(room.roomId)}
               />
             )||
-            (!chatstatus && room.roomStatus === 'CHAT_PROCEEDING') && (
+            (chatstatus === 'proceeding' && room.roomStatus === 'CHAT_PROCEEDING') && (
+              <ChatroomBox
+                key={room.roomId}
+                room={room}
+                onClick={() => handleRoomClick(room.roomId)}
+              />
+            )||
+            (chatstatus === 'waiting' && room.roomStatus === 'CHAT_WAITING') && (
               <ChatroomBox
                 key={room.roomId}
                 room={room}

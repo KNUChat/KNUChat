@@ -33,8 +33,8 @@ interface ChatStore {
   setClient: (client: CompatClient | null) => void;
   update: boolean;
   setUpdate: (update: boolean) => void;
-  chatstatus: boolean;
-  setChatStatus: (chatstatus: boolean) => void;
+  chatstatus: string;
+  setChatStatus: (chatstatus: string) => void;
   checked: boolean;
   setChecked: (checked: boolean) => void;
 }
@@ -57,7 +57,7 @@ export const useChatStore = create<ChatStore>((set) => ({
   setClient: (client) => set({ client }),
   update : false,
   setUpdate: (update) => set({ update }),
-  chatstatus : false,
+  chatstatus : "proceeding",
   setChatStatus: (chatstatus) => set({ chatstatus }),
   checked : true,
   setChecked: (checked) => set({ checked }),
