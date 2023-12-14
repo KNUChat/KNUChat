@@ -12,6 +12,7 @@ const Chatlist: React.FC = () => {
   const { userInfo } = useUserStore();
   const userId = userInfo.id;
   const { authToken } = useAuthStore();
+
   console.log("authToken", authToken);
   useEffect(() => {
     const fetchChatRooms = async () => {
@@ -32,7 +33,7 @@ const Chatlist: React.FC = () => {
     };
 
     fetchChatRooms();
-  }, [userId, setRooms, update, setUpdate]);
+  }, [userId, setRooms, update, setUpdate, authToken]);
 
   const handleRoomClick = (roomId: number) => {
     setSelectedRoomId(roomId);

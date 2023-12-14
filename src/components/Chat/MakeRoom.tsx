@@ -34,7 +34,7 @@ const MakeRoom: React.FC = () => {
           headers: {
             Authorization: `${authToken}`,
           },
-          withCredentials: true,
+          withCredentials: false,
         }
       );
       console.log(response.data);

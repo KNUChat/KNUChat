@@ -42,10 +42,9 @@ const Main = () => {
       setAuthToken(authorizationHeader);
     };
     fetchAuthToken();
-    // setAuthToken(response);
 
     // 받아온 code 값을 원하는 대로 사용하시면 됩니다.
-  }, [location]);
+  }, [location, setAuthToken, setUserInfo, userInfo]);
   return (
     <>
       <CommonTemplate />
