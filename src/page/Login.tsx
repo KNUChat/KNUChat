@@ -9,7 +9,7 @@ const Login = () => {
     // navigate(`${baseURL}/oauth2/authorization/google`);
     navigate("/Redirect", {
       state: {
-        url: `https://accounts.google.com/o/oauth2/v2/auth?client_id=331419415754-4aeh072kj79q7s4jek9944qivs9pbejq.apps.googleusercontent.com&redirect_uri=http://localhost:8080/oauth2/google/callback&response_type=code&scope=email`,
+        url: `https://accounts.google.com/o/oauth2/v2/auth?client_id=331419415754-4aeh072kj79q7s4jek9944qivs9pbejq.apps.googleusercontent.com&redirect_uri=http://localhost:5173/oauth2/google/callback&response_type=code&scope=email`,
       },
     });
     console.log(window.location);

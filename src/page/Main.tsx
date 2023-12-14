@@ -2,9 +2,8 @@ import CommonTemplate from "@template/CommonTemplate";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuthStore } from "@store/useAuthStore";
+import { useUserStore } from "@store/useUserStore";
 import axios from "axios";
-import { useUserStore, UserInfoType } from "@store/useUserStore";
-
 const Main = () => {
   const location = useLocation();
   const { setAuthToken } = useAuthStore();
@@ -17,11 +16,8 @@ const Main = () => {
     const fetchAuthToken = async () => {
       axios.defaults.withCredentials = true;
       const response = await axios.get(`http://52.79.37.100:32100/oauth2?code=${code}`, { withCredentials: true });
-      console.log(response);
-      console.log(response.headers);
       console.log("Authorization", response?.headers?.get("authorization"));
       const authorizationHeader = response.headers.authorization;
-      console.log(authorizationHeader);
       const cookies = response?.headers?.get("set-cookie");
       console.log("cookies", cookies);
       const token = authorizationHeader.replace("Bearer ", "");
