@@ -64,7 +64,7 @@ const ChatPrintBox: React.FC = () => {
 
   return (
     <ChatPrintWrapper>
-      <Title name={"null"}/>
+      <Title id={selectedRoomId}/>
       <SubHandler />
       <ChatLogWrapper>
         {logs1.map((log, index) => (
