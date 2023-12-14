@@ -5,11 +5,14 @@ import ChatroomBox from "./ChatroomBox";
 import { useChatStore } from "../../store/useChatStore";
 import ChatListNav from "./ChatListNav";
 import { useAuthStore } from "@store/useAuthStore";
+import { useUserStore } from "@store/useUserStore";
 
 const Chatlist: React.FC = () => {
-  const { setSelectedRoomId, userId, setRooms, rooms,update,setUpdate,chatstatus } = useChatStore();
-  const {authToken } = useAuthStore();
-  
+  const { setSelectedRoomId, setRooms, rooms, update, setUpdate, chatstatus } = useChatStore();
+  const { userInfo } = useUserStore();
+  const userId = userInfo.id;
+  const { authToken } = useAuthStore();
+  console.log("authToken", authToken);
   useEffect(() => {
     const fetchChatRooms = async () => {
       try {
@@ -27,9 +30,9 @@ const Chatlist: React.FC = () => {
         console.error("Error fetching chat rooms:", error);
       }
     };
-  
+
     fetchChatRooms();
-  }, [userId, setRooms,update,setUpdate]);
+  }, [userId, setRooms, update, setUpdate]);
 
   const handleRoomClick = (roomId: number) => {
     setSelectedRoomId(roomId);
@@ -40,30 +43,19 @@ const Chatlist: React.FC = () => {
       <ChatListNav />
       <Wrapper>
         <ListWrapper>
-          {rooms.map((room) => (
-            (chatstatus === 'ended' && room.roomStatus === 'CHAT_ENDED')&& (
-              <ChatroomBox
-                key={room.roomId}
-                room={room}
-                onClick={() => handleRoomClick(room.roomId)}
-              />
-            )||
-            (chatstatus === 'proceeding' && room.roomStatus === 'CHAT_PROCEEDING') && (
-              <ChatroomBox
-                key={room.roomId}
-                room={room}
-                onClick={() => handleRoomClick(room.roomId)}
-              />
-            )||
-            (chatstatus === 'waiting' && room.roomStatus === 'CHAT_WAITING') && (
-              <ChatroomBox
-                key={room.roomId}
-                room={room}
-                onClick={() => handleRoomClick(room.roomId)}
-              />
-            )
-          ))}
-        </ListWrapper> 
+          {rooms.map(
+            (room) =>
+              (chatstatus === "ended" && room.roomStatus === "CHAT_ENDED" && (
+                <ChatroomBox key={room.roomId} room={room} onClick={() => handleRoomClick(room.roomId)} />
+              )) ||
+              (chatstatus === "proceeding" && room.roomStatus === "CHAT_PROCEEDING" && (
+                <ChatroomBox key={room.roomId} room={room} onClick={() => handleRoomClick(room.roomId)} />
+              )) ||
+              (chatstatus === "waiting" && room.roomStatus === "CHAT_WAITING" && (
+                <ChatroomBox key={room.roomId} room={room} onClick={() => handleRoomClick(room.roomId)} />
+              ))
+          )}
+        </ListWrapper>
       </Wrapper>
     </ChatlistWrapper>
   );
@@ -72,11 +64,11 @@ const Chatlist: React.FC = () => {
 export default Chatlist;
 
 const ChatlistWrapper = styled.div`
-  margin-top: 0.5rem; 
+  margin-top: 0.5rem;
   display: flex;
   flex-direction: column;
   height: 30rem;
-  background-color:white;
+  background-color: white;
   border-radius: 10px 10px 10px 10px;
 `;
 
@@ -89,12 +81,12 @@ const ListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color:white;
+  background-color: white;
   border-radius: 10px 10px 10px 10px;
   overflow-y: auto;
   height: 30rem;
-  margin-top:0.4rem;
-  
+  margin-top: 0.4rem;
+
   &::-webkit-scrollbar {
     width: 0.2em;
   }
