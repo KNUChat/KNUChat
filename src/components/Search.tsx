@@ -12,12 +12,13 @@ const Search = () => {
   const [detailedViews, setDetailedViews] = useState<boolean[]>([]); // 각 레코드의 상세 보기 상태를 관리하는 배열
   const { type, page, searchWord } = useSearchStore();
   const [currentPage, setCurrentPage] = useState(page);
+
+  console.log("type", type, "page", page, "searchWord", searchWord);
   const temp: RecordSearchProps = {
-    searchWord: searchWord,
-    type: "user",
     page: page,
+    searchWord: searchWord,
+    type: type,
   };
-  console.log(type, page, searchWord);
   const { data: recordData, refetch } = useSearchRecord(temp);
   console.log("recordData", recordData);
 
@@ -58,7 +59,7 @@ const Search = () => {
                 <ContentHeader>
                   <p
                     onClick={() => {
-                      console.log("page");
+                      navigate(`/record/${record.recordId}`);
                     }}
                   >
                     {record.title}
@@ -74,11 +75,12 @@ const Search = () => {
             );
           })}
         <PaginationWrapper>
-          {Array.from(Array(10).keys()).map((pageNumber) => (
-            <PageNumber key={pageNumber} onClick={() => handleClickPage(pageNumber)}>
-              {pageNumber + 1}
-            </PageNumber>
-          ))}
+          {recordData?.recordResponses &&
+            Array.from(Array(recordData?.recordResponses.totalPages).keys()).map((pageNumber) => (
+              <PageNumber key={pageNumber} onClick={() => handleClickPage(pageNumber)}>
+                {pageNumber + 1}
+              </PageNumber>
+            ))}
         </PaginationWrapper>
       </MyPageBox>
     </RecordContentWrapper>

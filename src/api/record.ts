@@ -35,6 +35,7 @@ const recordApi = {
   },
   searchRecord: async (queryKey: (string | RecordSearchProps)[]) => {
     const filtering: RecordSearchProps = typeof queryKey[1] != "string" ? queryKey[1] : [];
+    console.log(filtering);
     return await clientApi.record.get(`/record?page=${filtering.page}&searchWord=${filtering.searchWord}&type=${filtering.type}`);
   },
 };

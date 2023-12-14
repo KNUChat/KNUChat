@@ -43,7 +43,7 @@ const Counter = styled.span`
 `;
 
 const DefaultInput = forwardRef<HTMLTextAreaElement, DefaultInputProps>(({ maxLength, height, defaultValue }: DefaultInputProps, ref) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defaultValue || "");
 
   const remainingChars = maxLength - value.length;
 
@@ -54,14 +54,13 @@ const DefaultInput = forwardRef<HTMLTextAreaElement, DefaultInputProps>(({ maxLe
       setValue(inputValue);
     }
   };
-  if (defaultValue && ref) {
-    (ref as RefObject<HTMLInputElement>)!.current!.value = defaultValue;
-  }
+
   useEffect(() => {
-    if (defaultValue) {
+    if (defaultValue && ref && ref.current) {
+      ref.current.value = defaultValue;
       setValue(defaultValue);
     }
-  }, [defaultValue]);
+  }, [defaultValue, ref]);
 
   return (
     <InputWrapper>

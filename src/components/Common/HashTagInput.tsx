@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import styled from "styled-components";
 
 interface InputProps {
@@ -6,6 +6,9 @@ interface InputProps {
   height?: string;
 }
 
+interface HashTagInputProps extends InputProps {
+  defaultValue?: string[];
+}
 const InputWrapper = styled.div`
   position: relative;
   height: 100%;
@@ -64,10 +67,14 @@ interface HashTagInputRef {
   getTags: () => string[];
 }
 
-const HashTagInput = forwardRef<HashTagInputRef, InputProps>(({ maxLength, height }, ref) => {
+const HashTagInput = forwardRef<HashTagInputRef, HashTagInputProps>(({ maxLength, height, defaultValue }, ref) => {
   const [value, setValue] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>(defaultValue ? defaultValue : []);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setTags(defaultValue ? defaultValue : []);
+  }, [defaultValue]);
 
   const remainingChars = maxLength - value.length;
 
