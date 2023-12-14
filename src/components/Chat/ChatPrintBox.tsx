@@ -6,7 +6,7 @@ import SubHandler from "@/websocket/SubHandler";
 import Chat from "./Chat";
 import Title from "./Title";
 import { useAuthStore } from "@store/useAuthStore";
-import PrintDate from "./Printdate";
+import PrintDate from "./PrintDate";
 
 interface Message {
   roomId: number;
