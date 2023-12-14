@@ -6,12 +6,15 @@ import { useState, useEffect } from "react";
 import { RecordSearchProps } from "@api/record";
 import useSearchRecord from "@hook/record/useSearchRecord";
 import { RecordProps } from "@components/MyPage/RecordTab";
+import { useUserStore } from "@store/useUserStore";
 
 const RecordContent = () => {
   const [detailedViews, setDetailedViews] = useState<boolean[]>([]); // 각 레코드의 상세 보기 상태를 관리하는 배열
   const [currentPage, setCurrentPage] = useState(0);
+  const { userInfo } = useUserStore();
+  const userId = userInfo.id;
   const temp: RecordSearchProps = {
-    searchWord: "1",
+    searchWord: userId,
     type: "user",
     page: currentPage,
   };
@@ -22,7 +25,7 @@ const RecordContent = () => {
 
   const handleClickAddRecord = () => {
     navigate("/addRecord");
-  };             
+  };
 
   const handleClickPage = (pageNumber: number) => {
     setCurrentPage(pageNumber); // Update current page on click
@@ -71,11 +74,12 @@ const RecordContent = () => {
             );
           })}
         <PaginationWrapper>
-          {Array.from(Array(10).keys()).map((pageNumber) => (
-            <PageNumber key={pageNumber} onClick={() => handleClickPage(pageNumber)}>
-              {pageNumber + 1}
-            </PageNumber>
-          ))}
+          {recordData?.recordResponses &&
+            Array.from(Array(recordData?.recordResponses.totalPages).keys()).map((pageNumber) => (
+              <PageNumber key={pageNumber} onClick={() => handleClickPage(pageNumber)}>
+                {pageNumber + 1}
+              </PageNumber>
+            ))}
         </PaginationWrapper>
       </MyPageBox>
     </RecordContentWrapper>

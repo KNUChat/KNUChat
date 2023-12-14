@@ -4,6 +4,7 @@ import ContentBox from "./ContentBox";
 import { useNavigate } from "react-router-dom";
 import useSearchRecord from "@hook/record/useSearchRecord";
 import { RecordSearchProps } from "@api/record";
+import { useUserStore } from "@store/useUserStore";
 
 export interface RecordProps {
   description: string;
@@ -12,12 +13,14 @@ export interface RecordProps {
   recordId: number;
   title: string;
   userId: number;
+  achievement: string;
 }
 
 const Content = () => {
   const navigate = useNavigate();
+  const { userInfo } = useUserStore();
   const temp: RecordSearchProps = {
-    searchWord: "1",
+    searchWord: userInfo.id,
     type: "user",
     page: 0,
   };
