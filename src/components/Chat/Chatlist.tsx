@@ -10,7 +10,7 @@ import { useUserStore } from "@store/useUserStore";
 const Chatlist: React.FC = () => {
   const { setSelectedRoomId, setRooms, rooms, update, setUpdate, chatstatus } = useChatStore();
   const { userInfo } = useUserStore();
-  const userId = userInfo.id;
+  const userId = Number(userInfo.id);
   const { authToken } = useAuthStore();
 
   console.log("authToken", authToken);
@@ -24,6 +24,7 @@ const Chatlist: React.FC = () => {
           params: {
             id: userId,
           },
+          withCredentials: false,
         });
         setRooms(response.data);
         setUpdate(false);

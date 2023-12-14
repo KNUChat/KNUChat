@@ -6,7 +6,8 @@ import SubHandler from "@/websocket/SubHandler";
 import Chat from "./Chat";
 import Title from "./Title";
 import { useAuthStore } from "@store/useAuthStore";
-import PrintDate from "./Printdate";
+import PrintDate from "./PrintDate";
+import { useUserStore } from "@store/useUserStore";
 
 interface Message {
   roomId: number;
@@ -20,7 +21,9 @@ interface Message {
 const ChatPrintBox: React.FC = () => {
   const [logs1, setLogs1] = useState<Message[]>([]);
   const [logs2, setLogs2] = useState<Message[]>([]);
-  const { selectedRoomId, messages, userId} = useChatStore();
+  const { selectedRoomId, messages} = useChatStore();
+  const { userInfo } = useUserStore();
+  const userId = Number(userInfo.id);
   const {authToken } = useAuthStore();
 
   useEffect(() => {
@@ -31,6 +34,7 @@ const ChatPrintBox: React.FC = () => {
             headers: {
               Authorization: `${authToken}`,
             },
+            withCredentials: false,
           });
 
           const formattedLogs = response.data.map((log: Message) => ({

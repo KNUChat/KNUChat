@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import { useState, ChangeEvent, useEffect } from "react";
 import { useChatStore } from "../../store/useChatStore";
+import { useUserStore } from "@store/useUserStore";
 
 const ChatTextBox: React.FC = () => {
-  const { setSendTime, selectedRoomId, userId, rooms, client } = useChatStore();
+  const { setSendTime, selectedRoomId, rooms, client } = useChatStore();
+  const { userInfo } = useUserStore();
+  const userId = Number(userInfo.id);
   const [message, setMessage] = useState("");
 
   const selectedRoom = rooms.find((room) => room.roomId === selectedRoomId);

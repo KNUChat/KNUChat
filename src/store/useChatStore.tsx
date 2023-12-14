@@ -23,8 +23,6 @@ interface ChatStore {
   setSendTime: (time: string) => void;
   selectedRoomId: number | null;
   setSelectedRoomId: (roomId: number | null) => void;
-  userId: number;
-  setUserId: (userId: number | 1) => void;
   messages: Message[];
   addMessage: (message: Message) => void;
   rooms: Room[];
@@ -46,8 +44,6 @@ export const useChatStore = create<ChatStore>((set) => ({
   setSendTime: (time) => set({ sendTime: time }),
   selectedRoomId: null,
   setSelectedRoomId: (roomId) => set({ selectedRoomId: roomId }),
-  userId: 1,
-  setUserId: (userId) => set({ userId: userId as number }),
   messages: [],
   addMessage: (message) => set(() => {
     const updatedMessages = [message];

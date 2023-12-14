@@ -11,9 +11,10 @@ const MakeRoom: React.FC = () => {
   const { setUpdate } = useChatStore();
   const { authToken } = useAuthStore();
   const { userInfo } = useUserStore();
-  const userId = userInfo.id;
+  const userId = Number(userInfo.id);
   console.log("authToken", authToken);
   console.log("userId", userId);
+
   const handleCreateRoom = async () => {
     try {
       const mentorIdInt = typeof mentorId === "number" ? mentorId : parseInt(mentorId);

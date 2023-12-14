@@ -15,6 +15,7 @@ const ButtonBox = () => {
         headers: {
           Authorization: `${authToken}`,
         },  
+        withCredentials: false,
       });
       setUpdate(true);
       setSelectedRoomId(null);

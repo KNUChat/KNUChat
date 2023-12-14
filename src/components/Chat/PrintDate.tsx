@@ -15,7 +15,7 @@ interface ChatProps {
 
 const PrintDate: React.FC<ChatProps> = ({ msg }) => {
   const [, DatePart,] = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(msg.sendTime) || [];
-  console.log(DatePart);
+
   return (
     <DateWrapper>
       <LeftLine />
