@@ -4,13 +4,16 @@ import ContentBox from "./ContentBox";
 import { useNavigate } from "react-router-dom";
 import useGetUserProfile from "@hook/user/useGetUserProfile";
 import { UserDataProps } from "@api/user";
+import { useUserStore } from "@store/useUserStore";
 
 const Content = () => {
   const navigate = useNavigate();
   const handleClickMore = () => {
     navigate("/profile");
   };
-  const userId = 1;
+  const { userInfo } = useUserStore();
+  const userId = parseInt(userInfo.id);
+  console.log("userId", userId);
   const { data } = useGetUserProfile(userId);
   const userData: UserDataProps = data;
   return (

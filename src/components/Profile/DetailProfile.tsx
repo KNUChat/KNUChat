@@ -6,12 +6,10 @@ import useGetUserProfile from "@hook/user/useGetUserProfile";
 import { UserDataProps } from "@api/user";
 import DateRangePicker from "@components/Record/DateRangePicker";
 import DefaultInput from "@components/Common/DefaultInput";
-import { useUserStore } from "@store/useUserStore";
 
-const ProfileContent = () => {
-  const { userInfo } = useUserStore();
-  const userId = userInfo.id;
-  const { data } = useGetUserProfile(parseInt(userId));
+const DetailProfile = ({ profileId }) => {
+  const userId = profileId;
+  const { data } = useGetUserProfile(userId);
   const userData: UserDataProps = data;
   console.log(userData);
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -125,9 +123,12 @@ const ProfileContent = () => {
   return (
     <ProfileContentWrapper>
       <MyPageBox>
+        <p>이름</p>
+        <DefaultInput ref={defaultInputRef} maxLength={200} defaultValue={userData && userData?.userDto?.name} />
+        <p>학번</p>
+        <DefaultInput ref={defaultInputRef} maxLength={200} defaultValue={userData && userData?.userDto?.id.toString()} />
         <Header>
           <p>간단소개글</p>
-          <Button onClick={() => handleSaveAll()}>전체 저장</Button>
         </Header>
         <ContentBox>
           <DefaultInput ref={defaultInputRef} maxLength={200} defaultValue={userData && userData?.profileDto?.introduction} />
@@ -157,7 +158,6 @@ const ProfileContent = () => {
                   <Input type="text" value={textInput} onChange={(event) => handleChange(0, index, event)} />
                 </div>
               ))}
-              <Button onClick={() => handleAdd(0)}>추가</Button>
             </>
           }
         />
@@ -171,7 +171,6 @@ const ProfileContent = () => {
                   <Input type="text" value={textInput} onChange={(event) => handleChange(1, index, event)} />
                 </div>
               ))}
-              <Button onClick={() => handleAdd(1)}>추가</Button>
             </>
           }
         />
@@ -186,7 +185,6 @@ const ProfileContent = () => {
                   <Input type="text" value={textInput} onChange={(event) => handleChange(2, index, event)} />
                 </div>
               ))}
-              <Button onClick={() => handleAdd(2)}>추가</Button>
             </>
           }
         />
@@ -250,4 +248,4 @@ const Input = styled.input`
   border: 1px solid #ced4da;
 `;
 
-export default ProfileContent;
+export default DetailProfile;
