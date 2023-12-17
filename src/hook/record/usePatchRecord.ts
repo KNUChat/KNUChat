@@ -1,13 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
-import recordApi, { NewRecordProps } from "@api/record";
+import recordApi, { PatchRecordProps } from "@api/record";
 
-const usePatchRecord = (recordPatchData: NewRecordProps) => {
+const usePatchRecord = () => {
   return useMutation({
-    mutationFn: () => {
-      return recordApi.patchRecord(recordPatchData);
+    mutationFn: ({ id, title, achievement, period, description, urls, hashtags }: PatchRecordProps) => {
+      return recordApi.patchRecord({ id, title, achievement, period, description, urls, hashtags });
     },
     onSuccess: (data) => {
       console.log(data);
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 };
