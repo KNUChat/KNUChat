@@ -1,133 +1,113 @@
 import React, { useEffect, useRef, useState } from "react";
 import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 
-const WebRTCVideoChat: React.FC = () => {
+const VideoCallComponent: React.FC = () => {
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+  const [roomId, setRoomId] = useState<string>(""); // 방 번호 상태 추가
+  const webSocket = useRef<WebSocket | null>(null);
+  const stompClient = useRef<Stomp.Client | null>(null);
   const peerConnection = useRef<RTCPeerConnection | null>(null);
-  const webSocket = useRef<SockJS | null>(null);
-
-  const localVideoRef = useRef<HTMLVideoElement>(null);
-  const remoteVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const startWebRTC = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        setLocalStream(stream);
-      } catch (error) {
-        console.error("Error accessing media devices:", error);
+    // WebSocket 연결
+    const socket = new SockJS("http://52.79.37.100:32408/signaling"); // 백엔드 WebSocket 엔드포인트
+    webSocket.current = new WebSocket("ws://52.79.37.100:32408/signaling"); // WebSocket 연결
+    stompClient.current = Stomp.over(socket);
+    stompClient.current.connect({}, () => {
+      console.log("WebSocket connected");
+      stompClient.current.subscribe("/topic/messages", (message) => {
+        handleMessage(JSON.parse(message.body));
+      });
+    });
+
+    // peerConnection 설정
+    peerConnection.current = new RTCPeerConnection();
+    peerConnection.current.ontrack = (event) => {
+      if (event.streams && event.streams[0]) {
+        setRemoteStream(event.streams[0]);
       }
     };
 
-    startWebRTC();
+    // 로컬 미디어 스트림 가져오기
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setLocalStream(stream);
+        stream.getTracks().forEach((track) => peerConnection.current?.addTrack(track, stream));
+      })
+      .catch((error) => {
+        console.error("Error accessing media devices:", error);
+      });
+
+    // cleanup 함수
+    return () => {
+      // 연결 종료 및 리소스 정리
+      if (peerConnection.current) {
+        peerConnection.current.close();
+      }
+      if (webSocket.current) {
+        webSocket.current.close();
+      }
+      if (stompClient.current) {
+        stompClient.current.disconnect();
+      }
+    };
   }, []);
 
-  useEffect(() => {
-    const createOfferAndSend = async () => {
-      if (localStream) {
-        const configuration = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
-        peerConnection.current = new RTCPeerConnection(configuration);
+  const handleMessage = (message: any) => {
+    // 받은 메시지 처리
+    // 예: Offer, Answer, ICE 메시지 처리
+  };
 
-        localStream.getTracks().forEach((track) => {
-          peerConnection.current?.addTrack(track, localStream);
-        });
-
-        // Sock.js를 사용하여 웹소켓 연결
-        webSocket.current = new SockJS("http://52.79.37.100:32408/signaling");
-
-        webSocket.current.onopen = () => {
-          console.log("WebSocket 연결 성공!");
-          createOffer();
-        };
-
-        webSocket.current.onclose = () => {
-          console.log("WebSocket 연결 종료");
-        };
-
-        webSocket.current.onmessage = async (event) => {
-          const message = JSON.parse(event.data);
-          if (message.type === "/peer/offer") {
-            const offer = new RTCSessionDescription(message.offer);
-            await peerConnection.current?.setRemoteDescription(offer);
-
-            const answer = await peerConnection.current?.createAnswer();
-            await peerConnection.current?.setLocalDescription(answer);
-            sendAnswer("clientKey", "1", answer);
-          } else if (message.type === "/peer/answer") {
-            const answer = new RTCSessionDescription(message.answer);
-            await peerConnection.current?.setRemoteDescription(answer);
-          } else if (message.type === "/peer/iceCandidate") {
-            const candidate = new RTCIceCandidate(message.candidate);
-            await peerConnection.current?.addIceCandidate(candidate);
-          }
-        };
+  const createOfferAndSend = async () => {
+    try {
+      if (peerConnection.current) {
+        const offer = await peerConnection.current.createOffer();
+        await peerConnection.current.setLocalDescription(offer);
+        const key = Math.random().toString(36).substr(2, 10); // 랜덤 Key 생성
+        stompClient.current?.send(`/app/peer/offer/${key}/${roomId}`, {}, JSON.stringify(offer)); // 방번호와 랜덤 Key 전송
       }
-    };
+    } catch (error) {
+      console.error("Error creating and sending offer:", error);
+    }
+  };
 
-    const createOffer = async () => {
-      const offer = await peerConnection.current?.createOffer();
-      if (offer) {
-        await peerConnection.current?.setLocalDescription(offer);
-        sendOffer("clientKey", "1", offer);
-      }
-    };
-
-    const sendOffer = async (key: string, roomId: string, offer: RTCSessionDescriptionInit) => {
-      const offerMessage = {
-        type: "/peer/offer/" + key + "/" + roomId,
-        offer,
-      };
-      webSocket.current?.send(JSON.stringify(offerMessage));
-    };
-
-    const sendAnswer = async (key: string, roomId: string, answer: RTCSessionDescriptionInit) => {
-      const answerMessage = {
-        type: "/peer/answer/" + key + "/" + roomId,
-        answer,
-      };
-      webSocket.current?.send(JSON.stringify(answerMessage));
-    };
-
-    const sendIceCandidate = async (key: string, roomId: string, candidate: RTCIceCandidate) => {
-      const iceMessage = {
-        type: "/peer/iceCandidate/" + key + "/" + roomId,
-        candidate,
-      };
-      webSocket.current?.send(JSON.stringify(iceMessage));
-    };
-
-    const attachStreamToVideo = (stream: MediaStream | null, videoRef: React.RefObject<HTMLVideoElement>) => {
-      if (stream && videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-    };
-
-    attachStreamToVideo(localStream, localVideoRef);
-    attachStreamToVideo(remoteStream, remoteVideoRef);
-
-    return () => {
-      webSocket.current?.close();
-      peerConnection.current?.close();
-      setLocalStream(null);
-      setRemoteStream(null);
-    };
-
-    createOfferAndSend();
-  }, [localStream]);
+  const handleRoomIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRoomId(event.target.value);
+  };
 
   return (
     <div>
-      <div>
-        {/* 로컬 비디오 스트림 */}
-        <video ref={localVideoRef} autoPlay muted />
-      </div>
-      <div>
-        {/* 원격 비디오 스트림 */}
-        <video ref={remoteVideoRef} autoPlay />
-      </div>
+      <input type="text" value={roomId} onChange={handleRoomIdChange} placeholder="Enter Room ID" />
+      {localStream && (
+        <video
+          ref={(videoElement) => {
+            if (videoElement && localStream) {
+              videoElement.srcObject = localStream;
+            }
+          }}
+          autoPlay
+          playsInline
+        />
+      )}
+      {remoteStream && (
+        <video
+          ref={(videoElement) => {
+            if (videoElement && remoteStream) {
+              videoElement.srcObject = remoteStream;
+            }
+          }}
+          autoPlay
+          playsInline
+        />
+      )}
+
+      <button onClick={createOfferAndSend}>Start Call</button>
+      {/* 다른 컨트롤들 추가 */}
     </div>
   );
 };
 
-export default WebRTCVideoChat;
+export default VideoCallComponent;
