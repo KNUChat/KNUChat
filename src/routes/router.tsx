@@ -6,7 +6,7 @@ import OpenChat from "@/page/OpenChat";
 import NotFound from "@page/NotFound";
 import Login from "@page/Login";
 import WebRtcTest from "@page/WebRtcTest";
-import VideoCall from "@page/Reference";
+import VideoCall from "@page/webRTC";
 import Redirect from "@components/Redirect";
 import ProtectAuth from "@page/ProtectAuth";
 import ProtectMain from "@page/ProtectMain";

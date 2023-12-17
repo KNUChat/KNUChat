@@ -1,249 +1,133 @@
-// WebRTC.tsx
-import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import SockJS from "sockjs-client";
 
-type Props = {
-  id?: string;
-  uuid?: string;
-};
+const WebRTCVideoChat: React.FC = () => {
+  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+  const peerConnection = useRef<RTCPeerConnection | null>(null);
+  const webSocket = useRef<SockJS | null>(null);
 
-const WebRTC = ({ uuid }: Props) => {
-  const { id } = useParams();
-  console.log(id);
-  const navigate = useNavigate();
-  const localVideoRef = useRef<HTMLVideoElement | null>(null);
-  const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
+  const localVideoRef = useRef<HTMLVideoElement>(null);
+  const remoteVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const socket = new WebSocket(`ws://localhost:8080/signal`);
-
-    const peerConnectionConfig = {
-      iceServers: [{ urls: "stun:stun.stunprotocol.org:3478" }, { urls: "stun:stun.l.google.com:19302" }],
+    const startWebRTC = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        setLocalStream(stream);
+      } catch (error) {
+        console.error("Error accessing media devices:", error);
+      }
     };
 
-    const mediaConstraints = {
-      audio: true,
-      video: true,
-    };
+    startWebRTC();
+  }, []);
 
-    let localStream: MediaStream;
-    let localVideoTracks: MediaStreamTrack[];
-    let myPeerConnection: RTCPeerConnection;
-
-    function log(message: string) {
-      console.log(message);
-    }
-
-    function handleErrorMessage(message: string) {
-      console.error(message);
-    }
-
-    function sendToServer(msg: any) {
-      let msgJSON = JSON.stringify(msg);
-      socket.send(msgJSON);
-    }
-
-    function getMedia(constraints: MediaStreamConstraints) {
+  useEffect(() => {
+    const createOfferAndSend = async () => {
       if (localStream) {
+        const configuration = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
+        peerConnection.current = new RTCPeerConnection(configuration);
+
         localStream.getTracks().forEach((track) => {
-          track.stop();
+          peerConnection.current?.addTrack(track, localStream);
         });
-      }
-      navigator.mediaDevices.getUserMedia(constraints).then(getLocalMediaStream).catch(handleGetUserMediaError);
-    }
 
-    function handlePeerConnection(message: any) {
-      createPeerConnection();
-      getMedia(mediaConstraints);
-      if (message.data === "true") {
-        myPeerConnection.onnegotiationneeded = handleNegotiationNeededEvent;
-      }
-    }
+        // Sock.js를 사용하여 웹소켓 연결
+        webSocket.current = new SockJS("http://52.79.37.100:32408/signaling");
 
-    function createPeerConnection() {
-      myPeerConnection = new RTCPeerConnection(peerConnectionConfig);
+        webSocket.current.onopen = () => {
+          console.log("WebSocket 연결 성공!");
+          createOffer();
+        };
 
-      myPeerConnection.onicecandidate = handleICECandidateEvent;
-      myPeerConnection.ontrack = handleTrackEvent;
-    }
+        webSocket.current.onclose = () => {
+          console.log("WebSocket 연결 종료");
+        };
 
-    function getLocalMediaStream(mediaStream: MediaStream) {
-      localStream = mediaStream;
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = mediaStream;
-      }
-      localStream.getTracks().forEach((track) => myPeerConnection.addTrack(track, localStream));
-    }
+        webSocket.current.onmessage = async (event) => {
+          const message = JSON.parse(event.data);
+          if (message.type === "/peer/offer") {
+            const offer = new RTCSessionDescription(message.offer);
+            await peerConnection.current?.setRemoteDescription(offer);
 
-    function handleGetUserMediaError(error: any) {
-      log("navigator.getUserMedia error: ", error);
-      switch (error.name) {
-        case "NotFoundError":
-          alert("Unable to open your call because no camera and/or microphone were found.");
-          break;
-        case "SecurityError":
-        case "PermissionDeniedError":
-          break;
-        default:
-          alert("Error opening your camera and/or microphone: " + error.message);
-          break;
-      }
-    }
-
-    function handleICECandidateEvent(event: any) {
-      if (event.candidate) {
-        sendToServer({
-          from: uuid,
-          type: "ice",
-          candidate: event.candidate,
-        });
-        log("ICE Candidate Event: ICE candidate sent");
-      }
-    }
-
-    function handleTrackEvent(event: any) {
-      log("Track Event: set stream to remote video element");
-      if (remoteVideoRef.current) {
-        remoteVideoRef.current.srcObject = event.streams[0];
-      }
-    }
-
-    function handleNegotiationNeededEvent() {
-      myPeerConnection
-        .createOffer()
-        .then(function (offer) {
-          return myPeerConnection.setLocalDescription(offer);
-        })
-        .then(function () {
-          sendToServer({
-            from: uuid,
-            type: "offer",
-            sdp: myPeerConnection.localDescription,
-          });
-          log("Negotiation Needed Event: SDP offer sent");
-        })
-        .catch(function (reason) {
-          handleErrorMessage("failure to connect error: ", reason);
-        });
-    }
-
-    function handleOfferMessage(message: any) {
-      log("Accepting Offer Message");
-      log(message);
-      let desc = new RTCSessionDescription(message.sdp);
-      if (desc != null && message.sdp != null) {
-        log("RTC Signalling state: " + myPeerConnection.signalingState);
-        myPeerConnection
-          .setRemoteDescription(desc)
-          .then(function () {
-            log("Set up local media stream");
-            return navigator.mediaDevices.getUserMedia(mediaConstraints);
-          })
-          .then(function (stream) {
-            log("-- Local video stream obtained");
-            localStream = stream;
-            try {
-              if (localVideoRef.current) {
-                localVideoRef.current.srcObject = localStream;
-              }
-            } catch (error) {
-              if (localVideoRef.current) {
-                localVideoRef.current.src = window.URL.createObjectURL(stream);
-              }
-            }
-
-            log("-- Adding stream to the RTCPeerConnection");
-            localStream.getTracks().forEach((track) => myPeerConnection.addTrack(track, localStream));
-          })
-          .then(function () {
-            log("-- Creating answer");
-            return myPeerConnection.createAnswer();
-          })
-          .then(function (answer) {
-            log("-- Setting local description after creating answer");
-            return myPeerConnection.setLocalDescription(answer);
-          })
-          .then(function () {
-            log("Sending answer packet back to other peer");
-            sendToServer({
-              from: uuid,
-              type: "answer",
-              sdp: myPeerConnection.localDescription,
-            });
-          })
-          .catch(handleErrorMessage);
-      }
-    }
-
-    function handleAnswerMessage(message: any) {
-      log("The peer has accepted request");
-
-      myPeerConnection.setRemoteDescription(message.sdp).catch(handleErrorMessage);
-    }
-
-    function handleNewICECandidateMessage(message: any) {
-      let candidate = new RTCIceCandidate(message.candidate);
-      log("Adding received ICE candidate: " + JSON.stringify(candidate));
-      myPeerConnection.addIceCandidate(candidate).catch(handleErrorMessage);
-    }
-
-    socket.onmessage = function (msg) {
-      let message = JSON.parse(msg.data);
-      switch (message.type) {
-        case "text":
-          log("Text message from " + message.from + " received: " + message.data);
-          break;
-
-        case "offer":
-          log("Signal OFFER received");
-          handleOfferMessage(message);
-          break;
-
-        case "answer":
-          log("Signal ANSWER received");
-          handleAnswerMessage(message);
-          break;
-
-        case "ice":
-          log("Signal ICE Candidate received");
-          handleNewICECandidateMessage(message);
-          break;
-
-        case "join":
-          log("Client is starting to " + (message.data === "true") ? "negotiate" : "wait for a peer");
-          handlePeerConnection(message);
-          break;
-
-        default:
-          handleErrorMessage("Wrong type message received from server");
+            const answer = await peerConnection.current?.createAnswer();
+            await peerConnection.current?.setLocalDescription(answer);
+            sendAnswer("clientKey", "1", answer);
+          } else if (message.type === "/peer/answer") {
+            const answer = new RTCSessionDescription(message.answer);
+            await peerConnection.current?.setRemoteDescription(answer);
+          } else if (message.type === "/peer/iceCandidate") {
+            const candidate = new RTCIceCandidate(message.candidate);
+            await peerConnection.current?.addIceCandidate(candidate);
+          }
+        };
       }
     };
 
-    socket.onopen = function () {
-      log("WebSocket connection opened to Room: #" + id);
-      sendToServer({
-        from: uuid,
-        type: "join",
-        data: id,
-      });
+    const createOffer = async () => {
+      const offer = await peerConnection.current?.createOffer();
+      if (offer) {
+        await peerConnection.current?.setLocalDescription(offer);
+        sendOffer("clientKey", "1", offer);
+      }
     };
 
-    socket.onclose = function (message) {
-      log("Socket has been closed");
+    const sendOffer = async (key: string, roomId: string, offer: RTCSessionDescriptionInit) => {
+      const offerMessage = {
+        type: "/peer/offer/" + key + "/" + roomId,
+        offer,
+      };
+      webSocket.current?.send(JSON.stringify(offerMessage));
     };
 
-    socket.onerror = function (message) {
-      handleErrorMessage("Error: " + message);
+    const sendAnswer = async (key: string, roomId: string, answer: RTCSessionDescriptionInit) => {
+      const answerMessage = {
+        type: "/peer/answer/" + key + "/" + roomId,
+        answer,
+      };
+      webSocket.current?.send(JSON.stringify(answerMessage));
     };
-  }, [id, uuid]);
+
+    const sendIceCandidate = async (key: string, roomId: string, candidate: RTCIceCandidate) => {
+      const iceMessage = {
+        type: "/peer/iceCandidate/" + key + "/" + roomId,
+        candidate,
+      };
+      webSocket.current?.send(JSON.stringify(iceMessage));
+    };
+
+    const attachStreamToVideo = (stream: MediaStream | null, videoRef: React.RefObject<HTMLVideoElement>) => {
+      if (stream && videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    };
+
+    attachStreamToVideo(localStream, localVideoRef);
+    attachStreamToVideo(remoteStream, remoteVideoRef);
+
+    return () => {
+      webSocket.current?.close();
+      peerConnection.current?.close();
+      setLocalStream(null);
+      setRemoteStream(null);
+    };
+
+    createOfferAndSend();
+  }, [localStream]);
 
   return (
     <div>
-      <video ref={localVideoRef} autoPlay playsInline />
-      <video ref={remoteVideoRef} autoPlay playsInline />
+      <div>
+        {/* 로컬 비디오 스트림 */}
+        <video ref={localVideoRef} autoPlay muted />
+      </div>
+      <div>
+        {/* 원격 비디오 스트림 */}
+        <video ref={remoteVideoRef} autoPlay />
+      </div>
     </div>
   );
 };
 
-export default WebRTC;
+export default WebRTCVideoChat;
