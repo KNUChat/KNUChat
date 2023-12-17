@@ -9,6 +9,7 @@ import AddRecord from "@components/Record/AddRecord";
 import Search from "@components/Search";
 import DetailRecord from "@components/Record/DetailRecord";
 import DetailProfile from "@components/Profile/DetailProfile";
+import EditRecord from "@components/Record/EditRecord";
 
 const ContentTable = {
   "/me": (
@@ -46,7 +47,9 @@ const MainContent = () => {
 
   useEffect(() => {
     const renderSelectedContent = () => {
-      if (pathname.startsWith("/record/") && recordId) {
+      if (pathname.startsWith("/record/edit/") && recordId) {
+        setSelectedContent(<EditRecord recordId={recordId} />);
+      } else if (pathname.startsWith("/record/") && recordId) {
         setSelectedContent(<DetailRecord recordId={recordId} />);
       } else if (pathname.startsWith("/profile/") && profileId) {
         setSelectedContent(<DetailProfile profileId={profileId} />);
