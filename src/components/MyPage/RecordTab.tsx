@@ -38,7 +38,8 @@ const Content = () => {
         recordData?.recordResponses.map((record: RecordProps) => {
           return (
             <ContentBox key={record.recordId}>
-              <p>{record.description}</p>
+              <UniversityText>{record.title}</UniversityText>
+              <SubText>{record.description}</SubText>
             </ContentBox>
           );
         })}
@@ -79,4 +80,16 @@ const Header = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 0.5rem;
+`;
+
+const UniversityText = styled.p`
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-top: 4px;
+  margin-bottom: 8px;
+`;
+
+const SubText = styled.div`
+  color: #808080; // Grey color for department text
 `;

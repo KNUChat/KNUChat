@@ -16,8 +16,8 @@ const Login = () => {
   };
   return (
     <LoginWrapper>
-      <p>KNU Chat</p>
-      <p>KNU Chat에 오신걸 환영 합니다!</p>
+      <LogoText>KNU Chat</LogoText>
+      <SubText>KNU Chat에 오신걸 환영 합니다!</SubText>
       <GoogleLoginButton onClick={() => handleGoogleLogin()}>
         <GoogleLogo />
         <p>구글 계정으로 로그인</p>
@@ -49,10 +49,24 @@ const GoogleLoginButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  margin-top: 0.5rem;
 `;
 
 const GoogleLogo = styled.div`
   background-image: url(${Google});
   width: 1.5rem;
   height: 1.5rem;
+`;
+
+const LogoText = styled.p`
+  color: #222;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 10px;
+  padding: 0.5rem;
+  margin-bottom: 0;
+`;
+
+const SubText = styled.p`
+  margin: 0.5rem;
 `;

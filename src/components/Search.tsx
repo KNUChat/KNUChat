@@ -49,8 +49,8 @@ const Search = () => {
     <RecordContentWrapper>
       <MyPageBox>
         <Header>
-          <p>이력</p>
-          <button onClick={() => handleClickAddRecord()}>추가</button>
+          <SubText>이력</SubText>
+          <BlackButton onClick={() => handleClickAddRecord()}>추가</BlackButton>
         </Header>
         {recordData?.recordResponses &&
           recordData?.recordResponses.map((record: RecordProps, index: number) => {
@@ -138,4 +138,29 @@ const PageNumber = styled.button`
   &:hover {
     background-color: #e8e8e8;
   }
+`;
+
+const BlackButton = styled.button`
+  flex: 8;
+  max-width: 3.5rem;
+  max-height: 2rem;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #333; /* Change border color to a darker shade */
+  font-size: 16px;
+  background-color: #fff;
+  outline: none;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #222;
+    color: #fff;
+  }
+`;
+
+const SubText = styled.p`
+  color: #222;
+  font-weight: bold;
+  font-size: 2rem;
+  padding: 0;
+  margin: 0;
 `;

@@ -7,17 +7,19 @@ import { ThemeProvider } from "styled-components";
 import theme from "./style/theme.tsx";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import GlobalStyles from "@style/GlobalStyle.ts";
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <HelmetProvider>
-            <App />
-          </HelmetProvider>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ThemeProvider>
+  <ThemeProvider theme={theme}>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <GlobalStyles />
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  </ThemeProvider>
 );
