@@ -4,16 +4,17 @@ import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 import useGetUserProfile from "@hook/user/useGetUserProfile";
 import { UserDataProps } from "@api/user";
+import { useUserStore } from "@store/useUserStore";
 import DateRangePicker from "@components/Record/DateRangePicker";
 import DefaultInput from "@components/Common/DefaultInput";
-import { useUserStore } from "@store/useUserStore";
+import useInitUserProfile from "@hook/user/useInitUserProfile";
+import useUpdateUserProfile from "@hook/user/useUpdateUserProfile";
 
 const ProfileContent = () => {
   const { userInfo } = useUserStore();
-  const userId = userInfo.id;
-  const { data } = useGetUserProfile(parseInt(userId));
+  const userId = parseInt(userInfo.id);
+  const { data } = useGetUserProfile(userId);
   const userData: UserDataProps = data;
-  console.log(userData);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [StartDate, setStartDate] = useState("");
   const [EndDate, setEndDate] = useState("");
@@ -97,13 +98,48 @@ const ProfileContent = () => {
       const inputContent = defaultInputRef.current.value;
       console.log("Content from DefaultInput:", inputContent);
       // You can now use inputContent as needed
+      return inputContent;
     }
   };
-
+  const [newUserData, setNewUserData] = useState<UserDataProps>();
+  const { mutate: initProfile } = useInitUserProfile(newUserData);
   const handleSaveAll = () => {
-    getContentFromDefaultInput();
     console.log(textInputs);
     console.log(StartDate, EndDate);
+    setNewUserData({
+      userDto: {
+        id: userId,
+        name: "김현우",
+        email: "krokerdile@knu.ac.kr",
+        gender: "MALE",
+      },
+      profileDto: {
+        stdNum: 18,
+        academicStatus: "ATTENDING",
+        graduateDate: "202408",
+        admissionDate: "201803",
+        introduction: getContentFromDefaultInput(),
+        grade: 1,
+      },
+      departmentDtos: [
+        {
+          college: "컴퓨터학부",
+          major: "글로벌SW융합전공",
+          depCategory: "BASIC",
+        },
+      ],
+      certificationDtos: [
+        {
+          name: "OPIC",
+          achievement: "IM2",
+          obtainDate: "20230505",
+        },
+      ],
+      urlDtos: textInputs[2],
+    });
+    console.log(JSON.stringify(newUserData));
+    console.log("newUserData", newUserData);
+    initProfile();
   };
 
   const handleAdd = (categoryIndex: number) => {

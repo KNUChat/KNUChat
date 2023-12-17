@@ -9,6 +9,9 @@ const useUpdateUserProfile = (userData: UserDataProps) => {
     onSuccess: (data) => {
       console.log(data);
     },
+    onError: (error) => {
+      console.log(error);
+    },
   });
 };
 
