@@ -59,7 +59,7 @@ const GoogleLogo = styled.div`
 `;
 
 const LogoText = styled.p`
-  color: #222;
+  color: #d20f17;
   font-weight: bold;
   font-size: 2rem;
   margin-bottom: 10px;

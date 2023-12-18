@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import MyPageBox from "@components/MyPage/MyPageBox";
 import unlockedIcon from "@/assets/unlock.svg";
 import lockedIcon from "@/assets/lock.svg";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ContentBox from "@components/MyPage/ContentBox";
 import DefaultInput from "@components/Common/DefaultInput";
 import HashTagInput from "@components/Common/HashTagInput";
@@ -12,10 +12,10 @@ import { NewRecordProps } from "@api/record";
 import useGetRecord from "@hook/record/useGetRecord";
 import { useParams } from "react-router-dom";
 import { RecordProps } from "@components/MyPage/RecordTab";
+import { useMentorStore } from "@store/useMentorStore";
 
 const DetailRecord = ({ recordId }) => {
   const { data } = useGetRecord(recordId);
-  console.log(data);
   const showData: RecordProps = data;
   const [isDarkMode, setIsDarkMode] = useState(showData.hiding);
   const titleRef = useRef(null);
@@ -27,7 +27,7 @@ const DetailRecord = ({ recordId }) => {
     <AddRecordWrapper>
       <MyPageBox>
         <AddRecordHeader>
-          <p>이력 작성하기</p>
+          <h2>이력 자세히보기</h2>
           <LockTab>
             <p>공개여부</p>
             <LockButton className={isDarkMode ? "locked" : ""} isDarkMode={isDarkMode}>

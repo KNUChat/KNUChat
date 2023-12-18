@@ -89,7 +89,7 @@ const AddRecord = () => {
         userId: userId,
         title: title,
         description: goal, // Using 'goal' as description for now
-        period: "2020.09.01-2020.09.03", // Update this with actual period
+        period: "2023.09.01-2023.12.01", // Update this with actual period
         achievement: process, // Using 'process' as achievement for now
         hashtag: tag || ["DefaultTag"],
       } // Default tag if no tags retrieved

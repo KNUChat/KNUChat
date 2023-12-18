@@ -43,9 +43,10 @@ const EditRecord = ({ recordId }) => {
       return tags;
     }
   };
+  console.log(showData);
 
   const [textInputs, setTextInputs] = useState([
-    [""], // for 링크
+    showData?.urls ? showData.urls : [""], // for 링크
   ]);
   const [editedInputs, setEditedInputs] = useState(Array.from(Array(1), () => []));
   const handleChange = (categoryIndex: number, inputIndex: number, event) => {
@@ -71,6 +72,7 @@ const EditRecord = ({ recordId }) => {
       return newEditedInputs;
     });
   };
+
   const { mutate: updateRecord } = usePatchRecord();
   const handleSubmit = () => {
     const title = getRef(titleRef);
@@ -84,6 +86,7 @@ const EditRecord = ({ recordId }) => {
     console.log("Tag:", tag);
     console.log("Goal:", goal);
     console.log("Process:", process);
+    console.log(textInputs[0]);
 
     updateRecord({ id: recordId, title: title, hashtags: tag, achievement: goal, period: date, description: process, urls: textInputs[0] });
   };
@@ -104,31 +107,31 @@ const EditRecord = ({ recordId }) => {
         <AddRecordContent>
           <p>제목</p>
           <ContentBox>
-            <DefaultInput defaultValue={showData.title} maxLength={150} height="4rem" ref={titleRef} />
+            <DefaultInput defaultValue={showData ? showData.title : ""} maxLength={150} height="4rem" ref={titleRef} />
           </ContentBox>
         </AddRecordContent>
         <AddRecordContent>
           <p>기간</p>
           <ContentBox>
-            <DefaultInput defaultValue={showData.period} maxLength={150} height="4rem" ref={dateRef} />
+            <DefaultInput defaultValue={showData ? showData.period : ""} maxLength={150} height="4rem" ref={dateRef} />
           </ContentBox>
         </AddRecordContent>
         <AddRecordContent>
           <AddRecordContent>
             <p>태그</p>
             <ContentBox>
-              <HashTagInput defaultValue={showData.hashtags} maxLength={100} ref={tagRef} />
+              <HashTagInput defaultValue={showData ? showData.hashtags : []} maxLength={100} ref={tagRef} />
             </ContentBox>
           </AddRecordContent>
           <p>성과</p>
           <ContentBox>
-            <DefaultInput defaultValue={showData.achievement} maxLength={1000} height="9rem" ref={goalRef} />
+            <DefaultInput defaultValue={showData ? showData.achievement : ""} maxLength={1000} height="9rem" ref={goalRef} />
           </ContentBox>
         </AddRecordContent>
         <AddRecordContent>
           <p>과정</p>
           <ContentBox>
-            <DefaultInput defaultValue={showData.description} maxLength={1000} height="10rem" ref={processRef} />
+            <DefaultInput defaultValue={showData ? showData.description : ""} maxLength={1000} height="10rem" ref={processRef} />
           </ContentBox>
         </AddRecordContent>
         <p>링크</p>

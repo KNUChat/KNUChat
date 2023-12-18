@@ -49,7 +49,7 @@ const Search = () => {
     <RecordContentWrapper>
       <MyPageBox>
         <Header>
-          <SubText>이력</SubText>
+          <SubText>이력 검색결과</SubText>
           <BlackButton onClick={() => handleClickAddRecord()}>추가</BlackButton>
         </Header>
         {recordData?.recordResponses &&
@@ -57,15 +57,15 @@ const Search = () => {
             return (
               <ContentBox key={index}>
                 <ContentHeader>
-                  <p
+                  <UniversityText
                     onClick={() => {
                       navigate(`/record/${record.recordId}`);
                     }}
                   >
                     {record.title}
-                  </p>
-                  <p>{record.hashtags}</p>
-                  <p>{record.period}</p>
+                  </UniversityText>
+                  <Hashtags>{record.hashtags}</Hashtags>
+                  <PeriodText>{record.period}</PeriodText>
                 </ContentHeader>
                 <ContentMain isDetailedView={detailedViews[index] || false}>
                   <p>{record.description}</p>
@@ -94,6 +94,10 @@ const RecordContentWrapper = styled.div`
   height: 100%;
 `;
 
+const PeriodText = styled.p`
+  color: #666;
+  margin-bottom: 6px;
+`;
 const DetailButton = styled.button`
   position: absolute;
   bottom: 2px;
@@ -107,7 +111,7 @@ const DetailButton = styled.button`
 
 const ContentHeader = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
 const ContentMain = styled.div<{ isDetailedView: boolean }>`
@@ -163,4 +167,17 @@ const SubText = styled.p`
   font-size: 2rem;
   padding: 0;
   margin: 0;
+`;
+
+const UniversityText = styled.p`
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-top: 4px;
+  margin-bottom: 8px;
+`;
+
+const Hashtags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
 `;

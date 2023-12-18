@@ -1,7 +1,7 @@
 import MyPageBox from "@components/MyPage/MyPageBox";
 import useModalStore from "@store/useModalStore";
 import styled from "styled-components";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@store/useUserStore";
 
@@ -11,11 +11,12 @@ const SideContent = () => {
   const { pathname } = useLocation();
   const { userInfo } = useUserStore();
   const userId = userInfo.id;
-  const userName = "test1";
+  const userName = "김현우";
   const showExampleModal = () => {
     setModalType("example");
     setShowModal(true);
   };
+  const navigate = useNavigate();
   const [selectedContent, setSelectedContent] = useState<React.ReactNode | null>(null);
   const ContentTable = {
     "/me": (
@@ -26,29 +27,125 @@ const SideContent = () => {
         </UserProfileLink>
         <Divider />
         <h2>Other Functions</h2>
-        <LinkToOtherFunctionalities>개인정보 수정하기</LinkToOtherFunctionalities>
-        <LinkToOtherFunctionalities>이력 추가하기</LinkToOtherFunctionalities>
-        <LinkToOtherFunctionalities>채팅방 이동하기</LinkToOtherFunctionalities>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/profile");
+          }}
+        >
+          개인정보 수정하기
+        </LinkToOtherFunctionalities>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/addRecord");
+          }}
+        >
+          이력 추가하기
+        </LinkToOtherFunctionalities>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/me");
+          }}
+        >
+          채팅방 이동하기
+        </LinkToOtherFunctionalities>
       </>
     ),
     "/profile": (
       <>
-        <BlackButton onClick={() => showExampleModal()}>modalTest</BlackButton>
+        <UserProfileLink to={`/profile/${userId}`}>
+          <Circle>{userId}</Circle>
+          <UserName>{userName}</UserName>
+        </UserProfileLink>
+        <Divider />
+        <h2>Other Functions</h2>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/profile");
+          }}
+        >
+          개인정보 수정하기
+        </LinkToOtherFunctionalities>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/addRecord");
+          }}
+        >
+          이력 추가하기
+        </LinkToOtherFunctionalities>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/me");
+          }}
+        >
+          채팅방 이동하기
+        </LinkToOtherFunctionalities>
       </>
     ),
     "/record": (
       <>
-        <BlackButton onClick={() => showExampleModal()}>modalTest</BlackButton>
+        <UserProfileLink to={`/profile/${userId}`}>
+          <Circle>{userId}</Circle>
+          <UserName>{userName}</UserName>
+        </UserProfileLink>
+        <Divider />
+        <h2>Other Functions</h2>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/profile");
+          }}
+        >
+          개인정보 수정하기
+        </LinkToOtherFunctionalities>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/addRecord");
+          }}
+        >
+          이력 추가하기
+        </LinkToOtherFunctionalities>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/me");
+          }}
+        >
+          채팅방 이동하기
+        </LinkToOtherFunctionalities>
       </>
     ),
     "/addRecord": (
       <>
-        <BlackButton onClick={() => showExampleModal()}>modalTest</BlackButton>
+        <UserProfileLink to={`/profile/${userId}`}>
+          <Circle>{userId}</Circle>
+          <UserName>{userName}</UserName>
+        </UserProfileLink>
+        <Divider />
+        <h2>Other Functions</h2>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/profile");
+          }}
+        >
+          개인정보 수정하기
+        </LinkToOtherFunctionalities>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/addRecord");
+          }}
+        >
+          이력 추가하기
+        </LinkToOtherFunctionalities>
+        <LinkToOtherFunctionalities
+          onClick={() => {
+            navigate("/me");
+          }}
+        >
+          채팅방 이동하기
+        </LinkToOtherFunctionalities>
       </>
     ),
     "/search": (
       <>
-        <BlackButton onClick={() => showExampleModal()}>modalTest</BlackButton>
+        <BlackButton onClick={() => showExampleModal()}>커피챗 신청하기</BlackButton>
       </>
     ),
   };
@@ -63,13 +160,13 @@ const SideContent = () => {
       } else if (pathname.startsWith("/record/") && recordId) {
         setSelectedContent(
           <>
-            <BlackButton onClick={() => showExampleModal()}>modalTest</BlackButton>
+            <BlackButton onClick={() => showExampleModal()}>커피챗 신청하기</BlackButton>
           </>
         );
       } else if (pathname.startsWith("/profile/") && profileId) {
         setSelectedContent(
           <>
-            <BlackButton onClick={() => showExampleModal()}>modalTest</BlackButton>
+            <BlackButton onClick={() => showExampleModal()}>커피챗 신청하기</BlackButton>
           </>
         );
       } else {

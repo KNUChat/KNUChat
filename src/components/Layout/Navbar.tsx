@@ -102,8 +102,8 @@ const Navbar = () => {
           <select style={{ flex: 1 }} onChange={handleChangeType}>
             <option value="선택">선택</option>
             <option value="사용자">사용자</option>
-            <option value="해시태그">해시태그</option>
-            <option value="소속">소속</option>
+            <option value="해시태그">소속</option>
+            <option value="소속">해시태그</option>
           </select>
           <input style={{ flex: 8 }} ref={ref} />
           <button style={{ flex: 1 }} onClick={handleSearch}>

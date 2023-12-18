@@ -9,15 +9,18 @@ import DateRangePicker from "@components/Record/DateRangePicker";
 import DefaultInput from "@components/Common/DefaultInput";
 import useInitUserProfile from "@hook/user/useInitUserProfile";
 import useUpdateUserProfile from "@hook/user/useUpdateUserProfile";
+import { useNavigate } from "react-router-dom";
 
 const ProfileContent = () => {
   const { userInfo } = useUserStore();
+  const navigate = useNavigate();
   const userId = parseInt(userInfo.id);
   const { data } = useGetUserProfile(userId);
   const userData: UserDataProps = data;
   const [selectedStatus, setSelectedStatus] = useState("");
-  const [StartDate, setStartDate] = useState("");
-  const [EndDate, setEndDate] = useState("");
+  console.log(userData.profileDto?.admissionDate, userData.profileDto?.graduateDate);
+  const [StartDate, setStartDate] = useState(userData ? userData.profileDto?.admissionDate : "");
+  const [EndDate, setEndDate] = useState(userData ? userData.profileDto?.graduateDate : "");
   const statuses = ["재학", "휴학", "제적", "졸업"];
   useEffect(() => {
     if (userData?.profileDto?.academicStatus) {
@@ -102,7 +105,7 @@ const ProfileContent = () => {
     }
   };
   const [newUserData, setNewUserData] = useState<UserDataProps>();
-  const { mutate: initProfile } = useInitUserProfile(newUserData);
+  const { mutate: initProfile } = useUpdateUserProfile(newUserData);
   const handleSaveAll = () => {
     console.log(textInputs);
     console.log(StartDate, EndDate);
@@ -140,6 +143,7 @@ const ProfileContent = () => {
     console.log(JSON.stringify(newUserData));
     console.log("newUserData", newUserData);
     initProfile();
+    navigate("/me");
   };
 
   const handleAdd = (categoryIndex: number) => {
