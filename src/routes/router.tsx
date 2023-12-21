@@ -5,11 +5,8 @@ import MyPage from "@/page/MyPage";
 import OpenChat from "@/page/OpenChat";
 import NotFound from "@page/NotFound";
 import Login from "@page/Login";
-import WebRtcTest from "@page/WebRtcTest";
-import VideoCall from "@page/webRTC";
 import Redirect from "@components/Redirect";
 import ProtectAuth from "@page/ProtectAuth";
-import ProtectMain from "@page/ProtectMain";
 
 const Router = () => {
   return (
@@ -34,9 +31,6 @@ const Router = () => {
         />
         <Route path="/openChat" element={<OpenChat />} />
         <Route path="/*" element={<NotFound />} />
-
-        <Route path="/rtctest" element={<WebRtcTest />} />
-        <Route path="/rtc" element={<VideoCall />} />
 
         {["/", "/me", "/record", "/addRecord", "/profile", "/search", "/record/:recordId", "/record/edit/:recordId", "/profile/:profileId"].map(
           (path) => (
