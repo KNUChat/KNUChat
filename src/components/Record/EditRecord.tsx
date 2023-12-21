@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import MyPageBox from "@components/MyPage/MyPageBox";
 import unlockedIcon from "@/assets/unlock.svg";
 import lockedIcon from "@/assets/lock.svg";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ContentBox from "@components/MyPage/ContentBox";
 import DefaultInput from "@components/Common/DefaultInput";
 import HashTagInput from "@components/Common/HashTagInput";
@@ -11,19 +11,42 @@ import useAddRecord from "@hook/record/useAddRecord";
 import { NewRecordProps } from "@api/record";
 import { useUserStore } from "@store/useUserStore";
 import usePatchRecord from "@hook/record/usePatchRecord";
+import { RecordProps } from "@components/MyPage/RecordTab";
+import useGetRecord from "@hook/record/useGetRecord";
 
-const AddRecord = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+const EditRecord = ({ recordId }) => {
+  const { data } = useGetRecord(recordId);
+  const showData: RecordProps = data;
+  const [isDarkMode, setIsDarkMode] = useState(showData.hiding);
   const titleRef = useRef(null);
   const tagRef = useRef(null);
   const goalRef = useRef(null);
   const processRef = useRef(null);
+  const dateRef = useRef(null);
 
-  const { userInfo } = useUserStore();
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
-  const userId = parseInt(userInfo.id);
+  const getRef = (temp: React.MutableRefObject<null>) => {
+    if (temp.current) {
+      const inputContent = temp.current.value;
+      console.log("Content from DefaultInput:", inputContent);
+      return inputContent;
+    }
+  };
+
+  const handleRetrieveTags = () => {
+    if (tagRef.current) {
+      const tags = tagRef.current.getTags();
+      console.log("Retrieved Tags:", tags);
+      return tags;
+    }
+  };
+  console.log(showData);
+
   const [textInputs, setTextInputs] = useState([
-    [""], // for 링크
+    showData?.urls ? showData.urls : [""], // for 링크
   ]);
   const [editedInputs, setEditedInputs] = useState(Array.from(Array(1), () => []));
   const handleChange = (categoryIndex: number, inputIndex: number, event) => {
@@ -50,57 +73,29 @@ const AddRecord = () => {
     });
   };
 
-  const defaultInputRef = useRef(null);
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
-  const getRef = (temp: React.MutableRefObject<null>) => {
-    if (temp.current) {
-      const inputContent = temp.current.value;
-      console.log("Content from DefaultInput:", inputContent);
-      return inputContent;
-    }
-  };
-
-  const handleRetrieveTags = () => {
-    if (tagRef.current) {
-      const tags = tagRef.current.getTags();
-      console.log("Retrieved Tags:", tags);
-      return tags;
-    }
-  };
-  const { mutate: addRecord } = useAddRecord();
-
+  const { mutate: updateRecord } = usePatchRecord();
   const handleSubmit = () => {
     const title = getRef(titleRef);
     const tag = handleRetrieveTags();
     const goal = getRef(goalRef);
     const process = getRef(processRef);
+    const date = getRef(dateRef);
 
     // Use the retrieved values as needed
     console.log("Title:", title);
     console.log("Tag:", tag);
     console.log("Goal:", goal);
     console.log("Process:", process);
+    console.log(textInputs[0]);
 
-    addRecord(
-      {
-        userId: userId,
-        title: title,
-        description: goal, // Using 'goal' as description for now
-        period: "2023.09.01-2023.12.01", // Update this with actual period
-        achievement: process, // Using 'process' as achievement for now
-        hashtag: tag || ["DefaultTag"],
-      } // Default tag if no tags retrieved
-    ); // Pass recordData to useAddRecord hook
+    updateRecord({ id: recordId, title: title, hashtags: tag, achievement: goal, period: date, description: process, urls: textInputs[0] });
   };
 
   return (
     <AddRecordWrapper>
       <MyPageBox>
         <AddRecordHeader>
-          <p>이력 작성하기</p>
+          <p>이력 수정하기</p>
           <LockTab>
             <p>공개여부</p>
             <LockButton className={isDarkMode ? "locked" : ""} onClick={toggleDarkMode} isDarkMode={isDarkMode}>
@@ -112,31 +107,31 @@ const AddRecord = () => {
         <AddRecordContent>
           <p>제목</p>
           <ContentBox>
-            <DefaultInput maxLength={150} height="4rem" ref={titleRef} />
+            <DefaultInput defaultValue={showData ? showData.title : ""} maxLength={150} height="4rem" ref={titleRef} />
           </ContentBox>
         </AddRecordContent>
         <AddRecordContent>
           <p>기간</p>
           <ContentBox>
-            <DateRangePicker />
+            <DefaultInput defaultValue={showData ? showData.period : ""} maxLength={150} height="4rem" ref={dateRef} />
           </ContentBox>
         </AddRecordContent>
         <AddRecordContent>
           <AddRecordContent>
             <p>태그</p>
             <ContentBox>
-              <HashTagInput maxLength={100} ref={tagRef} />
+              <HashTagInput defaultValue={showData ? showData.hashtags : []} maxLength={100} ref={tagRef} />
             </ContentBox>
           </AddRecordContent>
-          <p>목표</p>
+          <p>성과</p>
           <ContentBox>
-            <DefaultInput maxLength={1000} height="9rem" ref={goalRef} />
+            <DefaultInput defaultValue={showData ? showData.achievement : ""} maxLength={1000} height="9rem" ref={goalRef} />
           </ContentBox>
         </AddRecordContent>
         <AddRecordContent>
           <p>과정</p>
           <ContentBox>
-            <DefaultInput maxLength={1000} height="10rem" ref={processRef} />
+            <DefaultInput defaultValue={showData ? showData.description : ""} maxLength={1000} height="10rem" ref={processRef} />
           </ContentBox>
         </AddRecordContent>
         <p>링크</p>
@@ -154,14 +149,14 @@ const AddRecord = () => {
           }
         />
         <ContentFooter>
-          <RightButton onClick={() => handleSubmit()}>제출</RightButton>
+          <RightButton onClick={() => handleSubmit()}>수정하기</RightButton>
         </ContentFooter>
       </MyPageBox>
     </AddRecordWrapper>
   );
 };
 
-export default AddRecord;
+export default EditRecord;
 
 const AddRecordWrapper = styled.div`
   width: 100%;
@@ -222,14 +217,6 @@ const LockTab = styled.div`
   align-items: center;
 `;
 
-const Input = styled.input`
-  margin: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  width: 70%;
-  border: 1px solid #ced4da;
-`;
-
 const RightButton = styled.button`
   max-width: 5rem;
   flex: 8;
@@ -252,4 +239,12 @@ const ContentFooter = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+`;
+
+const Input = styled.input`
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 70%;
+  border: 1px solid #ced4da;
 `;

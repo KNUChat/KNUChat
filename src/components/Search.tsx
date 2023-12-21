@@ -12,12 +12,13 @@ const Search = () => {
   const [detailedViews, setDetailedViews] = useState<boolean[]>([]); // 각 레코드의 상세 보기 상태를 관리하는 배열
   const { type, page, searchWord } = useSearchStore();
   const [currentPage, setCurrentPage] = useState(page);
+
+  console.log("type", type, "page", page, "searchWord", searchWord);
   const temp: RecordSearchProps = {
-    searchWord: searchWord,
-    type: "user",
     page: page,
+    searchWord: searchWord,
+    type: type,
   };
-  console.log(type, page, searchWord);
   const { data: recordData, refetch } = useSearchRecord(temp);
   console.log("recordData", recordData);
 
@@ -48,23 +49,23 @@ const Search = () => {
     <RecordContentWrapper>
       <MyPageBox>
         <Header>
-          <p>이력</p>
-          <button onClick={() => handleClickAddRecord()}>추가</button>
+          <SubText>이력 검색결과</SubText>
+          <BlackButton onClick={() => handleClickAddRecord()}>추가</BlackButton>
         </Header>
         {recordData?.recordResponses &&
           recordData?.recordResponses.map((record: RecordProps, index: number) => {
             return (
               <ContentBox key={index}>
                 <ContentHeader>
-                  <p
+                  <UniversityText
                     onClick={() => {
-                      console.log("page");
+                      navigate(`/record/${record.recordId}`);
                     }}
                   >
                     {record.title}
-                  </p>
-                  <p>{record.hashtags}</p>
-                  <p>{record.period}</p>
+                  </UniversityText>
+                  <Hashtags>{record.hashtags}</Hashtags>
+                  <PeriodText>{record.period}</PeriodText>
                 </ContentHeader>
                 <ContentMain isDetailedView={detailedViews[index] || false}>
                   <p>{record.description}</p>
@@ -74,11 +75,12 @@ const Search = () => {
             );
           })}
         <PaginationWrapper>
-          {Array.from(Array(10).keys()).map((pageNumber) => (
-            <PageNumber key={pageNumber} onClick={() => handleClickPage(pageNumber)}>
-              {pageNumber + 1}
-            </PageNumber>
-          ))}
+          {recordData?.recordResponses &&
+            Array.from(Array(recordData?.recordResponses.totalPages).keys()).map((pageNumber) => (
+              <PageNumber key={pageNumber} onClick={() => handleClickPage(pageNumber)}>
+                {pageNumber + 1}
+              </PageNumber>
+            ))}
         </PaginationWrapper>
       </MyPageBox>
     </RecordContentWrapper>
@@ -92,6 +94,10 @@ const RecordContentWrapper = styled.div`
   height: 100%;
 `;
 
+const PeriodText = styled.p`
+  color: #666;
+  margin-bottom: 6px;
+`;
 const DetailButton = styled.button`
   position: absolute;
   bottom: 2px;
@@ -105,7 +111,7 @@ const DetailButton = styled.button`
 
 const ContentHeader = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
 const ContentMain = styled.div<{ isDetailedView: boolean }>`
@@ -136,4 +142,42 @@ const PageNumber = styled.button`
   &:hover {
     background-color: #e8e8e8;
   }
+`;
+
+const BlackButton = styled.button`
+  flex: 8;
+  max-width: 3.5rem;
+  max-height: 2rem;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #333; /* Change border color to a darker shade */
+  font-size: 16px;
+  background-color: #fff;
+  outline: none;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #222;
+    color: #fff;
+  }
+`;
+
+const SubText = styled.p`
+  color: #222;
+  font-weight: bold;
+  font-size: 2rem;
+  padding: 0;
+  margin: 0;
+`;
+
+const UniversityText = styled.p`
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-top: 4px;
+  margin-bottom: 8px;
+`;
+
+const Hashtags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
 `;

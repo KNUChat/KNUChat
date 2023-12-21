@@ -30,21 +30,25 @@ const WebRTCChat = () => {
   const handleOfferReceived = (offer: RTCSessionDescriptionInit, otherKey: string) => {
     const pc = createPeerConnection(otherKey);
 
-    pc.setRemoteDescription(new RTCSessionDescription(offer))
-      .then(() => {
-        return pc.createAnswer();
-      })
-      .then((answer) => {
-        return pc.setLocalDescription(answer);
-      })
-      .then(() => {
-        if (pc.localDescription && stompClient) {
-          stompClient.send(`/app/peer/answer/${otherKey}/${roomId}`, {}, JSON.stringify({ key: myKey.current, body: pc.localDescription }));
-        }
-      })
-      .catch((error) => {
-        console.error("Error handling received offer:", error);
-      });
+    if (pc && pc.signalingState === "stable" && offer && offer.type) {
+      pc.setRemoteDescription(new RTCSessionDescription(offer))
+        .then(() => {
+          return pc.createAnswer();
+        })
+        .then((answer) => {
+          return pc.setLocalDescription(answer);
+        })
+        .then(() => {
+          if (pc.localDescription && stompClient) {
+            stompClient.send(`/app/peer/answer/${otherKey}/${roomId}`, {}, JSON.stringify({ key: myKey.current, body: pc.localDescription }));
+          }
+        })
+        .catch((error) => {
+          console.error("Error handling received offer:", error);
+        });
+    } else {
+      console.error("Invalid or null offer received, or signaling state is not stable.");
+    }
   };
   useEffect(() => {
     const connectSocket = async () => {
@@ -102,7 +106,15 @@ const WebRTCChat = () => {
     };
 
     connectSocket();
-  }, [otherKeyList]);
+  }, [roomId]);
+
+  const [isSocketConnected, setIsSocketConnected] = useState(false); // 소켓 연결 상태를 나타내는 상태 추가
+
+  useEffect(() => {
+    if (stompClient) {
+      setIsSocketConnected(stompClient.connected); // 소켓 연결 여부 업데이트
+    }
+  }, [stompClient]);
 
   const createPeerConnection = (otherKey: string) => {
     const pc = new RTCPeerConnection();
@@ -195,12 +207,46 @@ const WebRTCChat = () => {
     }, 1000);
   };
 
+  const [connectedUsers, setConnectedUsers] = useState<number>(0); // 연결된 사용자 수를 추적하는 상태 추가
+
+  useEffect(() => {
+    // PC 연결 상태 확인을 위한 함수
+    const checkPeerConnectionStatus = () => {
+      pcListMap.forEach((pc) => {
+        if (pc.connectionState === "connected") {
+          console.log("Peer connection established:", pc); // 연결된 피어 커넥션 로그 확인
+        }
+      });
+    };
+
+    // 초기 연결 상태 확인
+    checkPeerConnectionStatus();
+
+    // 연결된 사용자 수 추적을 위한 훅
+    const trackConnectedUsers = () => {
+      setConnectedUsers(pcListMap.size); // 연결된 사용자 수 업데이트
+    };
+
+    // 사용자 수 업데이트
+    trackConnectedUsers();
+
+    // PC 연결 상태 변화를 추적하기 위한 이벤트 핸들러 추가
+    pcListMap.forEach((pc) => {
+      pc.addEventListener("connectionstatechange", () => {
+        checkPeerConnectionStatus(); // 피어 커넥션 상태 변경 로그 확인
+        trackConnectedUsers(); // 연결된 사용자 수 업데이트
+      });
+    });
+  }, [pcListMap]);
+
   return (
     <div>
       <div>
         <input type="text" id="roomIdInput" value={roomId} onChange={(e) => setRoomId(e.target.value)} />
         <button onClick={handleEnterRoom}>Enter Room</button>
         <button onClick={handleStartStream}>Start Stream</button>
+        <p>Socket Connected: {isSocketConnected ? "Yes" : "No"}</p>
+        <p>Connected Users: {connectedUsers}</p>
       </div>
       <div>
         <video ref={localStreamRef} autoPlay muted controls style={{ display: localStream ? "block" : "none" }} />

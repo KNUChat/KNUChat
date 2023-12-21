@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useChatStore } from "@store/useChatStore";
+import { useUserStore } from "@store/useUserStore";
 
 interface Room {
   roomId: number;
@@ -15,7 +16,9 @@ interface ChatroomBoxProps {
 }
 
 const ChatroomBox: React.FC<ChatroomBoxProps> = ({ room, onClick }) => {
-  const { selectedRoomId, userId } = useChatStore();
+  const { selectedRoomId } = useChatStore();
+  const { userInfo } = useUserStore();
+  const userId = Number(userInfo.id);
 
   const role = userId === room.mentorId ? "Mentor" : userId === room.menteeId ? "Mentee" : null;
 

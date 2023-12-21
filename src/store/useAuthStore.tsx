@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 const jwtToken = import.meta.env.VITE_JWT;
 

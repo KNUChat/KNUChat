@@ -3,9 +3,12 @@ import styled from "styled-components";
 import axios from "axios";
 import { useChatStore } from "../../store/useChatStore";
 import { useAuthStore } from "@store/useAuthStore";
+import { useUserStore } from "@store/useUserStore";
 
 const Profile: React.FC = () => {
-  const { selectedRoomId, rooms, userId} = useChatStore();
+  const { selectedRoomId, rooms} = useChatStore();
+  const { userInfo } = useUserStore();
+  const userId = Number(userInfo.id);
   const {authToken} = useAuthStore()
   const [selectedUserProfile, setSelectedUserProfile] = useState<any | null>(null);
   const [content, setContent] = useState<JSX.Element | null>(null);
@@ -25,6 +28,7 @@ const Profile: React.FC = () => {
             headers: {
               Authorization: `${authToken}`,
             },
+            withCredentials: false,
           });
           setSelectedUserProfile(response.data);
         } catch (error) {

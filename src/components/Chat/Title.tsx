@@ -2,13 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 interface TitleProps {
-  name: string | number;
+  id: number | any;
 }
 
-const Title: React.FC<TitleProps> = ({ name }) => {
+const Title: React.FC<TitleProps> = ({ id }) => {
+  
   return (
     <TitleWrapper>
-      {name}
+      {id}
     </TitleWrapper>
   );
 };

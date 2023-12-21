@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useChatStore } from "@store/useChatStore";
+import { useUserStore } from "@store/useUserStore";
 
 interface Message {
     roomId: number;
@@ -15,7 +15,8 @@ interface ChatProps {
   }
 
 const Chat:React.FC<ChatProps> =({msg})=> {
-    const {userId} = useChatStore();
+    const { userInfo } = useUserStore();
+    const userId = Number(userInfo.id);
     const [, , timePart] = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(msg.sendTime) || [];
     const parsedTime = timePart ? new Date(`1970-01-01T${timePart}:00Z`).toLocaleTimeString("en-US", { timeZone: "Asia/Seoul", hour12: true, hour:"2-digit",minute: "2-digit" }) : "";
     

@@ -8,10 +8,11 @@ interface UserDto {
 
 interface ProfileDto {
   stdNum: number;
-  academicStatus: "ENROLLMENT" | "GRADUATION" | "SUSPENSION"; // 학적 상태 옵션들
+  academicStatus: "ATTENDING" | "ENROLLMENT" | "GRADUATION" | "SUSPENSION"; // 학적 상태 옵션들
   graduateDate?: string; // 선택적으로 nullable한 값
   admissionDate: string;
   introduction: string;
+  grade: number;
 }
 
 interface DepartmentDto {
@@ -24,6 +25,7 @@ interface CertificationDto {
   name: string;
   achievement: string;
   obtainDate: string;
+  expireDate?: string;
 }
 
 export interface UserDataProps {
@@ -40,20 +42,65 @@ export interface UserSearchProps {
 }
 const userApi = {
   signIn: async () => {
-    return await clientApi.user.get("users/signin");
+    return await clientApi.user.get("/oauth2");
   },
   signUp: async () => {
     return await clientApi.user.post("/users/signup");
   },
   initUserProfile: async (userData: UserDataProps) => {
-    return await clientApi.user.post("/users/", { userData });
+    console.log(userData.departmentDtos);
+    console.log(userData.certificationDtos);
+    console.log(userData.urlDtos);
+    const initData = JSON.stringify({
+      userDto: { id: userData.userDto.id, name: userData.userDto.name, email: userData.userDto.email, gender: userData.userDto.gender },
+      profileDto: {
+        stdNum: userData.profileDto.stdNum,
+        academicStatus: userData.profileDto.academicStatus,
+        graduateDate: userData.profileDto.graduateDate,
+        admissionDate: userData.profileDto.admissionDate,
+        introduction: userData.profileDto.introduction,
+        grade: 0,
+      },
+      departmentDtos: userData.departmentDtos,
+      certificationDtos: userData.certificationDtos,
+      urlDtos: userData.urlDtos,
+    });
+    console.log(initData);
+    return await clientApi.user.post("/users", {
+      userDto: { id: userData.userDto.id, name: userData.userDto.name, email: userData.userDto.email, gender: userData.userDto.gender },
+      profileDto: {
+        stdNum: userData.profileDto.stdNum,
+        academicStatus: userData.profileDto.academicStatus,
+        graduateDate: userData.profileDto.graduateDate,
+        admissionDate: userData.profileDto.admissionDate,
+        introduction: userData.profileDto.introduction,
+        grade: 1,
+      },
+      departmentDtos: userData.departmentDtos,
+      certificationDtos: userData.certificationDtos,
+      urlDtos: userData.urlDtos,
+    });
   },
   getUserProfile: async (queryKey: (string | number)[]) => {
     const userId = queryKey[1];
     return await clientApi.user.get(`/users/${userId}`);
   },
   updateUserProfile: async (userData: UserDataProps) => {
-    return await clientApi.user.patch("/users/", { userData });
+    console.log(userData.departmentDtos);
+    return await clientApi.user.patch("/users", {
+      userDto: { id: userData.userDto.id, name: userData.userDto.name, email: userData.userDto.email, gender: userData.userDto.gender },
+      profileDto: {
+        stdNum: userData.profileDto.stdNum,
+        academicStatus: userData.profileDto.academicStatus,
+        graduateDate: userData.profileDto.graduateDate,
+        admissionDate: userData.profileDto.admissionDate,
+        introduction: userData.profileDto.introduction,
+        grade: 1,
+      },
+      departmentDtos: userData.departmentDtos,
+      certificationDtos: userData.certificationDtos,
+      urlDtos: userData.urlDtos,
+    });
   },
   deleteUserProfile: async (userId: number) => {
     return await clientApi.user.delete(`/users?${userId}`);

@@ -4,23 +4,17 @@ import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 import useGetUserProfile from "@hook/user/useGetUserProfile";
 import { UserDataProps } from "@api/user";
-import { useUserStore } from "@store/useUserStore";
 import DateRangePicker from "@components/Record/DateRangePicker";
 import DefaultInput from "@components/Common/DefaultInput";
-import useInitUserProfile from "@hook/user/useInitUserProfile";
-import useUpdateUserProfile from "@hook/user/useUpdateUserProfile";
-import { useNavigate } from "react-router-dom";
 
-const ProfileContent = () => {
-  const { userInfo } = useUserStore();
-  const navigate = useNavigate();
-  const userId = parseInt(userInfo.id);
+const DetailProfile = ({ profileId }) => {
+  const userId = profileId;
   const { data } = useGetUserProfile(userId);
   const userData: UserDataProps = data;
+  console.log(userData);
   const [selectedStatus, setSelectedStatus] = useState("");
-  console.log(userData.profileDto?.admissionDate, userData.profileDto?.graduateDate);
-  const [StartDate, setStartDate] = useState(userData ? userData.profileDto?.admissionDate : "");
-  const [EndDate, setEndDate] = useState(userData ? userData.profileDto?.graduateDate : "");
+  const [StartDate, setStartDate] = useState("");
+  const [EndDate, setEndDate] = useState("");
   const statuses = ["재학", "휴학", "제적", "졸업"];
   useEffect(() => {
     if (userData?.profileDto?.academicStatus) {
@@ -101,49 +95,13 @@ const ProfileContent = () => {
       const inputContent = defaultInputRef.current.value;
       console.log("Content from DefaultInput:", inputContent);
       // You can now use inputContent as needed
-      return inputContent;
     }
   };
-  const [newUserData, setNewUserData] = useState<UserDataProps>();
-  const { mutate: initProfile } = useUpdateUserProfile(newUserData);
+
   const handleSaveAll = () => {
+    getContentFromDefaultInput();
     console.log(textInputs);
     console.log(StartDate, EndDate);
-    setNewUserData({
-      userDto: {
-        id: userId,
-        name: "김현우",
-        email: "krokerdile@knu.ac.kr",
-        gender: "MALE",
-      },
-      profileDto: {
-        stdNum: 18,
-        academicStatus: "ATTENDING",
-        graduateDate: "202408",
-        admissionDate: "201803",
-        introduction: getContentFromDefaultInput(),
-        grade: 1,
-      },
-      departmentDtos: [
-        {
-          college: "컴퓨터학부",
-          major: "글로벌SW융합전공",
-          depCategory: "BASIC",
-        },
-      ],
-      certificationDtos: [
-        {
-          name: "OPIC",
-          achievement: "IM2",
-          obtainDate: "20230505",
-        },
-      ],
-      urlDtos: textInputs[2],
-    });
-    console.log(JSON.stringify(newUserData));
-    console.log("newUserData", newUserData);
-    initProfile();
-    navigate("/me");
   };
 
   const handleAdd = (categoryIndex: number) => {
@@ -165,9 +123,12 @@ const ProfileContent = () => {
   return (
     <ProfileContentWrapper>
       <MyPageBox>
+        <p>이름</p>
+        <DefaultInput ref={defaultInputRef} maxLength={200} defaultValue={userData && userData?.userDto?.name} />
+        <p>학번</p>
+        <DefaultInput ref={defaultInputRef} maxLength={200} defaultValue={userData && userData?.userDto?.id.toString()} />
         <Header>
           <p>간단소개글</p>
-          <Button onClick={() => handleSaveAll()}>전체 저장</Button>
         </Header>
         <ContentBox>
           <DefaultInput ref={defaultInputRef} maxLength={200} defaultValue={userData && userData?.profileDto?.introduction} />
@@ -197,7 +158,6 @@ const ProfileContent = () => {
                   <Input type="text" value={textInput} onChange={(event) => handleChange(0, index, event)} />
                 </div>
               ))}
-              <Button onClick={() => handleAdd(0)}>추가</Button>
             </>
           }
         />
@@ -211,7 +171,6 @@ const ProfileContent = () => {
                   <Input type="text" value={textInput} onChange={(event) => handleChange(1, index, event)} />
                 </div>
               ))}
-              <Button onClick={() => handleAdd(1)}>추가</Button>
             </>
           }
         />
@@ -226,7 +185,6 @@ const ProfileContent = () => {
                   <Input type="text" value={textInput} onChange={(event) => handleChange(2, index, event)} />
                 </div>
               ))}
-              <Button onClick={() => handleAdd(2)}>추가</Button>
             </>
           }
         />
@@ -290,4 +248,4 @@ const Input = styled.input`
   border: 1px solid #ced4da;
 `;
 
-export default ProfileContent;
+export default DetailProfile;
