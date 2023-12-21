@@ -19,7 +19,7 @@ const SideContent = () => {
   const navigate = useNavigate();
   const [selectedContent, setSelectedContent] = useState<React.ReactNode | null>(null);
   const ContentTable = {
-    "/me": (
+    "/": (
       <>
         <UserProfileLink to={`/profile/${userId}`}>
           <Circle>{userId}</Circle>

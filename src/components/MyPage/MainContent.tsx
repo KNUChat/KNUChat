@@ -12,7 +12,7 @@ import DetailProfile from "@components/Profile/DetailProfile";
 import EditRecord from "@components/Record/EditRecord";
 
 const ContentTable = {
-  "/me": (
+  "/": (
     <>
       <ProfileTab />
       <RecordTab />

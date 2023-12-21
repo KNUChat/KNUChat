@@ -14,7 +14,10 @@ const Navbar = () => {
     navigate("/");
   };
   const handleClickMyPage = () => {
-    navigate("/me");
+    navigate("/");
+  };
+  const handleClickChat = () => {
+    navigate("/chat");
   };
   const { setModalType, setShowModal } = useModalStore();
   const { setAuthToken } = useAuthStore();
@@ -112,7 +115,7 @@ const Navbar = () => {
         </SearchBox>
         <RightBox>
           {/* <button onClick={() => showExampleModal()}>modalTest</button> */}
-
+          <RightButton onClick={() => handleClickChat()}>Chat</RightButton>
           <RightButton onClick={() => handleClickMyPage()}>mypage</RightButton>
           <RightButton onClick={() => handleDeleteToken()}>logout</RightButton>
           {/* <button onClick={() => handleDeleteToken()}>test</button> */}

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Main from "@/page/Main";
 import Layout from "@/page/Layout";
 import MyPage from "@/page/MyPage";
@@ -25,7 +25,7 @@ const Router = () => {
 
       <Route element={<Layout />}>
         <Route
-          path="/"
+          path="/chat"
           element={
             // <ProtectMain>
             <Main />
@@ -38,20 +38,22 @@ const Router = () => {
         <Route path="/rtctest" element={<WebRtcTest />} />
         <Route path="/rtc" element={<VideoCall />} />
 
-        {["/me", "/record", "/addRecord", "/profile", "/search", "/record/:recordId", "/record/edit/:recordId", "/profile/:profileId"].map((path) => (
-          <Route
-            key={path}
-            path={path}
-            element={
-              // <ProtectMain>
-              <MyPage />
-              // </ProtectMain>
-            }
-          />
-        ))}
+        {["/", "/me", "/record", "/addRecord", "/profile", "/search", "/record/:recordId", "/record/edit/:recordId", "/profile/:profileId"].map(
+          (path) => (
+            <Route
+              key={path}
+              path={path}
+              element={
+                // <ProtectMain>
+                <MyPage />
+                // </ProtectMain>
+              }
+            />
+          )
+        )}
         <Route path="/Redirect" element={<Redirect />} />
         {["/oauth2/google/callback"].map((path) => (
-          <Route key={path} path={path} element={<Main />} />
+          <Route key={path} path={path} element={<Navigate to="/" />} />
         ))}
       </Route>
     </Routes>
